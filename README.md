@@ -30,7 +30,7 @@ workflow-sentinel \
   --repo fixtures/vulnerable > report.json
 ```
 
-This produces three entries: an expression embedded in a shell command, `write-all` token permissions, and a privileged trigger with a pull request checkout. The fixtures use hand-authored SARIF to demonstrate the report format. See [the example report](examples/offline-report.json) for the full output.
+This produces three entries: an expression embedded in a shell command, `write-all` token permissions, and a privileged trigger with a pull request checkout. This example uses hand-authored SARIF to demonstrate the report format. See [the example report](examples/offline-report.json) for the full output.
 
 For your own repository, [install zizmor](https://docs.zizmor.sh/installation/) and generate SARIF first:
 
@@ -40,7 +40,7 @@ zizmor --offline --format=sarif . > findings.sarif
 workflow-sentinel --sarif findings.sarif --repo . > report.json
 ```
 
-Run zizmor from the repository root so source paths are relative to `--repo`. Sentinel expects SARIF 2.1.0 and the unprefixed rule IDs listed above. zizmor 1.30.1 emits `zizmor/` prefixes; those findings currently receive `abstain` unless their IDs are normalized. It writes JSON to stdout and errors to stderr. Exit code `0` means the report was generated, including any findings; `2` indicates invalid input.
+Run zizmor from the repository root so source paths are relative to `--repo`. Sentinel accepts SARIF 2.1.0 with either the rule IDs listed above or their `zizmor/`-prefixed forms. Reports use the unprefixed IDs for supported rules. It writes JSON to stdout and errors to stderr. Exit code `0` means the report was generated, including any findings; `2` indicates invalid input.
 
 ## Limitations
 

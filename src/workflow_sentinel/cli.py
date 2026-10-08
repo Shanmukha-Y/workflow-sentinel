@@ -18,6 +18,8 @@ GUIDANCE = {
     "dangerous-triggers": "Report only: investigate privileged triggers and untrusted checkout. "
     "Do not automatically change triggers or checkout references.",
 }
+# Only alias the supported zizmor rules; preserve every unknown ID for abstention.
+RULE_ALIASES = {"zizmor/" + rule: rule for rule in GUIDANCE}
 
 
 def read_bounded(path: Path) -> bytes:
@@ -78,6 +80,7 @@ def investigate(sarif: dict[str, Any], root: Path) -> dict[str, Any]:
             rule = result.get("ruleId", "unknown")
             if not isinstance(rule, str):
                 raise ValueError("ruleId must be text")
+            rule = RULE_ALIASES.get(rule, rule)
             packet: dict[str, Any] = {
                 "rule_id": rule, "decision": "abstain", "evidence": [],
                 "guidance": GUIDANCE.get(rule, "Unsupported rule; human investigation required."),

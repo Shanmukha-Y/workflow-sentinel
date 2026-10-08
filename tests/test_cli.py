@@ -87,3 +87,59 @@ class SentinelTests(unittest.TestCase):
         self.sarif['runs'][0]['results'] = [{'ruleId': 'unknown'}] * 1001
         with self.assertRaises(ValueError):
             investigate(self.sarif, FIXTURE)
+
+    def test_supported_prefixes_match_legacy_reports(self):
+        prefixed = copy.deepcopy(self.sarif)
+        for result in prefixed['runs'][0]['results']:
+            result['ruleId'] = 'zizmor/' + result['ruleId']
+        original = copy.deepcopy(prefixed)
+        self.assertEqual(investigate(prefixed, FIXTURE), investigate(self.sarif, FIXTURE))
+        self.assertEqual(prefixed, original)
+
+    def test_unknown_and_lookalike_prefixes_still_abstain(self):
+        for rule in ['zizmor/unknown', 'zizmor/unpinned-uses', 'other/template-injection',
+                     'ZIZMOR/template-injection', 'zizmor/zizmor/template-injection',
+                     'zizmor/template-injection/extra', 'zizmor/']:
+            doc = copy.deepcopy(self.sarif)
+            result = doc['runs'][0]['results'][0]
+            result['ruleId'] = rule
+            doc['runs'][0]['results'] = [result]
+            packet = investigate(doc, FIXTURE)['packets'][0]
+            self.assertEqual(packet['rule_id'], rule)
+            self.assertEqual(packet['decision'], 'abstain')
+            self.assertEqual(packet['reason'], 'Unsupported rule')
+            self.assertEqual(packet['evidence'], [])
+
+    def test_prefixed_rule_requires_valid_local_evidence(self):
+        result = self.sarif['runs'][0]['results'][0]
+        result['ruleId'] = 'zizmor/template-injection'
+        self.sarif['runs'][0]['results'] = [result]
+        result['locations'][0]['physicalLocation']['artifactLocation']['uri'] = '../x.yml'
+        packet = investigate(self.sarif, FIXTURE)['packets'][0]
+        self.assertEqual(packet['decision'], 'abstain')
+        self.assertTrue(packet['reason'].startswith('Insufficient local evidence:'))
+
+    def test_captured_zizmor_1_30_1_sarif(self):
+        doc = json.loads((FIXTURE / 'findings.zizmor-1.30.1.sarif').read_text())
+        self.assertEqual(doc['runs'][0]['tool']['driver']['semanticVersion'], '1.30.1')
+        report = investigate(doc, FIXTURE)
+        packets = {p['rule_id']: p for p in report['packets']}
+        self.assertEqual({rule: p['decision'] for rule, p in packets.items()}, {
+            'template-injection': 'review', 'dangerous-triggers': 'review',
+            'excessive-permissions': 'review', 'zizmor/artipacked': 'abstain',
+            'zizmor/unpinned-uses': 'abstain', 'zizmor/anonymous-definition': 'abstain',
+            'zizmor/concurrency-limits': 'abstain',
+        })
+        self.assertEqual(packets['template-injection']['evidence'][0]['line'], 11)
+        self.assertEqual(packets['excessive-permissions']['evidence'][0]['line'], 3)
+        self.assertIn('pull_request.title',
+                      packets['template-injection']['evidence'][0]['excerpt'])
+        self.assertIn('https://docs.zizmor.sh/audits/#template-injection',
+                      packets['template-injection']['citations'])
+        for name, value in [('input', doc), ('report', report)]:
+            validate(value, json.loads((ROOT / f'schemas/{name}.schema.json').read_text()))
+        process = subprocess.run([sys.executable, '-m', 'workflow_sentinel.cli', '--sarif',
+                                  str(FIXTURE / 'findings.zizmor-1.30.1.sarif'), '--repo',
+                                  str(FIXTURE)], capture_output=True, text=True)
+        self.assertEqual(process.returncode, 0)
+        self.assertEqual(json.loads(process.stdout), report)
