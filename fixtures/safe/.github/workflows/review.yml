@@ -1,0 +1,11 @@
+name: Synthetic mitigation example — NOT A SECURITY GUARANTEE
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$TITLE"

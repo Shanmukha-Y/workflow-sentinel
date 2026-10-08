@@ -1,0 +1,69 @@
+{
+  "limitations": [
+    "No live model reasoning or patches",
+    "No independent vulnerability detection",
+    "Static evidence does not prove security",
+    "Source excerpts are untrusted content and may contain secrets"
+  ],
+  "mode": "offline-deterministic",
+  "packets": [
+    {
+      "citations": [
+        "https://docs.github.com/en/actions/reference/security/secure-use",
+        "https://docs.zizmor.sh/usage/",
+        "https://docs.zizmor.sh/audits/#dangerous-triggers"
+      ],
+      "decision": "review",
+      "evidence": [
+        {
+          "excerpt": "          ref: ${{ github.event.pull_request.head.sha }}",
+          "line": 10,
+          "path": ".github/workflows/review.yml",
+          "sha256": "969bfa35843a365c763f2777fc6f25664aae6415ec08cbc9af3bd9ee3fc46573"
+        }
+      ],
+      "guidance": "Report only: investigate privileged triggers and untrusted checkout. Do not automatically change triggers or checkout references.",
+      "reason": "SARIF locations resolved; exploitability is unverified",
+      "rule_id": "dangerous-triggers"
+    },
+    {
+      "citations": [
+        "https://docs.github.com/en/actions/reference/security/secure-use",
+        "https://docs.zizmor.sh/usage/",
+        "https://docs.zizmor.sh/audits/#excessive-permissions"
+      ],
+      "decision": "review",
+      "evidence": [
+        {
+          "excerpt": "permissions: write-all",
+          "line": 3,
+          "path": ".github/workflows/review.yml",
+          "sha256": "969bfa35843a365c763f2777fc6f25664aae6415ec08cbc9af3bd9ee3fc46573"
+        }
+      ],
+      "guidance": "Determine the minimum permissions each job requires before reducing token permissions. Required scopes cannot be inferred from a finding alone.",
+      "reason": "SARIF locations resolved; exploitability is unverified",
+      "rule_id": "excessive-permissions"
+    },
+    {
+      "citations": [
+        "https://docs.github.com/en/actions/reference/security/secure-use",
+        "https://docs.zizmor.sh/usage/",
+        "https://docs.zizmor.sh/audits/#template-injection"
+      ],
+      "decision": "review",
+      "evidence": [
+        {
+          "excerpt": "      - run: echo \"${{ github.event.pull_request.title }}\"",
+          "line": 11,
+          "path": ".github/workflows/review.yml",
+          "sha256": "969bfa35843a365c763f2777fc6f25664aae6415ec08cbc9af3bd9ee3fc46573"
+        }
+      ],
+      "guidance": "Review attacker control and shell context. Consider an intermediate environment variable and quoted shell expansion; do not blindly rewrite expressions.",
+      "reason": "SARIF locations resolved; exploitability is unverified",
+      "rule_id": "template-injection"
+    }
+  ],
+  "schema_version": "1.0"
+}

@@ -1,0 +1,65 @@
+{
+  "type": "object",
+  "required": [
+    "version",
+    "runs"
+  ],
+  "properties": {
+    "version": {
+      "const": "2.1.0"
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tool"
+        ],
+        "properties": {
+          "tool": {
+            "type": "object",
+            "required": [
+              "driver"
+            ],
+            "properties": {
+              "driver": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "const": "zizmor"
+                  }
+                }
+              }
+            }
+          },
+          "results": {
+            "type": "array",
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "required": [
+                "ruleId"
+              ],
+              "properties": {
+                "ruleId": {
+                  "type": "string"
+                },
+                "locations": {
+                  "type": "array",
+                  "maxItems": 10,
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
