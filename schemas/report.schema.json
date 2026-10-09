@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0"
+      "const": "1.1"
     },
     "mode": {
       "const": "offline-deterministic"
@@ -45,13 +45,210 @@
                 "excerpt": {
                   "type": "string",
                   "maxLength": 500
+                },
+                "column": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "end_line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "end_column": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "yaml_path": {
+                  "type": "array",
+                  "maxItems": 32,
+                  "items": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "provenance": {
+                  "enum": [
+                    "hash-matched",
+                    "snippet-matched",
+                    "unverified"
+                  ]
+                },
+                "citation": {
+                  "type": "string"
+                },
+                "context": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "job",
+                    "step_index",
+                    "triggers",
+                    "permissions",
+                    "job_if",
+                    "step_if",
+                    "shell",
+                    "run_expressions",
+                    "env_expressions",
+                    "checkouts",
+                    "citations"
+                  ],
+                  "properties": {
+                    "job": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "step_index": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "triggers": {
+                      "type": "array",
+                      "maxItems": 30,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "source",
+                        "declaration"
+                      ],
+                      "properties": {
+                        "source": {
+                          "enum": [
+                            "job",
+                            "workflow",
+                            "repository-default"
+                          ]
+                        },
+                        "declaration": {
+                          "oneOf": [
+                            {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "job_if": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "step_if": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "shell": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "run_expressions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "env_expressions": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "checkouts": {
+                      "type": "array",
+                      "maxItems": 40,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "job",
+                          "step_index",
+                          "uses",
+                          "ref",
+                          "repository",
+                          "citation"
+                        ],
+                        "properties": {
+                          "job": {
+                            "type": "string"
+                          },
+                          "step_index": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "uses": {
+                            "type": "string"
+                          },
+                          "ref": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "repository": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "citation": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "citations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "column_kind": {
+                  "const": "unicodeCodePoints"
                 }
               },
               "required": [
                 "path",
                 "line",
                 "sha256",
-                "excerpt"
+                "excerpt",
+                "column",
+                "end_line",
+                "end_column",
+                "yaml_path",
+                "provenance",
+                "citation",
+                "context",
+                "column_kind"
               ]
             }
           },
@@ -66,6 +263,14 @@
           },
           "reason": {
             "type": "string"
+          },
+          "trace": {
+            "type": "array",
+            "maxItems": 80,
+            "items": {
+              "type": "string",
+              "maxLength": 600
+            }
           }
         },
         "required": [
@@ -74,7 +279,8 @@
           "evidence",
           "guidance",
           "citations",
-          "reason"
+          "reason",
+          "trace"
         ],
         "allOf": [
           {

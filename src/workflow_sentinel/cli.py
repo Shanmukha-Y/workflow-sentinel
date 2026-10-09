@@ -1,11 +1,11 @@
 """Offline triage only: no subprocess, network, YAML execution, or model calls."""
 import argparse
-import hashlib
 import json
 import sys
 from pathlib import Path
 from typing import Any
-from urllib.parse import unquote, urlsplit
+
+from workflow_sentinel.investigation import InvestigationError, Investigator
 
 MAX_BYTES = 1_000_000
 MAX_RESULTS = 1_000
@@ -32,35 +32,13 @@ def read_bounded(path: Path) -> bytes:
     return data
 
 
-def evidence(root: Path, location: dict[str, Any]) -> dict[str, Any]:
-    physical = location["physicalLocation"]
-    uri = physical["artifactLocation"]["uri"]
-    if not isinstance(uri, str) or urlsplit(uri).scheme or urlsplit(uri).netloc:
-        raise ValueError("only repository-relative paths are accepted")
-    if physical["artifactLocation"].get("uriBaseId"):
-        raise ValueError("uriBaseId resolution is not supported")
-    relative = Path(unquote(uri))
-    if relative.is_absolute() or ".." in relative.parts:
-        raise ValueError("path escapes repository")
-    target = (root / relative).resolve()
-    target.relative_to(root.resolve())
-    if target.suffix not in {".yml", ".yaml"}:
-        raise ValueError("evidence must be a YAML workflow file")
-    raw = read_bounded(target)
-    lines = raw.decode("utf-8").splitlines()
-    line = physical["region"]["startLine"]
-    if type(line) is not int or not 1 <= line <= len(lines):
-        raise ValueError("invalid source line")
-    return {"path": relative.as_posix(), "line": line,
-            "sha256": hashlib.sha256(raw).hexdigest(), "excerpt": lines[line - 1][:500]}
-
-
 def investigate(sarif: dict[str, Any], root: Path) -> dict[str, Any]:
     if not isinstance(sarif, dict) or sarif.get("version") != "2.1.0" or not isinstance(
         sarif.get("runs"), list
     ):
         raise ValueError("expected SARIF 2.1.0 with runs array")
     packets: list[dict[str, Any]] = []
+    investigator = Investigator(root)
     for run in sarif["runs"]:
         if not isinstance(run, dict):
             raise ValueError("run must be an object")
@@ -87,21 +65,26 @@ def investigate(sarif: dict[str, Any], root: Path) -> dict[str, Any]:
                 "citations": [SOURCE, "https://docs.zizmor.sh/usage/",
                               "https://docs.zizmor.sh/audits/#" + rule
                               if rule in GUIDANCE else "https://docs.zizmor.sh/audits/"],
-                "reason": "Unsupported rule",
+                "reason": "Unsupported rule", "trace": ["classify: " + rule[:200]],
             }
             if rule in GUIDANCE:
                 try:
                     locations = result.get("locations", [])
                     if not isinstance(locations, list) or not locations or len(locations) > 10:
                         raise ValueError("expected 1 to 10 source locations")
-                    packet["evidence"] = [evidence(root, loc) for loc in locations]
+                    packet["evidence"] = [
+                        investigator.inspect(loc, run, packet["trace"]) for loc in locations
+                    ]
                     packet["decision"] = "review"
-                    packet["reason"] = "SARIF locations resolved; exploitability is unverified"
-                except (KeyError, ValueError, OSError, UnicodeError, TypeError, AttributeError) as exc:
-                    packet["reason"] = "Insufficient local evidence: " + type(exc).__name__
+                    packet["reason"] = "Workflow context resolved; exploitability is unverified"
+                except (KeyError, ValueError, OSError, UnicodeError, TypeError, AttributeError,
+                        RecursionError) as exc:
+                    reason = str(exc) if isinstance(exc, InvestigationError) else type(exc).__name__
+                    packet["reason"] = "Insufficient local evidence: " + reason
+                    packet["trace"].append("abstain: " + reason)
             packets.append(packet)
     packets.sort(key=lambda p: json.dumps(p, sort_keys=True))
-    return {"schema_version": "1.0", "mode": "offline-deterministic", "packets": packets,
+    return {"schema_version": "1.1", "mode": "offline-deterministic", "packets": packets,
             "limitations": ["No live model reasoning or patches", "No independent vulnerability "
                             "detection", "Static evidence does not prove security",
                             "Source excerpts are untrusted content and may contain secrets"]}

@@ -7,12 +7,13 @@ name = "workflow-sentinel"
 version = "0.1.0"
 description = "Bounded offline review packets for zizmor SARIF"
 requires-python = ">=3.11"
+dependencies = ["PyYAML==6.0.3"]
 
 [project.scripts]
 workflow-sentinel = "workflow_sentinel.cli:main"
 
 [project.optional-dependencies]
-dev = ["ruff==0.14.0", "mypy==1.18.2", "jsonschema==4.25.1"]
+dev = ["ruff==0.14.0", "mypy==1.18.2", "jsonschema==4.25.1", "types-PyYAML==6.0.12.20260906"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
