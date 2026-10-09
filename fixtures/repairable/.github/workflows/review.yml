@@ -1,0 +1,12 @@
+name: Review title
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print title
+        shell: bash
+        run: |
+          printf '%s\n' "${{ github.event.pull_request.title }}"

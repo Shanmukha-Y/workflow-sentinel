@@ -12,3 +12,8 @@
 
 One increment per day. Update progress with actual checks and blockers. No automatic schedule
 or social posting configured. Public visibility requires a separate release action.
+
+Current status: evidence investigation and a constrained Bash `printf` injection repair preview
+are implemented. Permission repairs remain deferred until explicit requirements can be supplied
+and validated. Next is the bounded static validation loop; keep the existing refusal gates and
+expand supported repair patterns only with evidence and tests.

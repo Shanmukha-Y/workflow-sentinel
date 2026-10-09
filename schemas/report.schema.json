@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.1"
+      "const": "1.2"
     },
     "mode": {
       "const": "offline-deterministic"
@@ -271,6 +271,116 @@
               "type": "string",
               "maxLength": 600
             }
+          },
+          "repair": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "reason",
+              "unified_diff",
+              "path",
+              "base_sha256",
+              "proposed_sha256",
+              "validation"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "proposed",
+                  "abstain"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              },
+              "unified_diff": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 16000
+              },
+              "path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "base_sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "proposed_sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "validation": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "proposed"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "base_sha256": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "proposed_sha256": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "unified_diff": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "validation": {
+                      "minItems": 4
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "path": {
+                      "type": "null"
+                    },
+                    "base_sha256": {
+                      "type": "null"
+                    },
+                    "proposed_sha256": {
+                      "type": "null"
+                    },
+                    "unified_diff": {
+                      "type": "null"
+                    },
+                    "validation": {
+                      "maxItems": 0
+                    }
+                  }
+                }
+              }
+            ]
           }
         },
         "required": [

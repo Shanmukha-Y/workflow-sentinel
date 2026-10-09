@@ -41,3 +41,31 @@ report-only. Preserve context/provenance checks and test repair refusal on ambig
 limits: no authenticated scan revision, runtime expression evaluation, required-scope inference,
 workflow/job default-shell resolution, or full YAML feature support. A snippet match only checks
 a fragment. Do not report the entire security investigation or validation roadmap as complete.
+
+## 2026-10-09 America/New_York — Constrained repair previews
+
+Started from verified faf9b97 with a clean working tree and matching private remote. Added
+`--preview-repairs` and schema 1.2. Eligible Bash steps move one known untrusted expression from
+a literal `printf` command into a new step env variable and replace it with a quoted expansion.
+The preview contains a unified diff and base/proposed SHA-256 hashes. No automatic application.
+
+Eligibility requires a source-resolved injection finding, exactly one location, matching source
+snippet/hash, explicit `shell: bash`, a conventional workflow path and LF source. Refuse existing
+env declarations, variable collisions, containers/defaults, unsupported expressions, extra
+commands, redirects, alternate shell/header forms, stale evidence and already-fixed scripts.
+Reparse the candidate and compare the entire YAML tree: only the selected run and new env entry
+may differ. Permissions are never reduced without explicit validated requirements; that repair
+path is not implemented. Dangerous triggers/untrusted checkout remain report-only.
+
+Validation: 39 unit tests, Ruff and strict mypy passed. Tests check disposable diff application,
+source immutability, hashes, exact expected AST change, opt-in CLI behavior and refusal cases.
+Real zizmor 1.30.1 on the isolated repair fixture reported one template-injection finding before
+and zero findings after the preview diff was applied as data to a disposable copy. No target
+script was executed. This single-fixture result is not held-out performance or proof of security.
+Captured scanner data, expected fixed YAML and example preview are committed for reproducibility.
+
+Next session: bounded static validation loop, capped retries, robust diff/base-hash checks and
+scanner-result comparison. Preserve natural README style and private visibility. Do not repeat
+the completed evidence investigation or compatibility work. Remaining limits: very narrow
+script support, no permission requirement interface, no authenticated scan revision, and no
+general semantic-equivalence or security proof. CI/remote results are in the increment handoff.

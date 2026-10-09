@@ -1,6 +1,6 @@
 {
   "limitations": [
-    "No live model reasoning or patches",
+    "No automatic patch application",
     "No independent vulnerability detection",
     "Static evidence does not prove security",
     "Source excerpts are untrusted content and may contain secrets"
@@ -218,5 +218,5 @@
       ]
     }
   ],
-  "schema_version": "1.1"
+  "schema_version": "1.2"
 }

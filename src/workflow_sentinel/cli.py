@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from workflow_sentinel.investigation import InvestigationError, Investigator
+from workflow_sentinel.repairs import preview
 
 MAX_BYTES = 1_000_000
 MAX_RESULTS = 1_000
@@ -32,7 +33,8 @@ def read_bounded(path: Path) -> bytes:
     return data
 
 
-def investigate(sarif: dict[str, Any], root: Path) -> dict[str, Any]:
+def investigate(sarif: dict[str, Any], root: Path,
+                preview_repairs: bool = False) -> dict[str, Any]:
     if not isinstance(sarif, dict) or sarif.get("version") != "2.1.0" or not isinstance(
         sarif.get("runs"), list
     ):
@@ -82,10 +84,12 @@ def investigate(sarif: dict[str, Any], root: Path) -> dict[str, Any]:
                     reason = str(exc) if isinstance(exc, InvestigationError) else type(exc).__name__
                     packet["reason"] = "Insufficient local evidence: " + reason
                     packet["trace"].append("abstain: " + reason)
+            if preview_repairs:
+                packet["repair"] = preview(packet, investigator.workflows)
             packets.append(packet)
     packets.sort(key=lambda p: json.dumps(p, sort_keys=True))
-    return {"schema_version": "1.1", "mode": "offline-deterministic", "packets": packets,
-            "limitations": ["No live model reasoning or patches", "No independent vulnerability "
+    return {"schema_version": "1.2", "mode": "offline-deterministic", "packets": packets,
+            "limitations": ["No automatic patch application", "No independent vulnerability "
                             "detection", "Static evidence does not prove security",
                             "Source excerpts are untrusted content and may contain secrets"]}
 
@@ -94,11 +98,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sarif", required=True, type=Path)
     parser.add_argument("--repo", required=True, type=Path)
+    parser.add_argument("--preview-repairs", action="store_true",
+                        help="include constrained repair diffs without changing source")
     args = parser.parse_args()
     try:
         if not args.repo.is_dir():
             raise ValueError("repository directory does not exist")
-        report = investigate(json.loads(read_bounded(args.sarif)), args.repo)
+        report = investigate(json.loads(read_bounded(args.sarif)), args.repo, args.preview_repairs)
         print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
     except (ValueError, OSError, KeyError, TypeError, AttributeError, RecursionError) as exc:
         print("workflow-sentinel: invalid input (" + type(exc).__name__ + ")", file=sys.stderr)
