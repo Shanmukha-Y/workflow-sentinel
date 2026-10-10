@@ -64,13 +64,40 @@ The JSON `repair` entry contains a unified diff, the original and proposed file 
 
 Previews currently support one literal `printf '%s'` or `printf '%s\n'` command in a `run: |` block with explicit `shell: bash` and a matching SARIF snippet or source hash. The expression must be a supported PR/issue title or body reference, or `github.head_ref`. Existing environment declarations, container/default execution settings, extra commands, redirections, and ambiguous contexts produce a repair abstention. Permission reductions need explicit validated requirements and are not implemented; trigger and checkout changes remain report-only.
 
+## Static validation
+
+With a trusted native zizmor **1.30.1** binary installed outside the repository being reviewed:
+
+```sh
+workflow-sentinel \
+  --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
+  --repo fixtures/repairable \
+  --validate-repairs \
+  --scanner /absolute/path/to/zizmor > validation.json
+```
+
+`--validate-repairs` includes repair previews and checks each eligible candidate against current source. It reconstructs the allowed edit, verifies hashes and YAML, then scans the original and candidate in separate temporary directories. Only the selected workflow is copied. Source files remain unchanged.
+
+The `static_validation` entry reports one of four outcomes:
+
+- `validated`: a fresh scan confirmed the target finding; the candidate removes it without new or strengthened findings.
+- `rejected`: source or edit checks failed, the target remains, or the scanner comparison found a regression.
+- `unsupported`: the repair or comparison falls outside the supported scope.
+- `unavailable`: the scanner is missing, failed, timed out, returned malformed output, or reached a resource limit.
+
+Comparison uses rule, severity, confidence, YAML location and finding multiplicity, so inserted lines do not create false regressions. Validation covers one workflow, not the entire repository. Missing local actions and dynamic/nonstandard action references are unsupported.
+
+Scanner arguments are fixed: offline SARIF, strict collection, regular persona, no configuration loading or ignore rules. The scanner receives a minimal environment. Each call has a 15-second timeout, a 1 MB stdout limit and a 64 KB stderr limit. At most two candidates are checked per report, with two calls each and no retries. Other scanner versions and script wrappers are currently unsupported. If `--scanner` is omitted, Sentinel looks for an installed `zizmor` binary on PATH.
+
+A validated result is a static check, not a security guarantee; review the diff before applying it. See [the example validation report](examples/static-validation.json).
+
 ## Limitations
 
 A `review` decision means the finding resolved to workflow context, not that exploitability was confirmed. Conditions and expressions are recorded as declarations; Sentinel does not evaluate them or determine the permissions a job needs. Shell context currently covers explicit step-level settings. Sentinel does not independently scan workflows, and an empty report does not establish security.
 
 Use the same checkout that was scanned. Supplied SHA-256 hashes and source snippets are checked against local content; mismatches produce abstentions. Reports label provenance as `hash-matched`, `snippet-matched`, or `unverified`. A matching snippet checks a fragment, and a supplied hash is not an authenticated scan revision. Reports include source excerpts, so check for sensitive content before sharing.
 
-Investigation reads are capped at 32 files and 4 MB total, with a 1 MB limit per file, 1,000 findings, and 10 locations per finding. YAML structure and context have size and depth limits. Ambiguous locations, duplicate keys, anchors, aliases, explicit tags, remote paths, symlinks, and SARIF URI base references produce abstentions. Source citations use one-based lines and Unicode code-point columns. Repository reads require POSIX directory-descriptor support (Linux or macOS). The [schemas](schemas) describe the accepted input subset and report format (`schema_version: 1.2`).
+Investigation reads are capped at 32 files and 4 MB total, with a 1 MB limit per file, 1,000 findings, and 10 locations per finding. YAML structure and context have size and depth limits. Ambiguous locations, duplicate keys, anchors, aliases, explicit tags, remote paths, symlinks, and SARIF URI base references produce abstentions. Source citations use one-based lines and Unicode code-point columns. Repository reads require POSIX directory-descriptor support (Linux or macOS). The [schemas](schemas) describe the accepted input subset and report format (`schema_version: 1.3`).
 
 ## Development
 

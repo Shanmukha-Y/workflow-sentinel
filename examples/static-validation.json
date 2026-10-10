@@ -1,0 +1,110 @@
+{
+  "limitations": [
+    "No automatic patch application",
+    "No independent vulnerability detection",
+    "Static evidence does not prove security",
+    "Source excerpts are untrusted content and may contain secrets"
+  ],
+  "mode": "offline-deterministic",
+  "packets": [
+    {
+      "citations": [
+        "https://docs.github.com/en/actions/reference/security/secure-use",
+        "https://docs.zizmor.sh/usage/",
+        "https://docs.zizmor.sh/audits/#template-injection"
+      ],
+      "decision": "review",
+      "evidence": [
+        {
+          "citation": ".github/workflows/review.yml:12:30-12:61",
+          "column": 30,
+          "column_kind": "unicodeCodePoints",
+          "context": {
+            "checkouts": [],
+            "citations": [
+              ".github/workflows/review.yml:10:16-10:20",
+              ".github/workflows/review.yml:11:14-13:1",
+              ".github/workflows/review.yml:2:5-2:17",
+              ".github/workflows/review.yml:4:3-5:1"
+            ],
+            "env_expressions": {},
+            "job": "review",
+            "job_if": null,
+            "permissions": {
+              "declaration": {
+                "contents": "read"
+              },
+              "source": "workflow"
+            },
+            "run_expressions": [
+              "github.event.pull_request.title"
+            ],
+            "shell": "bash",
+            "step_if": null,
+            "step_index": 0,
+            "triggers": [
+              "pull_request"
+            ]
+          },
+          "end_column": 61,
+          "end_line": 12,
+          "excerpt": "          printf '%s\\n' \"${{ github.event.pull_request.title }}\"",
+          "line": 12,
+          "path": ".github/workflows/review.yml",
+          "provenance": "snippet-matched",
+          "sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+          "yaml_path": [
+            "jobs",
+            "review",
+            "steps",
+            0,
+            "run"
+          ]
+        }
+      ],
+      "guidance": "Review attacker control and shell context. Consider an intermediate environment variable and quoted shell expansion; do not blindly rewrite expressions.",
+      "reason": "Workflow context resolved; exploitability is unverified",
+      "repair": {
+        "base_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+        "path": ".github/workflows/review.yml",
+        "proposed_sha256": "11cac569e8ee4c90a79ca78b96bb5dfa92448597eccf8991f3424964d9c11beb",
+        "reason": "Move expression from script generation to quoted Bash env",
+        "status": "proposed",
+        "unified_diff": "--- a/.github/workflows/review.yml\n+++ b/.github/workflows/review.yml\n@@ -8,5 +8,7 @@\n     steps:\n       - name: Print title\n         shell: bash\n+        env:\n+          SENTINEL_INPUT: ${{ github.event.pull_request.title }}\n         run: |\n-          printf '%s\\n' \"${{ github.event.pull_request.title }}\"\n+          printf '%s\\n' \"$SENTINEL_INPUT\"\n",
+        "validation": [
+          "YAML reparsed",
+          "Only selected run and new step env changed",
+          "Base hash binds the reviewed source; verify it before applying",
+          "Human review required; static checks do not prove security"
+        ]
+      },
+      "rule_id": "template-injection",
+      "static_validation": {
+        "after_findings": 0,
+        "attempts": 2,
+        "before_findings": 1,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ],
+        "new_findings": 0,
+        "reason": "Target removed with no new scanner findings",
+        "scanner_version": "1.30.1",
+        "scope": "single-workflow",
+        "status": "validated",
+        "target_removed": true
+      },
+      "trace": [
+        "classify: template-injection",
+        "resolve: repository-relative YAML path",
+        "read: bounded repository snapshot; YAML structure parsed",
+        "locate: unique YAML path identified",
+        "provenance: snippet-matched",
+        "context: triggers, permissions, job and step declarations inspected"
+      ]
+    }
+  ],
+  "schema_version": "1.3"
+}

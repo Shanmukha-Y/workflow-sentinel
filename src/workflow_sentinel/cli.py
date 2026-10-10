@@ -1,4 +1,4 @@
-"""Offline triage only: no subprocess, network, YAML execution, or model calls."""
+"""Workflow evidence reports with optional static repair validation."""
 import argparse
 import json
 import sys
@@ -7,6 +7,7 @@ from typing import Any
 
 from workflow_sentinel.investigation import InvestigationError, Investigator
 from workflow_sentinel.repairs import preview
+from workflow_sentinel.validation import MAX_VALIDATIONS, validate
 
 MAX_BYTES = 1_000_000
 MAX_RESULTS = 1_000
@@ -34,13 +35,15 @@ def read_bounded(path: Path) -> bytes:
 
 
 def investigate(sarif: dict[str, Any], root: Path,
-                preview_repairs: bool = False) -> dict[str, Any]:
+                preview_repairs: bool = False, validate_repairs: bool = False,
+                scanner: Path | None = None) -> dict[str, Any]:
     if not isinstance(sarif, dict) or sarif.get("version") != "2.1.0" or not isinstance(
         sarif.get("runs"), list
     ):
         raise ValueError("expected SARIF 2.1.0 with runs array")
     packets: list[dict[str, Any]] = []
     investigator = Investigator(root)
+    validations = 0
     for run in sarif["runs"]:
         if not isinstance(run, dict):
             raise ValueError("run must be an object")
@@ -84,11 +87,22 @@ def investigate(sarif: dict[str, Any], root: Path,
                     reason = str(exc) if isinstance(exc, InvestigationError) else type(exc).__name__
                     packet["reason"] = "Insufficient local evidence: " + reason
                     packet["trace"].append("abstain: " + reason)
-            if preview_repairs:
+            if preview_repairs or validate_repairs:
                 packet["repair"] = preview(packet, investigator.workflows)
+            if validate_repairs:
+                if packet['repair']['status'] == 'proposed' and validations >= MAX_VALIDATIONS:
+                    packet['static_validation'] = {'status': 'unavailable',
+                        'reason': 'Report validation budget exhausted', 'scope': 'single-workflow',
+                        'scanner_version': None, 'attempts': 0, 'before_findings': None,
+                        'after_findings': None, 'new_findings': None, 'target_removed': None,
+                        'checks': []}
+                else:
+                    if packet['repair']['status'] == 'proposed':
+                        validations += 1
+                    packet['static_validation'] = validate(packet, root, scanner)
             packets.append(packet)
     packets.sort(key=lambda p: json.dumps(p, sort_keys=True))
-    return {"schema_version": "1.2", "mode": "offline-deterministic", "packets": packets,
+    return {"schema_version": "1.3", "mode": "offline-deterministic", "packets": packets,
             "limitations": ["No automatic patch application", "No independent vulnerability "
                             "detection", "Static evidence does not prove security",
                             "Source excerpts are untrusted content and may contain secrets"]}
@@ -100,11 +114,18 @@ def main() -> int:
     parser.add_argument("--repo", required=True, type=Path)
     parser.add_argument("--preview-repairs", action="store_true",
                         help="include constrained repair diffs without changing source")
+    parser.add_argument('--validate-repairs', action='store_true',
+                        help='validate previews using bounded offline zizmor scans of temporary copies')
+    parser.add_argument('--scanner', type=Path,
+                        help='absolute path to an installed native zizmor binary')
     args = parser.parse_args()
+    if args.scanner and not args.validate_repairs:
+        parser.error('--scanner requires --validate-repairs')
     try:
         if not args.repo.is_dir():
             raise ValueError("repository directory does not exist")
-        report = investigate(json.loads(read_bounded(args.sarif)), args.repo, args.preview_repairs)
+        report = investigate(json.loads(read_bounded(args.sarif)), args.repo, args.preview_repairs,
+                             args.validate_repairs, args.scanner)
         print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
     except (ValueError, OSError, KeyError, TypeError, AttributeError, RecursionError) as exc:
         print("workflow-sentinel: invalid input (" + type(exc).__name__ + ")", file=sys.stderr)
