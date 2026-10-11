@@ -1,0 +1,8 @@
+{
+  "manifest_sha256": "cb8f9aaecf249e910c3890b7f11177c02b15bba4685a8b754f4ebd4aae2ec4f2",
+  "case_count": 38,
+  "development": 18,
+  "holdout_first_use": 20,
+  "production_commit": "d2fc6c6b7ebe8bdfc0a7134d7b024d91ae812ba1",
+  "status": "labels frozen before first evaluation; no runs yet"
+}
