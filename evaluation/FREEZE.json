@@ -1,8 +1,9 @@
 {
-  "manifest_sha256": "cb8f9aaecf249e910c3890b7f11177c02b15bba4685a8b754f4ebd4aae2ec4f2",
+  "manifest_sha256": "e4284e55b83cbece05df549014814474fc8aedd35bb43aed52702f30ab516ae1",
   "case_count": 38,
   "development": 18,
   "holdout_first_use": 20,
   "production_commit": "d2fc6c6b7ebe8bdfc0a7134d7b024d91ae812ba1",
-  "status": "labels frozen before first evaluation; no runs yet"
+  "status": "labels frozen before first evaluation; no runs yet",
+  "note": "Echo location corrected during label review before any evaluation run."
 }

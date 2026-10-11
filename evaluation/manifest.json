@@ -109,9 +109,9 @@
                         "uri": ".github/workflows/review.yml"
                       },
                       "region": {
-                        "startLine": 1,
+                        "startLine": 12,
                         "snippet": {
-                          "text": "name: Review title"
+                          "text": "echo \"${{ github.event.pull_request.title }}\""
                         }
                       }
                     }
