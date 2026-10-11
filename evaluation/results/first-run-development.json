@@ -1,0 +1,683 @@
+{
+  "dataset_version": "1.0",
+  "manifest_sha256": "e4284e55b83cbece05df549014814474fc8aedd35bb43aed52702f30ab516ae1",
+  "production_baseline_commit": "d2fc6c6b7ebe8bdfc0a7134d7b024d91ae812ba1",
+  "production_files_sha256": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.py": "3e29caf346727786980c4f2647b5816cef69c70941a9df993997ff68d63a7310",
+    "investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
+    "repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
+    "validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14"
+  },
+  "run_kind": "first-use",
+  "split": "development",
+  "scanner_requested": true,
+  "methodology": "Manually specified policy outcomes before any evaluation run. Synthetic first-use holdout, authored with implementation knowledge; not independent or a real-world vulnerability benchmark. Scanner fault scenarios are simulations, not scanner effectiveness measurements.",
+  "metrics": {
+    "observed_case_accuracy": {
+      "numerator": 18,
+      "denominator": 18,
+      "value": 1.0
+    },
+    "triage_policy_precision": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "triage_policy_recall": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "repair_eligibility_precision": {
+      "numerator": 7,
+      "denominator": 7,
+      "value": 1.0
+    },
+    "repair_eligibility_recall": {
+      "numerator": 7,
+      "denominator": 7,
+      "value": 1.0
+    },
+    "repair_abstention_rate": {
+      "numerator": 9,
+      "denominator": 16,
+      "value": 0.5625
+    },
+    "citation_source_checks": {
+      "numerator": 57,
+      "denominator": 57,
+      "value": 1.0
+    },
+    "exact_candidate_validity": {
+      "numerator": 7,
+      "denominator": 7,
+      "value": 1.0
+    },
+    "source_immutability": {
+      "numerator": 18,
+      "denominator": 18,
+      "value": 1.0
+    },
+    "live_validation_label_agreement": {
+      "numerator": 2,
+      "denominator": 2,
+      "value": 1.0
+    },
+    "simulated_validation_label_agreement": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0
+    },
+    "validation_not_run": 0,
+    "validation_outcomes": {
+      "validated": 3,
+      "rejected": 3,
+      "unsupported": 0,
+      "unavailable": 1,
+      "not-run": 11
+    }
+  },
+  "cases": [
+    {
+      "id": "dev-printf-title",
+      "category": "eligible repair",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-echo",
+      "category": "unsupported Bash",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "425642b501fdde560d269e37bac1604e4dfa2fab3f37279cad35f6f9b821b5f7",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-shell-sh",
+      "category": "unsupported shell",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "d06355386269d6b6c9e19292d69f02669f6e86dffa86cdd09a14de2ee6e3c1ae",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-step-env",
+      "category": "ambiguous environment",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "1aeb55c2db99cf254e247d82710e6f7d047c9e415a37f48d8a238ed871407a80",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-stale-snippet",
+      "category": "tampered evidence",
+      "split": "development",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-permissions",
+      "category": "permission report-only",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "permissions"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 3,
+      "citations_total": 3,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "de34b771fb97436f841d5f1e67aa16362e693cf5ab33d4621cf2f0a7cf662136",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-checkout",
+      "category": "unsafe checkout report-only",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "on"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 4,
+      "citations_total": 4,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "9a1698ba4ac0bcbff937c68b7bcc4f591427f4f99fdb0a4d99bb2a48d0f8a793",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-benign",
+      "category": "benign control",
+      "split": "development",
+      "expected": {
+        "triage": "empty",
+        "repair": "not-run",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "empty",
+      "repair": "not-run",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "11cac569e8ee4c90a79ca78b96bb5dfa92448597eccf8991f3424964d9c11beb",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-unknown-rule",
+      "category": "unsupported rule",
+      "split": "development",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-bad-version",
+      "category": "malformed SARIF",
+      "split": "development",
+      "expected": {
+        "triage": "error",
+        "repair": "not-run",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "error",
+      "repair": "not-run",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-duplicate-key",
+      "category": "ambiguous YAML",
+      "split": "development",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "067dc76802703c4c4d738f8f66abda757ffeafd5761e349dba0f526f2a95fd31",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-file-budget",
+      "category": "resource limit",
+      "split": "development",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "667c3e67f82d13f595cc73e7ad27cb0f8e8adedfc066bc4ba97a4649ae2bcc44",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-instructions",
+      "category": "instruction-like comment",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "b3b2243f614d34a5efaff39e432a7bec34cc4424f4a39700e21f997177504862",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-regression",
+      "category": "scanner fault injection",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "rejected"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "rejected",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "rejected",
+        "reason": "New or strengthened findings appeared after repair",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 1,
+        "new_findings": 1,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-retained-target",
+      "category": "scanner fault injection",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "rejected"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "rejected",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "rejected",
+        "reason": "Targeted finding remains after the repair",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 1,
+        "new_findings": 0,
+        "target_removed": false,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-missing-target",
+      "category": "scanner fault injection",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "rejected"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "rejected",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "rejected",
+        "reason": "Fresh baseline did not confirm the targeted finding",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 0,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": false,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-malformed-scanner",
+      "category": "scanner fault injection",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "unavailable"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "unavailable",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "unavailable",
+        "reason": "Scanner output is not SARIF 2.1.0",
+        "scope": "single-workflow",
+        "scanner_version": null,
+        "attempts": 1,
+        "before_findings": null,
+        "after_findings": null,
+        "new_findings": null,
+        "target_removed": null,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "dev-shifted-warning",
+      "category": "scanner fault injection",
+      "split": "development",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 2,
+        "after_findings": 1,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    }
+  ]
+}

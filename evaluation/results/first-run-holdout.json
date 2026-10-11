@@ -1,0 +1,729 @@
+{
+  "dataset_version": "1.0",
+  "manifest_sha256": "e4284e55b83cbece05df549014814474fc8aedd35bb43aed52702f30ab516ae1",
+  "production_baseline_commit": "d2fc6c6b7ebe8bdfc0a7134d7b024d91ae812ba1",
+  "production_files_sha256": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.py": "3e29caf346727786980c4f2647b5816cef69c70941a9df993997ff68d63a7310",
+    "investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
+    "repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
+    "validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14"
+  },
+  "run_kind": "first-use",
+  "split": "holdout-first-use",
+  "scanner_requested": true,
+  "methodology": "Manually specified policy outcomes before any evaluation run. Synthetic first-use holdout, authored with implementation knowledge; not independent or a real-world vulnerability benchmark. Scanner fault scenarios are simulations, not scanner effectiveness measurements.",
+  "metrics": {
+    "observed_case_accuracy": {
+      "numerator": 20,
+      "denominator": 20,
+      "value": 1.0
+    },
+    "triage_policy_precision": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "triage_policy_recall": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "repair_eligibility_precision": {
+      "numerator": 6,
+      "denominator": 6,
+      "value": 1.0
+    },
+    "repair_eligibility_recall": {
+      "numerator": 6,
+      "denominator": 6,
+      "value": 1.0
+    },
+    "repair_abstention_rate": {
+      "numerator": 13,
+      "denominator": 19,
+      "value": 0.6842105263157895
+    },
+    "citation_source_checks": {
+      "numerator": 60,
+      "denominator": 60,
+      "value": 1.0
+    },
+    "exact_candidate_validity": {
+      "numerator": 6,
+      "denominator": 6,
+      "value": 1.0
+    },
+    "source_immutability": {
+      "numerator": 20,
+      "denominator": 20,
+      "value": 1.0
+    },
+    "live_validation_label_agreement": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0
+    },
+    "simulated_validation_label_agreement": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+    },
+    "validation_not_run": 0,
+    "validation_outcomes": {
+      "validated": 4,
+      "rejected": 1,
+      "unsupported": 1,
+      "unavailable": 0,
+      "not-run": 14
+    }
+  },
+  "cases": [
+    {
+      "id": "holdout-issue-body",
+      "category": "eligible repair",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "991b6d9d1dd81081475492450599aed5c4a4b34be40974c94b2032a76c0e74ca",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-head-ref",
+      "category": "eligible repair",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "871f9225500b8dcfa5b1a331f6124d2610a5a726f7cdc8e0b80ecd2b196f04f3",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-pr-body",
+      "category": "eligible repair",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "1e18eacb940ccacc9e6f4d44aca605f5f2e7260d45a2513e0efb96bbd941415a",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-two-expressions",
+      "category": "unsupported Bash",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "bd74e6c3e5c33e964691f3ffd32983e6597f1c5b5da059691744aa0085900be9",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-redirect",
+      "category": "unsupported Bash",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "070c344830f2fbe699b48a48408adea693b6d2fa23267aed50cc7e971752ebc4",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-subshell",
+      "category": "unsafe Bash",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "9d95a62c0c91687370ba1019fb265b70866ae5258864c7b30369ebdb64d6993d",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-lookalike-rule",
+      "category": "unsupported rule",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-wrong-hash",
+      "category": "tampered evidence",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-astral-columns",
+      "category": "ambiguous source position",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "c91060111db1d8bb0d8e70cc6b520e17a8d0d80a4e2f175bc366f778313742c1",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-collision-comment",
+      "category": "instruction-like comment",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "0a1f3c020c126f18132d7338874fd78a96289b59de30d95a4f38a24b68fe6246",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-anchor",
+      "category": "unsupported YAML",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52c1cbe87d9599575f33794716e3d850e71d4589f2f9a378233266f901514d3d",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-path-escape",
+      "category": "tampered source path",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-location-budget",
+      "category": "resource limit",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-printf-format",
+      "category": "unsupported Bash",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "60c736fcc7e678b63d33bacc48ac6bce7da162c5d1ee6a5d87baaec189cd816b",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-chomp-header",
+      "category": "unsupported YAML edit",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "review",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "85f6ff44442b5426267474f660d2b6269fe6697ff5612e0b6ade5e44594c562a",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-benign",
+      "category": "benign control",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "empty",
+        "repair": "not-run",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "empty",
+      "repair": "not-run",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "9d156bd1a829f34ad1c516734db51051e6e672a424b026923e858cfdc9ac9ee6",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-hash-only",
+      "category": "eligible hash-bound repair",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "validated"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "validated",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "d1b98fde84914d37ddf92a5febd30027e79591fdbb97c38b040b13448a352fcd",
+      "validation_detail": {
+        "status": "validated",
+        "reason": "Target removed with no new scanner findings",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 1,
+        "after_findings": 0,
+        "new_findings": 0,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked",
+          "Two bounded offline scans compared by YAML route and multiplicity"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-node-budget",
+      "category": "resource limit",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "abstain",
+        "repair": "abstain",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ]
+      },
+      "triage": "abstain",
+      "repair": "abstain",
+      "validation": "not-run",
+      "validation_mode": "not-run",
+      "source_unchanged": true,
+      "citations_correct": 0,
+      "citations_total": 0,
+      "repair_exact": null,
+      "failures": [],
+      "source_sha256": "3fe7297ae904ce1a6fad33c31df15fc14a4640f8d087ba421ba1722fea49dd6d",
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-strengthened",
+      "category": "scanner fault injection",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          0,
+          "run"
+        ],
+        "validation": "rejected"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "rejected",
+      "validation_mode": "simulated-scanner-fault",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+      "validation_detail": {
+        "status": "rejected",
+        "reason": "New or strengthened findings appeared after repair",
+        "scope": "single-workflow",
+        "scanner_version": "1.30.1",
+        "attempts": 2,
+        "before_findings": 2,
+        "after_findings": 1,
+        "new_findings": 1,
+        "target_removed": true,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    },
+    {
+      "id": "holdout-dynamic-action",
+      "category": "unsupported validation context",
+      "split": "holdout-first-use",
+      "expected": {
+        "triage": "review",
+        "repair": "proposed",
+        "yaml_path": [
+          "jobs",
+          "review",
+          "steps",
+          1,
+          "run"
+        ],
+        "validation": "unsupported"
+      },
+      "triage": "review",
+      "repair": "proposed",
+      "validation": "unsupported",
+      "validation_mode": "live-scanner",
+      "source_unchanged": true,
+      "citations_correct": 5,
+      "citations_total": 5,
+      "repair_exact": true,
+      "failures": [],
+      "source_sha256": "6cd392e6827a44b7920399d5af9feaee5aa2842e02c47e8224f43597befe3726",
+      "validation_detail": {
+        "status": "unsupported",
+        "reason": "Local, dynamic or nonstandard action refs unsupported",
+        "scope": "single-workflow",
+        "scanner_version": null,
+        "attempts": 0,
+        "before_findings": null,
+        "after_findings": null,
+        "new_findings": null,
+        "target_removed": null,
+        "checks": [
+          "Current base hash matched",
+          "Exact allowlisted diff reconstructed",
+          "Candidate YAML and scope checked"
+        ]
+      },
+      "passed_observed_checks": true
+    }
+  ]
+}

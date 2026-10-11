@@ -16,5 +16,6 @@ or social posting configured. Public visibility requires a separate release acti
 Current status: evidence investigation and a constrained Bash `printf` injection repair preview
 are implemented. Permission repairs remain deferred until explicit requirements can be supplied
 and validated. The bounded static validation loop is implemented for eligible repair previews.
-Next: frozen adversarial and held-out evaluation; retain refusal gates and measure supported
-coverage separately from broad security claims.
+A frozen synthetic evaluation and first-run audit are complete; later runs are regressions.
+Next: assess the optional model adapter without paid calls, credentials, or expanded tool
+permissions. Keep the deterministic baseline and evaluation/refusal gates intact.

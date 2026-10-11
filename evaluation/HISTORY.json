@@ -1,0 +1,7 @@
+{
+  "immutable_first_run_records_sha256": {
+    "first-run-development.json": "d62b893f162608aab1d32c6223a8dc12ee96eea308cf990bab15778ff5acd073",
+    "first-run-holdout.json": "ff8c7d416e9f3c226487c9653dc928e8f8f9c2a4fa8c5ff67ff6bd3f24d4fe2d",
+    "first-run-audited-summary.json": "53c024e13d202de621da289206714072eec4c69bc709deb61cc383efc9370507"
+  }
+}

@@ -103,3 +103,40 @@ report-only. Remaining limits: single-workflow comparisons, one supported scanne
 permission-requirement interface, no authenticated scan revision or runtime/security proof.
 Native scanner installation is trusted; this is process bounding, not an OS security sandbox.
 CI and exact remote commit results are in the increment handoff.
+
+## 2026-10-11 America/New_York — Frozen synthetic evaluation
+
+Started from d2fc6c6 with a clean checkout and matching private remote. Froze 38 synthetic
+source/SARIF cases and manually specified policy outcomes/candidate YAML before any run
+(f0dc2df); corrected the echo SARIF source line during label review before execution (997b3c7).
+No production module was changed or tuned on the suite. Development and first-use labels were
+run separately. Original records and hashes are retained rather than overwritten.
+
+A post-run audit excluded five holdout variants already exercised by earlier unit tests.
+Official subsets: 18 development, 15 synthetic first-use holdout, 5 reused regressions. Original
+raw holdout file still has its initial 20-case naming; AUDIT and evaluation README explain the
+correction. Another instrumentation error counted one zero-attempt preflight refusal as a live
+scanner comparison: audited holdout has 4/4 actual comparisons plus 1/1 unsupported preflight,
+not the original raw 5/5 live count. The evaluator now attributes these correctly.
+
+Results: development 18/18, audited first-use 15/15, reused regressions 5/5 policy matches.
+First-use repair eligibility precision/recall 5/5 each; triage precision/recall 7/7 each;
+9/14 repair abstentions; 35/35 citation records passing bounded source checks; 5/5 exact
+candidate diffs; 15/15 original sources unchanged; 4/4 real scanner comparisons. Across all
+cases: 6 actual paired comparisons (12 zizmor calls), 6 simulated scanner-fault checks and one
+preflight-only refusal. No production outcome failures were observed. Cases cover malformed/
+tampered evidence, source/YAML limits, unsupported Bash, report-only permissions/checkout,
+benign controls, misleading instruction-like comments and scanner regressions.
+
+Limitations: self-authored with implementation knowledge, synthetic, not independent/blind
+or real-world security measurement. Some branches were known from existing unit tests.
+Policy precision/recall do not measure vulnerability detection; exact golden candidate checks
+do not prove runtime semantic equivalence/security. Instruction comments do not test a model.
+First-use results must not be replaced with later regression results. Production file hashes
+in original reports identify the evaluated baseline.
+
+Added reproducible evaluator, integrity/attribution tests, original/audited/regression reports,
+and methodology. Full unit suite now 58 tests; Ruff and strict production mypy passed. CI will
+also run the full regression suite with pinned zizmor. Next: optional adapter feasibility and
+contract design, retaining offline default, no paid calls/credentials and no broader tools.
+Do not silently relabel known cases as held-out in future runs.

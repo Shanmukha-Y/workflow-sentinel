@@ -1,0 +1,224 @@
+{
+  "run_kind": "audit-of-original-first-run-records-no-execution",
+  "production_changed": false,
+  "raw_reports_preserved": true,
+  "corrections": [
+    "Five prior-tested variants excluded from first-use holdout",
+    "Zero-attempt validation classified as preflight, not live scanner"
+  ],
+  "subsets": {
+    "development": {
+      "observed_case_accuracy": {
+        "numerator": 18,
+        "denominator": 18,
+        "value": 1.0
+      },
+      "triage_policy_precision": {
+        "numerator": 12,
+        "denominator": 12,
+        "value": 1.0
+      },
+      "triage_policy_recall": {
+        "numerator": 12,
+        "denominator": 12,
+        "value": 1.0
+      },
+      "repair_eligibility_precision": {
+        "numerator": 7,
+        "denominator": 7,
+        "value": 1.0
+      },
+      "repair_eligibility_recall": {
+        "numerator": 7,
+        "denominator": 7,
+        "value": 1.0
+      },
+      "repair_abstention_rate": {
+        "numerator": 9,
+        "denominator": 16,
+        "value": 0.5625
+      },
+      "citation_source_checks": {
+        "numerator": 57,
+        "denominator": 57,
+        "value": 1.0
+      },
+      "exact_candidate_validity": {
+        "numerator": 7,
+        "denominator": 7,
+        "value": 1.0
+      },
+      "source_immutability": {
+        "numerator": 18,
+        "denominator": 18,
+        "value": 1.0
+      },
+      "live_validation_label_agreement": {
+        "numerator": 2,
+        "denominator": 2,
+        "value": 1.0
+      },
+      "preflight_label_agreement": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "real_scanner_calls": 4,
+      "simulated_validation_label_agreement": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "validation_not_run": 0,
+      "validation_outcomes": {
+        "validated": 3,
+        "rejected": 3,
+        "unsupported": 0,
+        "unavailable": 1,
+        "not-run": 11
+      }
+    },
+    "holdout-first-use": {
+      "observed_case_accuracy": {
+        "numerator": 15,
+        "denominator": 15,
+        "value": 1.0
+      },
+      "triage_policy_precision": {
+        "numerator": 7,
+        "denominator": 7,
+        "value": 1.0
+      },
+      "triage_policy_recall": {
+        "numerator": 7,
+        "denominator": 7,
+        "value": 1.0
+      },
+      "repair_eligibility_precision": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "repair_eligibility_recall": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "repair_abstention_rate": {
+        "numerator": 9,
+        "denominator": 14,
+        "value": 0.6428571428571429
+      },
+      "citation_source_checks": {
+        "numerator": 35,
+        "denominator": 35,
+        "value": 1.0
+      },
+      "exact_candidate_validity": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "source_immutability": {
+        "numerator": 15,
+        "denominator": 15,
+        "value": 1.0
+      },
+      "live_validation_label_agreement": {
+        "numerator": 4,
+        "denominator": 4,
+        "value": 1.0
+      },
+      "preflight_label_agreement": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "real_scanner_calls": 8,
+      "simulated_validation_label_agreement": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "validation_not_run": 0,
+      "validation_outcomes": {
+        "validated": 4,
+        "rejected": 0,
+        "unsupported": 1,
+        "unavailable": 0,
+        "not-run": 10
+      }
+    },
+    "regression-reused": {
+      "observed_case_accuracy": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "triage_policy_precision": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "triage_policy_recall": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "repair_eligibility_precision": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "repair_eligibility_recall": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "repair_abstention_rate": {
+        "numerator": 4,
+        "denominator": 5,
+        "value": 0.8
+      },
+      "citation_source_checks": {
+        "numerator": 25,
+        "denominator": 25,
+        "value": 1.0
+      },
+      "exact_candidate_validity": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "source_immutability": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "live_validation_label_agreement": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "preflight_label_agreement": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "real_scanner_calls": 0,
+      "simulated_validation_label_agreement": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "validation_not_run": 0,
+      "validation_outcomes": {
+        "validated": 0,
+        "rejected": 1,
+        "unsupported": 0,
+        "unavailable": 0,
+        "not-run": 4
+      }
+    }
+  }
+}

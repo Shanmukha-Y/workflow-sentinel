@@ -1,0 +1,11 @@
+{
+  "classification_version": "1.0",
+  "excluded_from_first_use_holdout": {
+    "holdout-two-expressions": "Same unsupported script form was exercised in prior repair unit tests.",
+    "holdout-redirect": "Same redirect script form was exercised in prior repair unit tests.",
+    "holdout-subshell": "Same subshell script form was exercised in prior repair unit tests.",
+    "holdout-chomp-header": "Same run header was exercised in prior repair unit tests.",
+    "holdout-strengthened": "Same strengthened-level fault scenario was exercised in prior validation unit tests."
+  },
+  "rule": "Retain frozen manifest/raw first-run records; reclassify these rows as regression-reused in audited summaries and future runs. Remaining first-use cases are synthetic input variants, not unseen branches or an independent blind benchmark."
+}

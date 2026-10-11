@@ -99,6 +99,14 @@ Use the same checkout that was scanned. Supplied SHA-256 hashes and source snipp
 
 Investigation reads are capped at 32 files and 4 MB total, with a 1 MB limit per file, 1,000 findings, and 10 locations per finding. YAML structure and context have size and depth limits. Ambiguous locations, duplicate keys, anchors, aliases, explicit tags, remote paths, symlinks, and SARIF URI base references produce abstentions. Source citations use one-based lines and Unicode code-point columns. Repository reads require POSIX directory-descriptor support (Linux or macOS). The [schemas](schemas) describe the accepted input subset and report format (`schema_version: 1.3`).
 
+## Evaluation
+
+A frozen synthetic suite checks triage, repair eligibility, citation/source consistency and static validation. The audited first-use subset matched 15/15 policy labels, with 5/5 exact candidate diffs and 4/4 real scanner comparisons. These are narrow policy checks, not vulnerability-detection or security guarantees. See [evaluation methodology, original results and corrections](evaluation/README.md).
+
+```sh
+python evaluation/run.py --scanner /absolute/path/to/zizmor --output /tmp/sentinel-evaluation-regression.json
+```
+
 ## Development
 
 ```sh
