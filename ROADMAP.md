@@ -17,5 +17,7 @@ Current status: evidence investigation and a constrained Bash `printf` injection
 are implemented. Permission repairs remain deferred until explicit requirements can be supplied
 and validated. The bounded static validation loop is implemented for eligible repair previews.
 A frozen synthetic evaluation and first-run audit are complete; later runs are regressions.
-Next: assess the optional model adapter without paid calls, credentials, or expanded tool
-permissions. Keep the deterministic baseline and evaluation/refusal gates intact.
+A bounded advisory interpreter and offline scripted adapter demo are implemented. Live provider
+integration and model evaluation remain open gates; replay does not establish model quality.
+Next: release preparation with a reproducible demo, threat model and measured limitations;
+retain private visibility until separate release authorization.

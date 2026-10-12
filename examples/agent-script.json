@@ -1,0 +1,6 @@
+[
+  {"action": "evidence", "packet": 0},
+  {"action": "propose", "packet": 0},
+  {"action": "validate", "packet": 0},
+  {"action": "finish", "packet": 0}
+]

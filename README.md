@@ -91,6 +91,45 @@ Scanner arguments are fixed: offline SARIF, strict collection, regular persona, 
 
 A validated result is a static check, not a security guarantee; review the diff before applying it. See [the example validation report](examples/static-validation.json).
 
+## Advisory adapter replay
+
+The optional adapter interpreter accepts structured requests to inspect a finding's verified
+local evidence, request a constrained proposal, run static validation, or abstain. The included
+scripted transport replays JSON responses offline; it is a reproducible interface demo, not a
+live model. Packet indices refer to the deterministic report's sorted `packets` array.
+
+```sh
+workflow-sentinel \
+  --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
+  --repo fixtures/repairable \
+  --agent-script examples/agent-script.json \
+  --scanner /absolute/path/to/zizmor > agent-report.json
+```
+
+The example requests evidence, a proposal, validation, then completion. With the supported
+scanner it produces an advisory `review` selection and a static validation result. Without
+`--scanner` it abstains at validation; this mode never discovers a scanner on PATH. Existing
+CLI behavior remains the default when `--agent-script` is absent.
+
+The [request schema](schemas/agent-script.schema.json) permits only `evidence`, `propose`,
+`validate`, `finish` with an integer packet index, or `abstain` alone. Unknown fields, paths,
+commands, arbitrary patch text, and free-form rationale are rejected. Evidence selects only
+previously resolved packets; proposals require a prior evidence request and come from the
+existing deterministic repair policy. Proposed repairs cannot complete without successful
+static validation. Neither replay nor validation applies a patch to the original repository.
+
+There are at most eight responses, 4 KB per response, 64 KB of cumulative tool observations,
+and two validation pairs without retries. A 65-second loop deadline is checked between turns;
+individual scanner subprocesses retain their 15-second deadline. Initial investigation retains
+its existing resource bounds. Scripts are read under the CLI's 1 MB input cap. Traces contain
+only fixed action/status values and turn numbers; evidence/report excerpts remain untrusted
+source content and may contain secrets. The result is an `agent-1.0` envelope around the
+unchanged deterministic report format.
+
+See [the adapter contract and live-provider gates](docs/ADAPTER.md). No provider transport is
+included yet. Scripted tests exercise policy enforcement, not model reasoning, prompt-injection
+resistance, or live-model quality.
+
 ## Limitations
 
 A `review` decision means the finding resolved to workflow context, not that exploitability was confirmed. Conditions and expressions are recorded as declarations; Sentinel does not evaluate them or determine the permissions a job needs. Shell context currently covers explicit step-level settings. Sentinel does not independently scan workflows, and an empty report does not establish security.

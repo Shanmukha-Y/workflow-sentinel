@@ -140,3 +140,35 @@ and methodology. Full unit suite now 58 tests; Ruff and strict production mypy p
 also run the full regression suite with pinned zizmor. Next: optional adapter feasibility and
 contract design, retaining offline default, no paid calls/credentials and no broader tools.
 Do not silently relabel known cases as held-out in future runs.
+
+## 2026-10-12 UTC — Bounded advisory adapter replay
+
+Started from clean 45d65aca; private remote matched. Added an opt-in scripted adapter interpreter
+with structured evidence/propose/validate/finish/abstain requests. It selects only existing
+bounded source evidence and invokes deterministic repair/validation policies. No arbitrary
+paths, commands, patch text, response rationale, provider plugins or target scripts are accepted.
+Prior evidence is required for proposals; proposed repairs require successful static validation
+before completion. Terminal responses must be last. Missing scanner, invalid responses/order,
+failed validation and exhausted budgets abstain. Scanner opt-in is explicit, never PATH discovery
+in replay mode. The ordinary offline CLI/report format is preserved.
+
+Added strict response fields/types and duplicate JSON field rejection, eight-turn and 4 KB
+response limits, 64 KB observation limit, two-pair validation budget, 65-second between-turn
+loop deadline and existing per-scanner timeouts. Fixed-value traces exclude raw response text;
+source evidence/report excerpts are still sensitive untrusted data, not redacted. The initial
+investigation retains its existing resource bounds. Included request schema, reproducible
+script, CLI instructions and a provider feasibility/contract document.
+
+Checks: 70 unit tests, Ruff and strict mypy on six production modules. Frozen full regression
+rerun matched 38/38 policy labels (a regression, not new first-use evidence). Real zizmor 1.30.1
+scripted demo returned review with validated target removal, using two scanner calls; source
+was unchanged. CI includes the scripted real-scanner demo and existing regression suite.
+No live provider, credential access, model request, paid commitment or target execution occurred.
+Mocked responses test interpreter enforcement, not prompt-injection resistance or model quality.
+
+Release gates: threat model, reproducible consolidated demo, measured scope/failures and manual
+release draft. Live model capability remains absent: a future adapter requires official API
+verification, explicit data/cost approval, hard network cancellation, sanitized errors and a
+separate adversarial live-model evaluation. Keep that gap visible; this increment does not
+fulfill a claim of live LLM reasoning. Permission repairs remain deferred and checkout report-only.
+Exact-commit CI and private remote verification are recorded in the increment handoff.
