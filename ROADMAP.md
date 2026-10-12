@@ -17,7 +17,8 @@ Current status: evidence investigation and a constrained Bash `printf` injection
 are implemented. Permission repairs remain deferred until explicit requirements can be supplied
 and validated. The bounded static validation loop is implemented for eligible repair previews.
 A frozen synthetic evaluation and first-run audit are complete; later runs are regressions.
-A bounded advisory interpreter and offline scripted adapter demo are implemented. Live provider
-integration and model evaluation remain open gates; replay does not establish model quality.
+A bounded advisory interpreter, offline scripted demo and opt-in OpenAI Responses provider
+adapter are implemented. SDK mock transport tests pass; live-model evaluation remains an open
+release gate, and neither replay nor mocks establish model quality.
 Next: release preparation with a reproducible demo, threat model and measured limitations;
 retain private visibility until separate release authorization.

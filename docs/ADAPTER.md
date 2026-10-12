@@ -1,9 +1,10 @@
 # Advisory adapter contract
 
 `workflow_sentinel.agent.run(sarif, repo, responses, scanner=None)` implements the offline
-request interpreter. Only the bundled data-only scripted transport is supported. It creates
+request interpreter. The bundled scripted transport and opt-in injected OpenAI adapter are supported. It creates
 the same bounded deterministic packets first, then interprets a sequence of structured
-requests. No callable plugins, provider SDKs, shell strings or source-defined tools are loaded.
+requests. The default replay loads no provider SDK. The provider path accepts only a trusted injected
+client; it loads no source-defined tools, plugins or shell strings.
 
 | Request | Prerequisite | Observation / outcome |
 |---|---|---|
@@ -27,24 +28,46 @@ scanner opt-in, rejected/unsupported/unavailable results, trace sanitization, de
 replay and unchanged source. Real scanner CI exercises one scripted successful proposal;
 that is a scanner integration demonstration, not a model evaluation.
 
-## Live transport feasibility and release gate
+## OpenAI transport implementation and remaining gate
 
-The interpreter is a narrow seam for a future provider, but replay is not an interactive LLM
-agent. A live transport must receive the previous bounded observations and supply one response
-at a time, with strict JSON decoding (including duplicate-key rejection), cancellation and a
-hard network deadline enforced outside the interpreter. It must not change available tools,
-turn/scanner budgets, source-read bounds, or the deterministic proposal/validation policy.
+`OpenAIAdapter(client, model=..., max_output_tokens=..., allow_source_disclosure=True)` is an
+opt-in interactive transport. It calls the supplied synchronous SDK client's
+`with_options(timeout=..., max_retries=0).responses.create(...)`. The request uses five strict
+function schemas, `tool_choice="required"`, `parallel_tool_calls=False`, `store=False`, and an
+explicit output-token cap. It accepts exactly one completed function call, validates the
+arguments again locally, rejects duplicate call IDs/JSON keys and returns the command to the
+same deterministic interpreter. Bounded reasoning items are preserved for continuation, and
+the next call receives the actual preceding observation using `function_call_output/call_id`.
+Raw provider response/errors are not included in report traces.
 
-Before adding one, verify current official provider API/SDK documentation, select a supported
-structured-output mechanism, bound requests and responses, disable automatic retries, and
-handle refusal, malformed responses, transport errors and cancellation without recording raw
-provider bodies. Require explicit provider, model, data-disclosure and spend configuration.
-Credentials must come from a user-approved runtime mechanism; never discover credentials by
-searching files, store them in reports, or include them in prompts. No provider is selected,
-no credential is read, and no network model request is made by this implementation.
+Verified on October 12 against the [official function-calling guide](https://developers.openai.com/api/docs/guides/function-calling)
+and [official SDK guidance](https://developers.openai.com/api/docs/libraries). Tested SDK:
+OpenAI Python 3.29.0 with httpx2 2.13.1 in-memory MockTransport. No live requests or real
+credentials were used. The SDK tests verify the emitted request payload, multi-turn observation
+roundtrip, reasoning continuation, retries disabled on HTTP 429, strict configuration, malformed/
+refused/incomplete output, arbitrary commands/patches, duplicate call IDs/arguments, input and
+output caps, deadline restoration, and missing scanner refusal. A standalone mock transport
+demo can also use the real installed scanner on the synthetic repair fixture.
 
-Release evidence still needs a separately approved live-model evaluation, including malicious
-source instructions and refusal/timeout handling, with measured failures and explicit cost/data
-limits. Existing frozen cases are regressions now; do not relabel them as new held-out model
-cases. Mocked responses establish interpreter behavior only. Adding a provider requires a new
-implementation and review; setting an environment variable cannot enable one today.
+The transport permits only `https://api.openai.com/v1`. A caller must separately approve data
+and spend, supply the client and supported model, and review excerpts for secrets. The adapter
+never discovers credentials or constructs clients. The test/demo uses a fixed mock placeholder
+and clears the SDK's environment during mock client construction; no real credential is read.
+There is no live CLI option. SDK dependencies are optional for runtime users.
+
+Resource bounds: eight requests, 64 KB serialized conversation history, 16 KB decoded provider
+response, 4 KB function arguments, 64–512 output tokens/request. The existing 64 KB observation
+and two scanner-pair caps remain. Each call uses a POSIX main-thread signal wall deadline of at
+most 15 seconds, capped by the session's remaining 65-second budget, plus SDK timeout. Active
+process alarms and non-main threads are refused; use a dedicated single-thread application and
+a fresh unused client. Trusted SDK/native code could delay signal delivery; this is not process
+isolation. Output size is checked after SDK decoding, not a preallocation/streaming cap.
+Cancelling a local request does not establish remote cancellation or zero charges. Token/byte
+caps do not enforce a monetary budget, and `store=False` is not a provider retention guarantee.
+
+Provider implementation is now present, but live capability remains unvalidated. Release needs
+separately approved real-model evaluation with malicious source instructions, measured failure/
+refusal behavior, explicit cost/data limits and available model/account compatibility. SDK mocks
+establish protocol and guard behavior only. Existing frozen cases are regressions; do not relabel
+them as new held-out model cases. The documentation must not call replay or mocked transport
+autonomous LLM reasoning or claim static validation proves security.

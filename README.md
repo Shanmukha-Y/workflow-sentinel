@@ -126,9 +126,54 @@ only fixed action/status values and turn numbers; evidence/report excerpts remai
 source content and may contain secrets. The result is an `agent-1.0` envelope around the
 unchanged deterministic report format.
 
-See [the adapter contract and live-provider gates](docs/ADAPTER.md). No provider transport is
-included yet. Scripted tests exercise policy enforcement, not model reasoning, prompt-injection
-resistance, or live-model quality.
+See [the adapter contract and live-provider gates](docs/ADAPTER.md). Scripted tests exercise
+policy enforcement, not model reasoning, prompt-injection resistance, or live-model quality.
+
+## OpenAI provider adapter
+
+`OpenAIAdapter` uses the official OpenAI Python SDK's Responses API to request one strict
+function call at a time and return each bounded tool observation on the next turn. It runs
+through the same deterministic request interpreter as replay. The provider chooses which
+packet/tool to request; it cannot supply patches, commands, source paths or a security verdict.
+The [official function-calling guide](https://developers.openai.com/api/docs/guides/function-calling)
+describes the protocol. Offline CLI behavior remains the default.
+
+Install the optional SDK with `python -m pip install -e '.[provider]'`. Your trusted application
+must supply a fresh configured synchronous SDK client, an explicit model that supports strict
+function tools, an output-token cap and explicit permission to disclose source evidence.
+Sentinel never constructs a credential-bearing client or searches environment/files for keys.
+
+```python
+from workflow_sentinel.agent import run
+from workflow_sentinel.openai_adapter import OpenAIAdapter
+
+# client is supplied by your application's approved runtime configuration.
+adapter = OpenAIAdapter(client, model=model, max_output_tokens=256,
+                        allow_source_disclosure=True)
+report = run(sarif, repo, None, scanner, adapter=adapter)
+```
+
+Calling this with a real client can disclose workflow excerpts/diffs to OpenAI and incur charges.
+The provider adapter is a Python API; there is no live-provider CLI switch or automatic fallback.
+It permits only the official API endpoint, disables SDK retries and response storage, limits
+history to 64 KB and decoded responses to 16 KB, and caps output at 64–512 tokens per request
+with at most eight requests. These are resource limits, not a dollar budget or a retention
+promise. SDK response size is checked after decoding, not as a streaming allocation limit.
+
+Each synchronous call has a 15-second wall deadline and SDK timeout, capped by the session's
+remaining time. Calls require a POSIX main thread without an active process alarm; other
+contexts abstain. Use a dedicated single-thread application with a fresh client. Provider
+failures/refusals/incomplete output and malformed calls abstain without recording raw errors.
+
+Try the real SDK over an in-memory mocked transport, with no live API calls:
+
+```sh
+python examples/provider_mock_demo.py --scanner /absolute/path/to/zizmor > provider-demo.json
+```
+
+The demo labels its output `mock-openai-transport-advisory`. SDK protocol/error tests passed;
+no live model has been evaluated. Real-model effectiveness and adversarial behavior remain
+release gates. Source excerpts are unredacted: review disclosure before enabling a real client.
 
 ## Limitations
 

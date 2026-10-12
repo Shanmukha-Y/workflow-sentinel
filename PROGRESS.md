@@ -172,3 +172,39 @@ verification, explicit data/cost approval, hard network cancellation, sanitized 
 separate adversarial live-model evaluation. Keep that gap visible; this increment does not
 fulfill a claim of live LLM reasoning. Permission repairs remain deferred and checkout report-only.
 Exact-commit CI and private remote verification are recorded in the increment handoff.
+
+### October 12 follow-up — Implemented OpenAI provider transport
+
+The replay-only handoff did not fulfill the requested provider integration. Added an actual
+opt-in OpenAI Responses adapter with an injected configured synchronous SDK client. Each model
+turn requests one strict allowlisted function, receives the preceding verified tool observation,
+and runs through the same deterministic policy. The adapter requires explicit source disclosure,
+model and output-token cap; it constructs no credential-bearing clients and discovers no keys.
+Official function-calling and SDK documentation were fetched before implementation; links and
+the checked SDK versions are in docs/ADAPTER.md. Runtime SDK is an optional dependency.
+
+The official SDK 3.29.0 was installed and exercised exclusively through httpx2 2.13.1 in-memory
+MockTransport using a fixed non-credential placeholder and empty constructor environment. No
+real credential was retrieved/transmitted/saved, no live API call or paid commitment occurred.
+A reproducible mock-transport demo performs interactive observation roundtrips and real zizmor
+validation of the existing synthetic fixture; output is labeled mock-openai-transport-advisory.
+
+Added strict completion/tool-call checks, unique call IDs, bounded reasoning continuation,
+64 KB history and 16 KB decoded-response caps, 64–512 output-token cap, eight-request limit,
+SDK timeout/retries=0 and POSIX main-thread wall deadlines capped by remaining session budget.
+Conflicting alarms/threads refuse; provider error bodies are not stored. Input/byte/token bounds
+are not monetary budgets; decoded size caps are not preallocation caps; store=False is not a
+retention promise. Trusted SDK/native code is not process-isolated; details are documented.
+
+Verification: 78 unit tests pass, including real SDK mocked wire protocol, multi-turn requests,
+HTTP 429 without retry, malformed/refused/incomplete response, extra/unsafe arguments, duplicate
+JSON fields/call IDs, bounded inputs/output/calls, actual local timeout and restored signal timer.
+Ruff, strict mypy (seven production modules) and diff whitespace checks pass. Full frozen suite
+rerun matched 38/38 regression policy labels. Mock provider plus real scanner demo validated;
+source was unchanged. CI includes both adapter demos. Staged credential-pattern review and
+exact private remote/CI verification are in the follow-up handoff.
+
+Provider implementation gap is closed; live-model capability validation remains a release gate.
+No mocked outcome measures real reasoning, model effectiveness or prompt-injection resistance.
+Public release remains gated on honest live capability evidence (separate data/spend approval),
+threat model, reproducible consolidated demo, measured limitations and human release decision.
