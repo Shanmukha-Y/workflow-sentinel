@@ -2,7 +2,9 @@
   "records_sha256": {
     "mock-regression.json": "93343c31e6c7cb9bd50ec1bc69ef937e904cd0e86d17b2208df123833dbd7506",
     "mock-regression-before-output-preflight.json": "c25cba52b7edfb88343eb98da9662ecb5503372b17951663f9bf563a14c7c03f",
-    "mock-first-scoring-error.json": "5617b7ded3fe705cc3eea79ca3acf7f9c1610a693a0775a25485c9b80f708112"
+    "mock-first-scoring-error.json": "5617b7ded3fe705cc3eea79ca3acf7f9c1610a693a0775a25485c9b80f708112",
+    "local-qwen38-first.json": "f830ab2021445e27c1e15843c13ac01311a72c5c3ad6c576279fd7468b0ab869",
+    "local-qwen38-first-environment.json": "f69cd94ed34b32fe87b60d4cec635664fadc1fa08640a8ed5f16882b6f3a9f0e"
   },
-  "note": "Preserve original scorer failure and subsequent mock regression. Neither is a live-model result."
+  "note": "Preserve original scorer failure, mock regressions, and actual first local Qwen run/environment. Mock records are not real-model measurements."
 }

@@ -1,0 +1,55 @@
+{
+  "recorded_at_utc": "2026-10-13T13:50:29.409158+00:00",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "architecture": "arm64",
+  "python": "3.12.9",
+  "cpu": "Apple M4 Max",
+  "ram_bytes": 51539607552,
+  "free_disk_bytes_after_pull": 542279061504,
+  "ollama_server_version": "0.40.0",
+  "model": {
+    "tag": "qwen3.8:27b-q4_K_M",
+    "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+    "download_bytes": 17741872132,
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "27.3B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 5120,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "vision",
+      "tools",
+      "thinking"
+    ]
+  },
+  "sampled_model_memory_bytes_during_run": 17837955480,
+  "memory_note": "Ollama /api/ps sample during the run; not a measured host or GPU peak.",
+  "configuration": {
+    "context": 8192,
+    "num_predict": 256,
+    "temperature": 0,
+    "seed": 0,
+    "think": false,
+    "per_request_seconds": 15,
+    "per_case_requests": 4,
+    "batch_requests": 32,
+    "keep_alive": "2m"
+  },
+  "listener_verified": "127.0.0.1:11434 only; existing daemon, configuration unchanged",
+  "download_registry": "https://ollama.com/library/qwen3.8:27b-q4_K_M",
+  "cloud_inference": false,
+  "credential_configuration": false,
+  "api_charges_usd": 0,
+  "cost_note": "Local model inference only; electricity and hardware costs not measured.",
+  "run": "local-qwen38-first.json",
+  "run_kind": "first local execution of known synthetic regressions"
+}

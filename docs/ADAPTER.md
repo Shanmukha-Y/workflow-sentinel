@@ -65,7 +65,8 @@ isolation. Output size is checked after SDK decoding, not a preallocation/stream
 Cancelling a local request does not establish remote cancellation or zero charges. Token/byte
 caps do not enforce a monetary budget, and `store=False` is not a provider retention guarantee.
 
-Provider implementation is now present, but live capability remains unvalidated. Release needs
+OpenAI implementation is present but its real cloud capability is unvalidated. The separate
+local Ollama adapter has an actual 4/8 Qwen result; see LOCAL_MODEL.md. Release needs
 separately approved real-model evaluation with malicious source instructions, measured failure/
 refusal behavior, explicit cost/data limits and available model/account compatibility. SDK mocks
 establish protocol and guard behavior only. Existing frozen cases are regressions; do not relabel

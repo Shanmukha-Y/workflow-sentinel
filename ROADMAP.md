@@ -20,8 +20,9 @@ A frozen synthetic evaluation and first-run audit are complete; later runs are r
 A bounded advisory interpreter, offline scripted demo and opt-in OpenAI Responses provider
 adapter are implemented. SDK mock transport tests pass; live-model evaluation remains an open
 release gate, and neither replay nor mocks establish model quality.
-An eight-case synthetic model evaluation harness and threat model are now available. The
-mock oracle verifies scoring/budgets; no live-model result or monetary approval exists.
-Next: obtain separate user approval for the bounded live pilot's model, data disclosure and
-substantiated spending ceiling, then measure capability/failures. Retain private visibility;
-consolidated demo and human release decision remain open gates.
+An eight-case synthetic model evaluation harness and threat model are available. The first
+real on-device Qwen3.8 27B run scored 4/8: two repairs and two controls passed, while manual-review
+and source-instruction cases failed the declared completion criteria. Original results are
+preserved; mocks do not replace that evidence. No cloud model or paid call was used.
+Next: address observed quality failures and evaluate changes honestly, complete the consolidated
+demo, and keep private until all established release gates and human authorization pass.

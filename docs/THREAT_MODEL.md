@@ -2,7 +2,7 @@
 
 Workflow Sentinel reviews supplied zizmor SARIF and local GitHub Actions YAML. It resolves
 bounded evidence, proposes a narrow deterministic Bash repair and can statically compare
-isolated workflow copies. An optional OpenAI adapter chooses among those tools. It never runs
+isolated workflow copies. Optional OpenAI and loopback-only Ollama adapters choose among those tools. It never runs
 target workflows, repository scripts or model-supplied shell commands and never applies patches.
 
 ## Assets and trust boundaries
@@ -10,7 +10,7 @@ target workflows, repository scripts or model-supplied shell commands and never 
 Source integrity, private workflow content, credentials, host resources, evaluation integrity
 and API spending are the protected assets. Workflow/SARIF content and model output are untrusted.
 The application, installed Python/SDK dependencies, configured client factory, native scanner,
-host OS and GitHub CI are trusted. SDK and scanner execution is bounded but not an OS sandbox;
+Ollama daemon/model weights, host OS and GitHub CI are trusted. SDK and scanner execution is bounded but not an OS sandbox;
 a compromised dependency or scanner is outside the implemented defenses.
 
 Source readers reject unsafe paths/symlinks and use directory descriptors. YAML parsing rejects
@@ -26,8 +26,8 @@ Instruction-like text in source can try to change model behavior. The interprete
 structured packet-index evidence/proposal/validation/finish requests or abstention, enforces
 order/budgets, and accepts no paths, commands, patches or model security verdicts. Generated
 repairs still come from deterministic policy. The model can nevertheless choose poor tools,
-miss useful work or abstain too often. No live effectiveness or injection-resistance claim has
-been established. The synthetic exposure check confirms payload inclusion only.
+miss useful work or abstain too often. A known synthetic local Qwen run scored 4/8; this is narrow tool-loop evidence, not broad
+effectiveness or an injection-resistance claim. The synthetic exposure check confirms payload inclusion only.
 
 Provider access is opt-in with a trusted injected client, explicit model, token cap and source
 disclosure approval. Reports and tool observations contain unredacted excerpts; sharing or
@@ -46,8 +46,9 @@ reports, review decisions, scanner success and schema validity are not security 
 
 ## Release gates
 
-Release is blocked pending an approved, honestly reported real-model pilot and review of its
-failures/usage, plus a consolidated reproducible demonstration and human release decision.
+Release is blocked by four observed local quality failures, plus the consolidated reproducible
+demonstration and human release decision. Real local results/failures are preserved in
+LOCAL_MODEL.md; any OpenAI/cloud pilot still needs separate approval.
 Known synthetic regressions and SDK mocks remain separate from any future live results.
 The repository stays private until a separately authorized release; elapsed calendar time is
 not authorization. A later pilot must explicitly approve data disclosure, model, request scope

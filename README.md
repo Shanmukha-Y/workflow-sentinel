@@ -172,8 +172,27 @@ python examples/provider_mock_demo.py --scanner /absolute/path/to/zizmor > provi
 ```
 
 The demo labels its output `mock-openai-transport-advisory`. SDK protocol/error tests passed;
-no live model has been evaluated. Real-model effectiveness and adversarial behavior remain
-release gates. Source excerpts are unredacted: review disclosure before enabling a real client.
+the OpenAI transport has not been evaluated with a real cloud model. Source excerpts are
+unredacted: review disclosure before enabling a real client.
+
+## Local Ollama inference
+
+The optional local adapter uses native tool calls through a fixed, proxy-free
+`127.0.0.1:11434` connection. It requires an installed tool-capable Qwen GGUF model and rejects
+cloud tags/remote metadata. It uses the same deterministic proposal/validation policy and
+never starts a server, accesses credentials or falls back to cloud inference.
+
+```sh
+python model_evaluation/run_local.py --model qwen3.8:27b-q4_K_M \
+  --scanner /absolute/path/to/zizmor --output /tmp/sentinel-local-unique.json
+```
+
+A real on-device Qwen3.8 27B evaluation scored **4/8** on the eight known synthetic cases.
+Both supported repairs validated; three manual-review cases abstained, and one case requested
+validation after a refused proposal and was blocked. The first results and configuration are
+preserved in [the local-model report](docs/LOCAL_MODEL.md). This measures a narrow real tool
+loop, not general autonomous security investigation or injection resistance. Release stays
+private while these quality failures remain open.
 
 ## Limitations
 

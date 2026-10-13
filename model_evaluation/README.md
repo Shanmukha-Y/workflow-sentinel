@@ -1,7 +1,8 @@
 # Model evaluation
 
-This harness is ready for a separately approved synthetic live-provider pilot. No live model
-has been evaluated. Its default command uses an in-memory SDK transport with a deterministic
+This harness supports a mocked SDK transport, an opt-in OpenAI pilot and authorized on-device
+Ollama inference. The first real local Qwen run scored 4/8; see [the preserved results and
+configuration](../docs/LOCAL_MODEL.md). No real OpenAI/cloud model has been evaluated. Its default command uses an in-memory SDK transport with a deterministic
 policy oracle; an 8/8 oracle score verifies the harness and integration, not model quality.
 
 ## Reproduce offline
@@ -14,7 +15,8 @@ python model_evaluation/run_mock.py \
   --output /tmp/sentinel-model-mock.json
 ```
 
-The CLI has no live switch or credential configuration. It never falls back to network access.
+The mock CLI has no live switch or credential configuration; the separate local CLI is documented
+in LOCAL_MODEL.md. It never falls back to network access.
 Without a scanner, the two repair cases cannot validate and the command returns nonzero; it
 still saves the failure report. The result file is reserved with exclusive creation before any client/provider work, so
 existing/unwritable output paths cannot waste requests and prior runs are never overwritten. Reruns require a fresh filename. The library saves no raw response, source excerpt,
@@ -59,7 +61,7 @@ responses omit usage metadata: all 23 usage records are unknown, not measured ze
 The intermediate corrected run before output-file preflight is also preserved separately.
 Checksums in HISTORY protect all three records; later runs remain regressions.
 
-## Proposed user-run live pilot — not authorized yet
+## Proposed user-run OpenAI/cloud pilot — not authorized yet
 
 The proposed scope is one pass of these eight known cases, one explicitly selected supported
 model snapshot, fresh synchronous clients, no tuning/retries and no target execution. Limits:
@@ -75,8 +77,8 @@ choose a supported model available to their account, verify its current input/ou
 and approve a monetary ceiling and how it is enforced. No reliable dollar ceiling can be
 substantiated before those choices. Call/byte/token limits are not a dollar cap; unknown usage
 or local timeout does not imply zero charges. Provider usage totals are recorded when supplied;
-missing or malformed usage remains unknown and requires billing reconciliation. This session's
-authorized API spend is zero; no credential was created, configured, retrieved or transmitted.
+missing or malformed usage remains unknown and requires billing reconciliation. Cloud API spend remains unauthorized; local inference was separately authorized and evaluated.
+No credential was created, configured, retrieved or transmitted.
 
 After those approvals, the user's trusted application can supply an already configured fresh
 client factory (Sentinel never discovers or constructs credentials):
@@ -97,6 +99,6 @@ Do not run this example with a real client before approval. Use a dedicated POSI
 application without an active alarm. The injected factory/SDK is trusted code and must provide
 an in-memory transport for mock mode; the library cannot attest transport identity. Audit
 results before sharing. Keep failures and actual source/code/model provenance, reconcile usage,
-and report live and mocked measurements separately. A failed pilot stays private; an elapsed
+and report live and mocked measurements separately. The failed local quality run stays private; an elapsed
 week or passing mock suite does not authorize release. Any expanded experiment needs its own
 scope/data/spend approval; existing cases must never be silently relabeled as new holdout data.

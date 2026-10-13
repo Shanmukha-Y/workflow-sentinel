@@ -12,6 +12,7 @@ from typing import Any, Callable
 
 from workflow_sentinel.agent import run
 from workflow_sentinel.openai_adapter import OpenAIAdapter, ProviderError
+from workflow_sentinel.ollama_adapter import OllamaAdapter
 
 MAX_CASES = 8
 MAX_CALLS = 32
@@ -121,12 +122,28 @@ class Budget:
         return self.seconds - (time.monotonic() - self.started)
 
 
-class EvaluationAdapter(OpenAIAdapter):
-    def __init__(self, client: Any, budget: Budget, *, model: str, tokens: int) -> None:
-        super().__init__(client, model=model, max_output_tokens=tokens, allow_source_disclosure=True)
+class EvaluationAdapter:
+    def __init__(self, client: Any, budget: Budget, *, model: str, tokens: int,
+                 local: bool = False) -> None:
+        self.inner: OpenAIAdapter | OllamaAdapter
+        if local:
+            self.inner = OllamaAdapter(client, model=model, max_output_tokens=tokens,
+                                      allow_local_inference=True)
+        else:
+            self.inner = OpenAIAdapter(client, model=model, max_output_tokens=tokens,
+                                      allow_source_disclosure=True)
+        self.mode = self.inner.mode
         self.budget = budget
         self.turns = 0
         self.confirmed_observations = 0
+
+    @property
+    def calls(self) -> int:
+        return self.inner.calls
+
+    @property
+    def usage_records(self) -> list[dict[str, int] | None]:
+        return self.inner.usage_records
 
     def next(self, packets: list[dict[str, Any]], observations: list[dict[str, Any]],
              remaining: float) -> dict[str, Any]:
@@ -136,7 +153,7 @@ class EvaluationAdapter(OpenAIAdapter):
         # Reserve before a request: failed/unknown usage attempts still consume the cap.
         self.turns += 1
         self.budget.reserved += 1
-        command = super().next(packets, observations, min(remaining, self.budget.remaining()))
+        command = self.inner.next(packets, observations, min(remaining, self.budget.remaining()))
         self.confirmed_observations = len(observations)
         return command
 
@@ -144,14 +161,17 @@ class EvaluationAdapter(OpenAIAdapter):
 def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None, *,
              model: str, tokens: int = 256, mode: str = 'mock',
              approve_live_calls: bool = False, approve_source_disclosure: bool = False,
+             approve_local_inference: bool = False,
              budget: Budget | None = None) -> dict[str, Any]:
     """Evaluate the fixed suite; caller owns client credentials and all live approval.
 
     A mock run must use an in-memory transport. This library cannot verify caller transport.
     There is no credential-bearing CLI or live fallback. Fresh clients are closed each case.
     """
-    if mode not in {'mock', 'live'}:
+    if mode not in {'mock', 'live', 'local'}:
         raise ValueError('Unknown evaluation mode')
+    if mode == 'local' and approve_local_inference is not True:
+        raise ValueError('Local inference requires explicit authorization')
     if mode == 'live' and (approve_live_calls is not True or approve_source_disclosure is not True):
         raise ValueError('Live evaluation requires separate call and disclosure authorization')
     if not isinstance(model, str) or re.fullmatch(r'[A-Za-z0-9_.:-]{1,100}', model) is None:
@@ -178,9 +198,11 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
             source_path.write_text(case['source'])
             client = None
             adapter = None
+            case_started = time.monotonic()
             try:
                 client = client_factory()
-                adapter = EvaluationAdapter(client, ledger, model=model, tokens=tokens)
+                adapter = EvaluationAdapter(client, ledger, model=model, tokens=tokens,
+                                            local=mode == 'local')
                 report = run(case['sarif'], repo, None, scanner, adapter=adapter)
                 row.update(score(case, report, source_path.read_bytes() == case['source'].encode(),
                                  adapter.confirmed_observations))
@@ -193,6 +215,10 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
                         client.close()
                     except Exception:
                         row.update({'passed': False, 'status': 'client-cleanup-error'})
+            row['wall_seconds'] = round(time.monotonic() - case_started, 6)
+            if adapter and isinstance(adapter.inner, OllamaAdapter):
+                row['attempts'] = adapter.inner.attempts
+                row['model_metadata'] = adapter.inner.model_metadata
             row['provider_attempts'] = adapter.calls if adapter else 0
             usage = adapter.usage_records if adapter else []
             row['usage'] = {'known_requests': sum(u is not None for u in usage),
@@ -201,6 +227,7 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
                             'output_tokens_known': sum(u['output_tokens'] for u in usage if u)}
             rows.append(row)
     return {'schema_version': 'model-eval-1.0', 'mode': mode, 'model': model,
+            'wall_seconds': round(time.monotonic() - ledger.started, 6),
             'manifest_sha256': freeze_digest(path),
             'baseline_commit': doc['baseline_commit'],
             'production_sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()

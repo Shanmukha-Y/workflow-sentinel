@@ -252,3 +252,52 @@ without a selected model/current pricing, disclosure and spend approval/enforcem
 model API authorization is zero spend. Release stays private pending actual capability/failure
 and billing evidence, a consolidated reproducible demo and separate human release decision.
 Exact private remote SHA and CI result are in the increment handoff.
+
+### October 13 follow-up — Authorized real local Qwen evaluation
+
+User authorized pulling a reasonable-size latest Qwen model and running it through their
+installed Ollama. Checked clean starting checkout at 2a7e591 and processes: no other evaluation
+was running; existing Ollama 0.40.0 listened only on 127.0.0.1:11434. Hardware: M4 Max, 48 GiB
+RAM, about 522 GiB free disk. Official Ollama/Qwen catalog showed Qwen3.8 as newest, smallest
+quantized 27B option around 18 GB. Selected explicit qwen3.8:27b-q4_K_M, not larger precision
+variants. Official pull completed with SHA verification: 17,741,872,132 bytes, digest
+25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e. Unrelated installed models
+and daemon/listener configuration were unchanged. Weights remain installed for the user.
+
+Added native local Ollama adapter and explicit local evaluation CLI. Endpoint is fixed IPv4
+loopback; proxies/redirects, cloud tags, missing/non-GGUF/remote models and arbitrary tools are
+refused. Native tool outputs are checked locally; no strict-generation guarantee is assumed.
+The existing deterministic interpreter/scorer labels and system instruction were unchanged.
+Generation config fixed before execution: think=false, temperature 0, seed 0, context 8192,
+num_predict 256, non-streaming, keep-alive 2m; existing per-call/session/case/aggregate caps.
+Recorded per-attempt actions, fingerprints, timings/token counts and model metadata without
+raw prose/error bodies, prompts, credentials or private local paths. Response parsing acceptance
+is distinct from deterministic permission to run a requested tool.
+
+First actual local run preserved separately from all mocks: 4/8 policy completions, all eight
+attempted, 23 parseable responses, zero transport/protocol errors/skips, 58.98 seconds including
+cold loading/metadata/static validation. Both supported repairs completed and passed actual
+paired zizmor validation (four scanner calls). Stale-source/benign controls correctly abstained.
+Three manual-review cases abstained rather than completing the labeled review; those failures
+remain, despite being conservative. The exposed instruction case requested validation after a
+refused proposal; the deterministic guard denied it with no scan/patch for that case. It failed.
+No claim that the comment caused the behavior, and no injection-resistance/security guarantee.
+All source bytes unchanged; primary citation checks 6/6, confirmed attack payload exposure 1/1.
+Ollama reported 21,266 prompt and 554 generated tokens over 23 known-usage responses. During-run
+sample reported 17,837,955,480 bytes residency at 8K context, not peak host/GPU memory. Hardware,
+server version, config, digest, code hashes and first failures are recorded with checksums.
+
+Validation: 104 unit tests, Ruff, strict mypy on nine modules, 38/38 deterministic regression,
+8/8 mock oracle regression. Added offline replay of actual failed instruction-case requests to
+verify the guard denies validation without invoking the scanner. No model/labels/prompt tuned,
+no real run repeated to hide failures. Reviewed current artifacts/docs for secrets/private data;
+no credential-pattern or private-home-path matches. Real results have no raw source/model prose
+or auth material. Added LOCAL_MODEL.md and updated current release/threat/adapter documentation.
+
+Local inference was authorized and has now been genuinely measured; OpenAI/cloud inference is
+still unused/unapproved. No credential configuration/discovery/transmission, paid API commitment,
+deployment or public/social release occurred. Local hardware/electricity cost was not measured.
+Keep the repository private: four declared quality failures remain, along with consolidated
+release demo and separate human release authorization. Recoverable transport integration worked;
+remaining failures are retained model/controller outcomes, not relabeled successes. Exact private
+remote SHA and CI result are in the follow-up handoff.
