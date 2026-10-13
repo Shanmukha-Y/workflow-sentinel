@@ -35,5 +35,3 @@ def mock_client(handler_override=None):
     with patch.dict(os.environ, {}, clear=True):
         return OpenAI(api_key='mock-placeholder-not-a-credential',
                       http_client=httpx2.Client(transport=httpx2.MockTransport(handler_override or handler)))
-
-
