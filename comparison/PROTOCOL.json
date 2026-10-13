@@ -1,5 +1,5 @@
 {
-  "version": "comparison-1.0",
+  "version": "comparison-2.0",
   "models": [
     "qwen3.8:27b-q4_K_M",
     "gemma4:31b-it-q4_K_M",
@@ -11,7 +11,7 @@
     "development-8",
     "exposed-contract-6"
   ],
-  "fresh_group": "8 exact fresh synthetic inputs; first exposure in trial 1, exposed replication in trial 2",
+  "fresh_group": "8 new exact revision-two synthetic inputs; old fresh-v1 is exposed after first attempt; trial 1 first exact source exposure, trial 2 exposed replication. Known categories/control signals are not novel or blind.",
   "fresh_trials": 2,
   "maximum_inference_requests": 360,
   "maximum_wall_seconds": 2700,
@@ -35,13 +35,14 @@
     "src/workflow_sentinel/repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
     "src/workflow_sentinel/agent.py": "66040bbc63085d570ac87472719e63ffd541c3d8118233d065393aa97769acb5",
     "src/workflow_sentinel/investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
-    "src/workflow_sentinel/openai_adapter.py": "38409538ac1ee9f34a91e0426423ada82ded1f7b144e70eef8ac9d90b3a22061",
-    "src/workflow_sentinel/ollama_adapter.py": "5993a29ba7cf0abcd11120fe42bba7cb92b761bdbe367817dc398a43089bf2ee",
+    "src/workflow_sentinel/openai_adapter.py": "837305f806a75265c2954e682e7d54f6fdaa6e2d811c35fb1600651edbbbc73d",
+    "src/workflow_sentinel/ollama_adapter.py": "637736360cfa6a1cfb378e0d5bedda32c4c2ebba15721dc9a35626004a5e36af",
     "src/workflow_sentinel/validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14",
-    "comparison/run.py": "daf95fef5398d0fd43cae0172d8dcb5de5e0a7e9c8d49afeea258d5e6c44f74b",
-    "comparison/fresh/manifest.json": "b5812084ce5f4f030b50a5702f617410a7992f3c6b488c20cb4f4956fae207a2",
-    "comparison/fresh/FREEZE.json": "259e9ea9abd133c4c35f078977043d5ae41072a88038a3835af8b8e3bf24a65b",
+    "comparison/run.py": "ac7965687f7bf725181432215db3a422b9549d1a1edbf02c29f5808aedbf75b9",
     "model_evaluation/manifest.json": "e631ff9e8646ae4205ac087b499af8433e452741f571fa081b7161220579a89f",
-    "model_evaluation/holdout-v2/manifest.json": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c"
-  }
+    "model_evaluation/holdout-v2/manifest.json": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c",
+    "comparison/fresh-v2/manifest.json": "0f12702e65f5f10ae90689c83f597acd894d0521a81c9420a0be9f6cae466c71",
+    "comparison/fresh-v2/FREEZE.json": "a93aae7d69882fe4be27a7f532bd6f9700b049fb2f693fa57a16d664ea19983c"
+  },
+  "integration_correction": "Preserve native tool-call IDs and matching tool-result IDs; require terminal tool format explicitly for all models; bounded asynchronous unload confirmation. All models rerun under identical final setup. Original interrupted runs retained."
 }
