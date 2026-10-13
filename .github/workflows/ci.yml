@@ -25,3 +25,4 @@ jobs:
       - run: python -c "import json; r=json.load(open('/tmp/agent.json')); assert r['decision']=='review' and r['report']['packets'][0]['static_validation']['status']=='validated'"
       - run: python examples/provider_mock_demo.py --scanner "$(command -v zizmor)" > /tmp/provider-mock.json
       - run: python -c "import json; r=json.load(open('/tmp/provider-mock.json')); assert r['mode']=='mock-openai-transport-advisory' and r['decision']=='review'"
+      - run: python model_evaluation/run_mock.py --scanner "$(command -v zizmor)" --output /tmp/model-evaluation-mock.json

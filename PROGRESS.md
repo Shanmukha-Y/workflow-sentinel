@@ -208,3 +208,47 @@ Provider implementation gap is closed; live-model capability validation remains 
 No mocked outcome measures real reasoning, model effectiveness or prompt-injection resistance.
 Public release remains gated on honest live capability evidence (separate data/spend approval),
 threat model, reproducible consolidated demo, measured limitations and human release decision.
+
+## 2026-10-13 UTC — Reproducible model evaluation and release gates
+
+Started from clean f4a92d4; private remote matched, one checkout and no Git lock/concurrent
+changes observed. Added a frozen eight-case synthetic model-policy harness using known
+regression fixtures, explicit pre-run labels and hashes, independent candidate/source citation
+checks, observed-tool requirements and explicit terminal response scoring. No first-use/held-out
+or real-world detection claim is made. Cases cover two supported repairs, ambiguous Bash,
+permissions, report-only checkout, stale evidence, benign control and actually exposed source
+instructions. Exposure requires a subsequent successful request containing the observation.
+
+The first mock execution scored 7/8 due to a scorer assumption that multiline citations store
+multiline excerpts. Existing investigation stores the first line. Corrected the scorer and
+added a regression without changing labels or investigation. Preserved the original failure
+and subsequent regression with checksums; original local-only exposure attribution is also
+clearly distinguished from the corrected confirmed-request metric. SDK policy-oracle result:
+8/8 completions, 23 attempts, 6/6 citation records, 1/1 required payload exposures and two real
+paired zizmor validations/four scanner calls. This is harness/integration verification, not
+live-model reasoning or prompt-injection-resistance measurement. Sources stayed unchanged.
+
+Aggregate caps: eight cases, four provider attempts/case, 32 reservations overall, 256 output
+tokens/request (8,192 requested maximum) and 540-second batch deadline checked at case/request
+boundaries. Scanner/initial investigation keeps its own limits rather than a batch interrupt.
+Failures/unknown usage consume reservations; skipped/error cases remain denominator failures.
+Always abstaining can pass at most 2/8. Each fresh client is closed, including error paths;
+cleanup failures count as failures. Records exclude source excerpts, prompts, raw responses and
+error bodies; exclusive output prevents replacing prior runs. Added sanitized provider usage
+accounting: missing/invalid usage is unknown, not zero. Mock oracle records 23 unknown usages;
+known token accounting and over-cap refusals are tested with synthetic usage metadata.
+
+Checks: 96 unit tests; Ruff; strict mypy on eight modules; 38/38 deterministic regression labels;
+real scanner mock-oracle demo. Added threat model, release-readiness review and clear user-run
+live instructions. Audit inspected 62 current project files and 93 reachable historical blobs:
+no credential-pattern matches, private home paths or sensitive filenames. Reviewed synthetic
+artifacts and report minimization. This is a bounded repository audit, not a guarantee that all
+possible secrets/private data are absent; ignored/outside credential stores were not searched.
+
+No credential creation/configuration/discovery/transmission, paid/live API call, deployment,
+public release or social posting occurred. Live pilot remains unapproved and unvalidated.
+Proposed scope is the fixed eight cases/32 requests; a monetary ceiling cannot be substantiated
+without a selected model/current pricing, disclosure and spend approval/enforcement. Current
+model API authorization is zero spend. Release stays private pending actual capability/failure
+and billing evidence, a consolidated reproducible demo and separate human release decision.
+Exact private remote SHA and CI result are in the increment handoff.

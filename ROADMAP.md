@@ -20,5 +20,8 @@ A frozen synthetic evaluation and first-run audit are complete; later runs are r
 A bounded advisory interpreter, offline scripted demo and opt-in OpenAI Responses provider
 adapter are implemented. SDK mock transport tests pass; live-model evaluation remains an open
 release gate, and neither replay nor mocks establish model quality.
-Next: release preparation with a reproducible demo, threat model and measured limitations;
-retain private visibility until separate release authorization.
+An eight-case synthetic model evaluation harness and threat model are now available. The
+mock oracle verifies scoring/budgets; no live-model result or monetary approval exists.
+Next: obtain separate user approval for the bounded live pilot's model, data disclosure and
+substantiated spending ceiling, then measure capability/failures. Retain private visibility;
+consolidated demo and human release decision remain open gates.

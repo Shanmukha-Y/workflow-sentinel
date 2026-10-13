@@ -1,0 +1,8 @@
+{
+  "records_sha256": {
+    "mock-regression.json": "93343c31e6c7cb9bd50ec1bc69ef937e904cd0e86d17b2208df123833dbd7506",
+    "mock-regression-before-output-preflight.json": "c25cba52b7edfb88343eb98da9662ecb5503372b17951663f9bf563a14c7c03f",
+    "mock-first-scoring-error.json": "5617b7ded3fe705cc3eea79ca3acf7f9c1610a693a0775a25485c9b80f708112"
+  },
+  "note": "Preserve original scorer failure and subsequent mock regression. Neither is a live-model result."
+}

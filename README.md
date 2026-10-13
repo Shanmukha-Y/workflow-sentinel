@@ -191,6 +191,12 @@ A frozen synthetic suite checks triage, repair eligibility, citation/source cons
 python evaluation/run.py --scanner /absolute/path/to/zizmor --output /tmp/sentinel-evaluation-regression.json
 ```
 
+The [model evaluation harness](model_evaluation/README.md) provides eight fixed synthetic cases
+with explicit outcome labels, aggregate request caps and failure-aware scoring. Its offline
+SDK oracle passed 8/8 after a documented scorer correction; this is harness verification, not
+live-model quality. The [threat model](docs/THREAT_MODEL.md) describes trust boundaries and
+remaining release gates.
+
 ## Development
 
 ```sh

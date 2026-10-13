@@ -90,6 +90,7 @@ class OpenAIAdapter:
         self.pending: str | None = None
         self.consumed = 0
         self.calls = 0
+        self.usage_records: list[dict[str, int] | None] = []
         self.call_ids: set[str] = set()
 
     def next(self, packets: list[dict[str, Any]], observations: list[dict[str, Any]],
@@ -110,6 +111,7 @@ class OpenAIAdapter:
         if len(json.dumps(self.history).encode()) > MAX_INPUT_BYTES:
             raise ProviderError('Provider input budget exhausted')
         self.calls += 1
+        self.usage_records.append(None)
         try:
             with deadline(min(CALL_SECONDS, remaining)):
                 response = self.client.with_options(timeout=min(CALL_SECONDS, remaining),
@@ -123,6 +125,14 @@ class OpenAIAdapter:
                 doc = decode(raw.encode())
         except Exception:
             raise ProviderError('Provider request failed') from None
+        usage = doc.get('usage') if isinstance(doc, dict) else None
+        if (isinstance(usage, dict) and type(usage.get('input_tokens')) is int
+                and type(usage.get('output_tokens')) is int
+                and usage['input_tokens'] >= 0 and usage['output_tokens'] >= 0):
+            self.usage_records[-1] = {'input_tokens': usage['input_tokens'],
+                                      'output_tokens': usage['output_tokens']}
+            if usage['output_tokens'] > self.max_output_tokens:
+                raise ProviderError('Provider output token cap exceeded')
         if not isinstance(doc, dict) or doc.get('status') != 'completed':
             raise ProviderError('Incomplete or refused provider response')
         output = doc.get('output')

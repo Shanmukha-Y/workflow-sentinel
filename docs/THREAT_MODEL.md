@@ -1,0 +1,55 @@
+# Threat model and release boundaries
+
+Workflow Sentinel reviews supplied zizmor SARIF and local GitHub Actions YAML. It resolves
+bounded evidence, proposes a narrow deterministic Bash repair and can statically compare
+isolated workflow copies. An optional OpenAI adapter chooses among those tools. It never runs
+target workflows, repository scripts or model-supplied shell commands and never applies patches.
+
+## Assets and trust boundaries
+
+Source integrity, private workflow content, credentials, host resources, evaluation integrity
+and API spending are the protected assets. Workflow/SARIF content and model output are untrusted.
+The application, installed Python/SDK dependencies, configured client factory, native scanner,
+host OS and GitHub CI are trusted. SDK and scanner execution is bounded but not an OS sandbox;
+a compromised dependency or scanner is outside the implemented defenses.
+
+Source readers reject unsafe paths/symlinks and use directory descriptors. YAML parsing rejects
+ambiguous structures and imposes byte/node/depth/step limits. Matched hashes/snippets establish
+local correspondence, not an authenticated scanning revision. Repairs require exact supported
+syntax and a matching snapshot, and the reconstructed YAML tree must change only allowlisted
+run/env fields. Scanner comparisons operate on isolated single-workflow copies with fixed
+arguments and a scrubbed environment; they cannot prove runtime equivalence or security.
+
+## Model and disclosure risks
+
+Instruction-like text in source can try to change model behavior. The interpreter permits only
+structured packet-index evidence/proposal/validation/finish requests or abstention, enforces
+order/budgets, and accepts no paths, commands, patches or model security verdicts. Generated
+repairs still come from deterministic policy. The model can nevertheless choose poor tools,
+miss useful work or abstain too often. No live effectiveness or injection-resistance claim has
+been established. The synthetic exposure check confirms payload inclusion only.
+
+Provider access is opt-in with a trusted injected client, explicit model, token cap and source
+disclosure approval. Reports and tool observations contain unredacted excerpts; sharing or
+sending them can reveal private data. Source/credential discovery for model authentication is
+not implemented. Raw provider errors/responses are excluded from traces/evaluation records;
+SDK prompt history exists in process memory. Call cancellation and store=False do not establish
+remote cancellation, zero charges or a retention promise. Resource caps are not monetary caps.
+
+## Known capability limits
+
+Permission repairs lack validated permission requirements; checkout/trigger changes stay
+report-only. Repair support is a narrow literal printf pattern, not general Bash analysis.
+Unknown findings and ambiguous evidence abstain. Validation supports one scanner version and
+one-workflow comparisons; absent local action context can force unsupported outcomes. Empty
+reports, review decisions, scanner success and schema validity are not security guarantees.
+
+## Release gates
+
+Release is blocked pending an approved, honestly reported real-model pilot and review of its
+failures/usage, plus a consolidated reproducible demonstration and human release decision.
+Known synthetic regressions and SDK mocks remain separate from any future live results.
+The repository stays private until a separately authorized release; elapsed calendar time is
+not authorization. A later pilot must explicitly approve data disclosure, model, request scope
+and a substantiated monetary ceiling. No deployment, public release or social posting is part
+of the current implementation or evaluation.
