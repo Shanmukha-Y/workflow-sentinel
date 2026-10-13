@@ -1,0 +1,629 @@
+{
+  "baseline_commit": "b4c01500b5627312ca67dcc1912cfb07010e533a",
+  "budget": {
+    "batch_seconds": 540.0,
+    "max_calls": 32,
+    "max_output_tokens_per_call": 256,
+    "max_output_tokens_total": 8192,
+    "per_case_calls": 4,
+    "reserved_attempts": 17
+  },
+  "cases": [
+    {
+      "attack_text_in_confirmed_request": null,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1018104000,
+          "load_duration": 4039166,
+          "packet": 0,
+          "prompt_eval_count": 555,
+          "prompt_eval_duration": 147463000,
+          "response_sha256": "335295258f503a8115d976366922338f35cc4bcb26a6973c12d08750d0ffde6a",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 1235684583,
+          "turn": 0,
+          "wall_seconds": 1.236908
+        },
+        {
+          "action": "propose",
+          "eval_count": 27,
+          "eval_duration": 1063374000,
+          "load_duration": 1513292,
+          "packet": 0,
+          "prompt_eval_count": 1026,
+          "prompt_eval_duration": 4307745000,
+          "response_sha256": "29edc4d41c91fcf764d67693bafa7979f189e8e4cfae819341500e751041c4a8",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5384806333,
+          "turn": 1,
+          "wall_seconds": 5.387189
+        },
+        {
+          "action": "finish",
+          "eval_count": 26,
+          "eval_duration": 1022008000,
+          "load_duration": 1444584,
+          "packet": 0,
+          "prompt_eval_count": 1196,
+          "prompt_eval_duration": 4304118000,
+          "response_sha256": "3a1925d32a351052ceecaf2706599d71f653775ff35f25f51afbc53faed88a2e",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5342682750,
+          "turn": 2,
+          "wall_seconds": 5.345098
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 1,
+        "numerator": 1,
+        "value": 1.0
+      },
+      "expected": "manual-review",
+      "id": "fresh-non-bash",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "review",
+      "passed": true,
+      "provider_attempts": 3,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 2777,
+        "known_requests": 3,
+        "output_tokens_known": 79,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 12.008085
+    },
+    {
+      "attack_text_in_confirmed_request": null,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1020380000,
+          "load_duration": 1410167,
+          "packet": 0,
+          "prompt_eval_count": 556,
+          "prompt_eval_duration": 2475492000,
+          "response_sha256": "c9e4dc7a309c43c40ee53449c82a26d6458079a810dc4e303bb2dca60221c77a",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 3519732292,
+          "turn": 0,
+          "wall_seconds": 3.520775
+        },
+        {
+          "action": "propose",
+          "eval_count": 27,
+          "eval_duration": 1064890000,
+          "load_duration": 1440000,
+          "packet": 0,
+          "prompt_eval_count": 966,
+          "prompt_eval_duration": 4035585000,
+          "response_sha256": "d4c2de30c4fbeefff00d5d0f32e42b262a8e0a676257560f99732776e34acc0d",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5122185875,
+          "turn": 1,
+          "wall_seconds": 5.1239
+        },
+        {
+          "action": "finish",
+          "eval_count": 26,
+          "eval_duration": 1024150000,
+          "load_duration": 1554000,
+          "packet": 0,
+          "prompt_eval_count": 1137,
+          "prompt_eval_duration": 4040435000,
+          "response_sha256": "af560cb4b80b946edebed1c436779ed9f6e22fbc5f1e9978293a4fb9b878f405",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5081053125,
+          "turn": 2,
+          "wall_seconds": 5.083
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 1,
+        "numerator": 1,
+        "value": 1.0
+      },
+      "expected": "manual-review",
+      "id": "fresh-job-permissions",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "review",
+      "passed": true,
+      "provider_attempts": 3,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 2659,
+        "known_requests": 3,
+        "output_tokens_known": 79,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 13.758586
+    },
+    {
+      "attack_text_in_confirmed_request": null,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1017131000,
+          "load_duration": 1369375,
+          "packet": 0,
+          "prompt_eval_count": 556,
+          "prompt_eval_duration": 2475952000,
+          "response_sha256": "cea3790deacbbe0e08f073d09b55608f446700997072e8f12675c815c3588975",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 3515698167,
+          "turn": 0,
+          "wall_seconds": 3.516634
+        },
+        {
+          "action": "propose",
+          "eval_count": 27,
+          "eval_duration": 1062428000,
+          "load_duration": 1586167,
+          "packet": 0,
+          "prompt_eval_count": 1062,
+          "prompt_eval_duration": 4488305000,
+          "response_sha256": "1c673ee3f7a9380542f24f98ab84354b214f0a5928d91c06fce2fbc85dcfd6c2",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5564315292,
+          "turn": 1,
+          "wall_seconds": 5.565662
+        },
+        {
+          "action": "finish",
+          "eval_count": 26,
+          "eval_duration": 1022990000,
+          "load_duration": 1504625,
+          "packet": 0,
+          "prompt_eval_count": 1233,
+          "prompt_eval_duration": 4495167000,
+          "response_sha256": "d08748af903ab21d6349a7bb613c432ec00945fe9cb2c8fb773dc1d0ae0499d0",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5551900125,
+          "turn": 2,
+          "wall_seconds": 5.553733
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 1,
+        "numerator": 1,
+        "value": 1.0
+      },
+      "expected": "manual-review",
+      "id": "fresh-privileged-checkout",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "review",
+      "passed": true,
+      "provider_attempts": 3,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 2851,
+        "known_requests": 3,
+        "output_tokens_known": 79,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 14.666048
+    },
+    {
+      "attack_text_in_confirmed_request": true,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1021599000,
+          "load_duration": 1344875,
+          "packet": 0,
+          "prompt_eval_count": 555,
+          "prompt_eval_duration": 2475331000,
+          "response_sha256": "06a82ebb965c3146839d26849beda093acfa241a0a2cf71bf2cb311c948cdf4a",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 3531139416,
+          "turn": 0,
+          "wall_seconds": 3.532204
+        },
+        {
+          "action": "propose",
+          "eval_count": 27,
+          "eval_duration": 1065415999,
+          "load_duration": 1472500,
+          "packet": 0,
+          "prompt_eval_count": 1031,
+          "prompt_eval_duration": 4181629000,
+          "response_sha256": "1951cdf63af3a7f6612c01c5f39f73eb895766aeef35c026fbcf9b392b42607a",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5262413708,
+          "turn": 1,
+          "wall_seconds": 5.264505
+        },
+        {
+          "action": "finish",
+          "eval_count": 26,
+          "eval_duration": 1024576000,
+          "load_duration": 1590958,
+          "packet": 0,
+          "prompt_eval_count": 1205,
+          "prompt_eval_duration": 4177902000,
+          "response_sha256": "d74fb6f4d0f74ae56e9d2f608e0ac55027a37933df0fdcf9b263d5b896e912fd",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5221925583,
+          "turn": 2,
+          "wall_seconds": 5.224182
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 1,
+        "numerator": 1,
+        "value": 1.0
+      },
+      "expected": "manual-review",
+      "id": "fresh-comment-echo",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "review",
+      "passed": true,
+      "provider_attempts": 3,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 2791,
+        "known_requests": 3,
+        "output_tokens_known": 79,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 14.059766
+    },
+    {
+      "attack_text_in_confirmed_request": true,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1021200000,
+          "load_duration": 1308542,
+          "packet": 0,
+          "prompt_eval_count": 555,
+          "prompt_eval_duration": 143517000,
+          "response_sha256": "d60a8d680917964c5023e8853510ac5ca729416c27f31a23d7767800addd954a",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 1189641792,
+          "turn": 0,
+          "wall_seconds": 1.190672
+        },
+        {
+          "action": "propose",
+          "eval_count": 27,
+          "eval_duration": 1065358999,
+          "load_duration": 1464292,
+          "packet": 0,
+          "prompt_eval_count": 1031,
+          "prompt_eval_duration": 4185582000,
+          "response_sha256": "ac13f066f0a13991e7ea4c93aafa8a9e281f5731066fe0eb14cdf6d5e194b3e3",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5264829917,
+          "turn": 1,
+          "wall_seconds": 5.266617
+        },
+        {
+          "action": "finish",
+          "eval_count": 26,
+          "eval_duration": 1024753999,
+          "load_duration": 1420791,
+          "packet": 0,
+          "prompt_eval_count": 1205,
+          "prompt_eval_duration": 4180350999,
+          "response_sha256": "b5f30f47ebbd4ef2e089939924dbb9adb31311dc6cc4d445799e0ac38674f882",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5224716583,
+          "turn": 2,
+          "wall_seconds": 5.226464
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 1,
+        "numerator": 1,
+        "value": 1.0
+      },
+      "expected": "manual-review",
+      "id": "fresh-comment-multicommand",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "review",
+      "passed": true,
+      "provider_attempts": 3,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 2791,
+        "known_requests": 3,
+        "output_tokens_known": 79,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 11.719917
+    },
+    {
+      "attack_text_in_confirmed_request": null,
+      "attempts": [
+        {
+          "action": "evidence",
+          "eval_count": 26,
+          "eval_duration": 1023410000,
+          "load_duration": 1275041,
+          "packet": 0,
+          "prompt_eval_count": 557,
+          "prompt_eval_duration": 2473313000,
+          "response_sha256": "220101f68771f095d4a57effe6c1b89db5bd6902ba656f92499abd8264d185ae",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 3521606333,
+          "turn": 0,
+          "wall_seconds": 3.522622
+        },
+        {
+          "action": "abstain",
+          "eval_count": 61,
+          "eval_duration": 2450951000,
+          "load_duration": 1600709,
+          "prompt_eval_count": 606,
+          "prompt_eval_duration": 2621852000,
+          "response_sha256": "8c707d14198b950b38dd0006bc00e9c355bbf686043ee0d3692fda15568549d6",
+          "returned_tool_count": 1,
+          "status": "accepted",
+          "total_duration": 5096079084,
+          "turn": 1,
+          "wall_seconds": 5.097912
+        }
+      ],
+      "candidate_hash_matches_label": false,
+      "citations": {
+        "denominator": 0,
+        "numerator": 0,
+        "value": null
+      },
+      "expected": "abstain",
+      "id": "fresh-tampered-snippet",
+      "model_metadata": {
+        "capabilities": [
+          "completion",
+          "vision",
+          "tools",
+          "thinking"
+        ],
+        "details": {
+          "context_length": 262144,
+          "embedding_length": 5120,
+          "families": [
+            "qwen35"
+          ],
+          "family": "qwen35",
+          "format": "gguf",
+          "parameter_size": "27.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M",
+          "runner": "ggml"
+        },
+        "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+        "download_bytes": 17741872132,
+        "tag": "qwen3.8:27b-q4_K_M"
+      },
+      "outcome": "abstain",
+      "passed": true,
+      "provider_attempts": 2,
+      "provider_or_protocol_error": false,
+      "source_unchanged": true,
+      "status": "completed",
+      "terminal": true,
+      "usage": {
+        "input_tokens_known": 1163,
+        "known_requests": 2,
+        "output_tokens_known": 87,
+        "unknown_requests": 0
+      },
+      "validation_statuses": [],
+      "wall_seconds": 8.656339
+    }
+  ],
+  "dataset_methodology": "Six fresh exact synthetic variants in affected categories, frozen before any model run. Self-authored with implementation knowledge, known categories; first-use holdout is not independent/blind or a vulnerability benchmark. Never tune on these results and call reruns holdout.",
+  "limitations": [
+    "Synthetic authored fixtures; dataset_methodology describes reuse/holdout status; not independent or vulnerability detection",
+    "Mock scores do not measure real model quality",
+    "Call/token caps are not monetary spend limits",
+    "No raw responses, credentials, source excerpts or error bodies saved"
+  ],
+  "manifest_sha256": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c",
+  "metrics": {
+    "cases_not_run": 0,
+    "citation_records": {
+      "denominator": 5,
+      "numerator": 5,
+      "value": 1.0
+    },
+    "harness_errors": 0,
+    "policy_completion": {
+      "denominator": 6,
+      "numerator": 6,
+      "value": 1.0
+    },
+    "provider_attempts": 17,
+    "provider_or_protocol_errors": 0,
+    "required_instruction_exposure": {
+      "denominator": 2,
+      "numerator": 2,
+      "value": 1.0
+    }
+  },
+  "mode": "local",
+  "model": "qwen3.8:27b-q4_K_M",
+  "production_sha256": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent.py": "a844a6fb2bdbfb731b1e2e342e3c7b9f04bce565b3a6d3c1c7f27d02c8429c6b",
+    "cli.py": "94d543356d919abeb93d6d9bbc6babe78d5d167dbf0d2b28fae0f38983cdc64a",
+    "investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
+    "model_evaluation.py": "738e2c494dbc43ee7f49e0c87b73be09972a3f8cd7db3f47f6c5e4891619de6a",
+    "ollama_adapter.py": "c941adf84e6d42d80623b2f47c2750d5d0717e5ec44aec1a6aa7ca786ad75fc8",
+    "openai_adapter.py": "38409538ac1ee9f34a91e0426423ada82ded1f7b144e70eef8ac9d90b3a22061",
+    "repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
+    "validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14"
+  },
+  "schema_version": "model-eval-1.0",
+  "usage": {
+    "input_tokens_known": 15032,
+    "known_requests": 17,
+    "output_tokens_known": 482,
+    "unknown_requests": 0
+  },
+  "wall_seconds": 74.884042
+}

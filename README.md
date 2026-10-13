@@ -189,10 +189,12 @@ python model_evaluation/run_local.py --model qwen3.8:27b-q4_K_M \
 
 A real on-device Qwen3.8 27B evaluation scored **4/8** on the eight known synthetic cases.
 Both supported repairs validated; three manual-review cases abstained, and one case requested
-validation after a refused proposal and was blocked. The first results and configuration are
-preserved in [the local-model report](docs/LOCAL_MODEL.md). This measures a narrow real tool
-loop, not general autonomous security investigation or injection resistance. Release stays
-private while these quality failures remain open.
+validation after a refused proposal and was blocked. The original result remains preserved in [the local-model report](docs/LOCAL_MODEL.md).
+A general review/repair contract clarification and prerequisite-aware tool advertisement then
+passed 8/8 on those development cases and 6/6 on fresh, frozen synthetic variants. See
+[the failure investigation and consolidated demo](docs/CONTRACT_INVESTIGATION.md). These are
+narrow tool-loop results, not general autonomous security investigation or injection resistance.
+The repository remains private pending human release authorization and acceptance of the limits.
 
 ## Limitations
 

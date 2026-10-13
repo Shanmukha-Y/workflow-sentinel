@@ -46,9 +46,11 @@ reports, review decisions, scanner success and schema validity are not security 
 
 ## Release gates
 
-Release is blocked by four observed local quality failures, plus the consolidated reproducible
-demonstration and human release decision. Real local results/failures are preserved in
-LOCAL_MODEL.md; any OpenAI/cloud pilot still needs separate approval.
+The original four failures are preserved; contract fixes passed 8/8 development and 6/6 fresh
+synthetic cases, and a consolidated demo is verified. Human release authorization remains open;
+acceptance must account for narrow synthetic scope, tightly guided tool selection and untested
+broader/adversarial behavior. See CONTRACT_INVESTIGATION.md. Any OpenAI/cloud pilot still needs
+separate approval.
 Known synthetic regressions and SDK mocks remain separate from any future live results.
 The repository stays private until a separately authorized release; elapsed calendar time is
 not authorization. A later pilot must explicitly approve data disclosure, model, request scope

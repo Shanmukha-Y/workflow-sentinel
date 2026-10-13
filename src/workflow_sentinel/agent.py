@@ -51,6 +51,34 @@ class Adapter(Protocol):
              remaining: float) -> Any: ...
 
 
+
+def available_tools(packets: list[dict[str, Any]],
+                    observations: list[dict[str, Any]]) -> dict[str, list[int]]:
+    """Derive advertised prerequisites from host observations, never source text or labels."""
+    result: dict[str, list[int]] = {'abstain': []}
+    for index, packet in enumerate(packets):
+        records = [obs for obs in observations if obs['packet'] == index]
+        evidence = any(obs['action'] == 'evidence' for obs in records)
+        proposals = [obs['repair'] for obs in records if obs['action'] == 'propose']
+        validations = [obs['static_validation'] for obs in records if obs['action'] == 'validate']
+        action = None
+        if not evidence:
+            action = 'evidence'
+        elif packet['decision'] == 'review':
+            if not proposals:
+                action = 'propose'
+            elif proposals[-1]['status'] == 'abstain':
+                action = 'finish'
+            elif proposals[-1]['status'] == 'proposed':
+                if not validations:
+                    action = 'validate'
+                elif validations[-1]['status'] == 'validated':
+                    action = 'finish'
+        if action:
+            result.setdefault(action, []).append(index)
+    return result
+
+
 def run(sarif: dict[str, Any], root: Path, responses: Any,
         scanner: Path | None = None, *, adapter: Adapter | None = None) -> dict[str, Any]:
     """Interpret scripted responses or an explicitly injected trusted provider adapter.
@@ -146,6 +174,16 @@ def run(sarif: dict[str, Any], root: Path, responses: Any,
             result['reason'] = 'Advisory selection; deterministic packet governs outcome'
             result['selected_packet'] = index
             return result
+        advertised = available_tools(packets, result['observations'] + [observation])
+        observation['policy'] = {
+            'review_status': packet['decision'],
+            'repair_status': packet['repair']['status']
+                             if action in {'propose', 'validate'} else None,
+            'next_actions': [name for name, indices in advertised.items()
+                             if name == 'abstain' or index in indices],
+            'completion': 'Manual review does not require an automatic repair; '
+                          'any proposed repair requires successful static validation',
+        }
         if len(json.dumps(result['observations'] + [observation]).encode()) > MAX_OBSERVATION_BYTES:
             result['reason'] = 'Observation budget exhausted'
             return result

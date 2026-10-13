@@ -20,9 +20,10 @@ A frozen synthetic evaluation and first-run audit are complete; later runs are r
 A bounded advisory interpreter, offline scripted demo and opt-in OpenAI Responses provider
 adapter are implemented. SDK mock transport tests pass; live-model evaluation remains an open
 release gate, and neither replay nor mocks establish model quality.
-An eight-case synthetic model evaluation harness and threat model are available. The first
-real on-device Qwen3.8 27B run scored 4/8: two repairs and two controls passed, while manual-review
-and source-instruction cases failed the declared completion criteria. Original results are
-preserved; mocks do not replace that evidence. No cloud model or paid call was used.
-Next: address observed quality failures and evaluate changes honestly, complete the consolidated
-demo, and keep private until all established release gates and human authorization pass.
+An eight-case synthetic model evaluation harness and threat model are available. The original
+local Qwen baseline (4/8) is preserved. General review/repair contract fixes passed the original
+eight as development regressions and six fresh frozen synthetic cases on first execution.
+The consolidated offline/local demo is verified. No cloud/paid calls were used.
+Remaining limits: one local model/host/configuration and self-authored known-category fixtures;
+no broad independent or adversarial security-quality claim. Keep private pending human release
+authorization and acceptance of the documented scope. Future fixture reuse is regression evidence.

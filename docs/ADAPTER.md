@@ -72,3 +72,13 @@ refusal behavior, explicit cost/data limits and available model/account compatib
 establish protocol and guard behavior only. Existing frozen cases are regressions; do not relabel
 them as new held-out model cases. The documentation must not call replay or mocked transport
 autonomous LLM reasoning or claim static validation proves security.
+
+## Review/repair control metadata
+
+Verified manual review and unsupported automatic repair are different outcomes. Host-derived
+observation policy fields now make that distinction explicit; shared instructions/descriptions
+allow manual completion while preserving abstention for insufficient evidence/failed validation.
+The Ollama adapter also filters advertised tools and packet enums by satisfied prerequisites,
+and independently rejects returned calls outside that set. The original controller checks remain.
+See CONTRACT_INVESTIGATION.md for the 4/8 baseline, 8/8 development rerun and first-use 6/6 fresh
+synthetic result; these are not independent or broad security-effectiveness claims.

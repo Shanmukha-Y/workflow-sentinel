@@ -8,7 +8,7 @@ import time
 from typing import Any
 from urllib import request as http
 
-from workflow_sentinel.agent import decode, request
+from workflow_sentinel.agent import available_tools, decode, request
 from workflow_sentinel.openai_adapter import INSTRUCTIONS, ProviderError, deadline, tools
 
 BASE = 'http://127.0.0.1:11434'
@@ -99,9 +99,17 @@ class OllamaAdapter:
                                  'content': json.dumps(observations[-1], ensure_ascii=True)})
             self.consumed = len(observations)
             self.pending = None
-        native_tools = [{'type': 'function', 'function': {
-            'name': t['name'], 'description': t['description'], 'parameters': t['parameters']}}
-            for t in tools()]
+        permitted = available_tools(packets, observations)
+        native_tools = []
+        for tool in tools():
+            if tool['name'] not in permitted:
+                continue
+            parameters = tool['parameters']
+            if tool['name'] != 'abstain':
+                parameters['properties']['packet']['enum'] = permitted[tool['name']]
+            native_tools.append({'type': 'function', 'function': {
+                'name': tool['name'], 'description': tool['description'],
+                'parameters': parameters}})
         body = {'model': self.model, 'messages': self.history, 'tools': native_tools,
                 'stream': False, 'think': False, 'keep_alive': '2m',
                 'options': {'num_ctx': CONTEXT, 'num_predict': self.max_output_tokens,
@@ -145,6 +153,9 @@ class OllamaAdapter:
             if not isinstance(args, dict) or 'action' in args:
                 raise ProviderError('Invalid local tool arguments')
             command = request({'action': function.get('name'), **args}, len(packets))
+            if (command['action'] not in permitted or command['action'] != 'abstain'
+                    and command['packet'] not in permitted[command['action']]):
+                raise ProviderError('Local tool prerequisite refused')
             self.pending = command['action']
             self.history.append({'role': 'assistant', 'content': '', 'tool_calls': [
                 {'function': {'name': self.pending, 'arguments': args}}]})

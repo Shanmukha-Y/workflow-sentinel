@@ -1,0 +1,9 @@
+{
+  "mode": "ollama-local-advisory",
+  "source_before_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+  "source_after_sha256": "52f3548797b38080bc7f305172973759101595c344a7d3d8a83004de38504780",
+  "source_unchanged": true,
+  "static_validation_passed": true,
+  "automatic_application": false,
+  "limitations": "One known synthetic fixture; static validation does not prove security or model quality"
+}

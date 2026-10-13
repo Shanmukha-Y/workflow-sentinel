@@ -229,7 +229,7 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
     return {'schema_version': 'model-eval-1.0', 'mode': mode, 'model': model,
             'wall_seconds': round(time.monotonic() - ledger.started, 6),
             'manifest_sha256': freeze_digest(path),
-            'baseline_commit': doc['baseline_commit'],
+            'baseline_commit': doc['baseline_commit'], 'dataset_methodology': doc['methodology'],
             'production_sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                   for p in Path(__file__).parent.glob('*.py')}, 'cases': rows,
             'metrics': {'policy_completion': ratio(sum(r['passed'] for r in rows), len(rows)),
@@ -253,7 +253,8 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
                        'per_case_calls': MAX_CASE_CALLS, 'max_output_tokens_per_call': tokens,
                        'max_output_tokens_total': ledger.max_calls * tokens,
                        'batch_seconds': ledger.seconds},
-            'limitations': ['Synthetic known fixtures, not held-out or vulnerability detection',
+            'limitations': ['Synthetic authored fixtures; dataset_methodology describes reuse/holdout status; '
+                            'not independent or vulnerability detection',
                             'Mock scores do not measure real model quality',
                             'Call/token caps are not monetary spend limits',
                             'No raw responses, credentials, source excerpts or error bodies saved']}

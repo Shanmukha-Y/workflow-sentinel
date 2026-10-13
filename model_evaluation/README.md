@@ -102,3 +102,13 @@ results before sharing. Keep failures and actual source/code/model provenance, r
 and report live and mocked measurements separately. The failed local quality run stays private; an elapsed
 week or passing mock suite does not authorize release. Any expanded experiment needs its own
 scope/data/spend approval; existing cases must never be silently relabeled as new holdout data.
+
+## Contract follow-up
+
+The original 4/8 local baseline remains immutable. A general review/repair contract clarification,
+host policy observations and prerequisite-filtered native tool advertising passed those eight
+cases as development regressions (8/8). Six frozen exact fresh variants passed on first model
+execution (6/6); they are self-authored known-category synthetic holdout, not independent/blind.
+The holdout included five manual reviews and one evidence-abstention control, no supported
+repairs. Details, pre-run SARIF correction, timing regression and consolidated demo are in
+[CONTRACT_INVESTIGATION.md](../docs/CONTRACT_INVESTIGATION.md). Further uses are regressions.

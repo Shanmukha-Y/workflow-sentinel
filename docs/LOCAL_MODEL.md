@@ -81,10 +81,11 @@ excerpt, credential or private local path is saved in the evaluation report.
 
 Local model integration and a narrow real capability measurement now exist. Cloud inference
 remains unapproved and unused, and no credential configuration or API charges occurred. Local
-hardware/electricity costs were not measured. The repository remains private: four declared
-policy failures mean quality gates have not passed. Permission repairs and checkout changes
+hardware/electricity costs were not measured. The original four failures remain in this archive; later general contract fixes passed the
+eight development cases and six fresh variants. See CONTRACT_INVESTIGATION.md. The repository
+remains private pending human release authorization and acceptance of narrow measured scope. Permission repairs and checkout changes
 remain unsupported/report-only. The known synthetic cases are neither held-out nor a broad
 real-world effectiveness benchmark. Future improvements must preserve this record, report
 changed code/configuration, and label reruns as regressions rather than silently fixing scores.
-A consolidated demo, failure remediation/evaluation and separate human release authorization
-remain required; an elapsed week does not authorize publication.
+The consolidated demo and contract evaluation are now complete; human release authorization
+and broader model-quality limitations remain; an elapsed week does not authorize publication.

@@ -301,3 +301,52 @@ Keep the repository private: four declared quality failures remain, along with c
 release demo and separate human release authorization. Recoverable transport integration worked;
 remaining failures are retained model/controller outcomes, not relabeled successes. Exact private
 remote SHA and CI result are in the follow-up handoff.
+
+### October 13 follow-up — General contract fix and fresh synthetic check
+
+Started from clean b4c0150 with matching private remote, no competing evaluation and loopback-only
+Ollama. Traces established three conservative abstentions after repair refusals and one blocked
+validation request after refusal. No transport/schema/budget errors caused these four failures.
+The original shared instruction conflated insufficient evidence/validation with unsupported
+repair, and tool descriptions did not describe manual-review completion. The controller and
+scorer already distinguished these; original expectations and 4/8 archive remain unchanged.
+Internal model causation/source-comment effects cannot be inferred from those traces alone.
+
+General changes: explicit review versus repair semantics in shared instructions/descriptions;
+host-derived observation policy/next actions; prerequisite-aware native tool advertisement with
+eligible packet enums and returned-call checks. No case/category-specific routing or label lookup.
+Unsupported automatic repair with verified review evidence can complete manual review, not a
+patch/security verdict. Insufficient evidence/failed validation still abstains; abstention always
+available. Original controller source/hash/scope/order/scanner/budget checks remain unchanged.
+OpenAI receives clarified descriptions/policy but real cloud-model behavior is still untested.
+
+Six fresh exact synthetic variants were frozen before any model execution (463697f). Manual
+source review corrected the job-permission SARIF line/column before the first holdout run (d4cf925)
+without altering source or expected outcome. Variants cover non-Bash shell, job permissions,
+privileged checkout, two exposed instruction comments and mismatched snippet. Self-authored with
+implementation knowledge and known categories, not blind/independent or real-world detection.
+No holdout result was used for tuning, and later reuse must be regression evidence.
+
+Actual local results with the same already-installed Qwen digest/generation caps:
+- Original baseline: 4/8, 23 requests, 58.98s (preserved).
+- Original eight as development regressions after contract change: 8/8, 23 requests, 111.86s;
+  22,080 prompt/629 output tokens, 6/6 citations, one exposure; two paired scanner comparisons.
+- Fresh first-use synthetic holdout: 6/6, 17 requests, 74.88s; 15,032 prompt/482 output tokens,
+  5/5 citations, 2/2 exposures; no eligible repairs/scanner comparison in this manual-review/
+  abstention holdout. No errors/skips/source changes in either new run.
+Combined contract changes support the improvement but do not isolate wording versus tool
+filtering or prove broad injection resistance. Runtime increased; no speedup/causal claim.
+
+Added consolidated synthetic demo with review/preview/agent/static-validation/unchanged-hash
+artifacts. Verified both real local Qwen demo and offline scripted mode; summary retained with
+checksums. Output directory preflight occurs before any model/scanner work. CI runs the offline
+demo only. 110 unit tests, Ruff, strict mypy on nine modules, 38/38 deterministic regression,
+8/8 mock oracle and both demos pass. Tests retain baseline/holdout records and verify state,
+packet enums, untrusted policy text, manual-only completion and failed-validation refusal.
+
+Release docs updated to distinguish baseline, development and first-use evidence, disclose
+pre-run fixture correction, tight guidance and missing independent/multi-finding/broad adversarial
+model evaluation. All original archives/checksums preserved. Keep private pending human release
+authorization and acceptance of the documented scope; do not force release. No model download,
+paid/cloud inference, credential configuration/discovery/transmission, deployment or social
+posting occurred. Exact remote commit/CI evidence is in the handoff.
