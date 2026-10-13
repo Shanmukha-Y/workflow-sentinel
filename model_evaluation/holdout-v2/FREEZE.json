@@ -1,5 +1,6 @@
 {
-  "manifest_sha256": "5ab361b5ec2aa6ce5ae7adf24a47f345d97fcfd636efcf96ae6dfa1fc1270976",
+  "manifest_sha256": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c",
   "labels_fixed_on": "2026-10-13",
-  "live_runs": 0
+  "live_runs": 0,
+  "pre_run_correction": "Manual source review corrected job-permission SARIF line/column before any holdout model execution; expected label/source unchanged."
 }

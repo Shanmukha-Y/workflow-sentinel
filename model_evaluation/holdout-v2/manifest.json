@@ -79,12 +79,12 @@
                         "uri": ".github/workflows/review.yml"
                       },
                       "region": {
-                        "startLine": 8,
-                        "startColumn": 1,
-                        "endLine": 8,
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
                         "endColumn": 27,
                         "snippet": {
-                          "text": "    runs-on: ubuntu-latest"
+                          "text": "    permissions: write-all"
                         }
                       }
                     }
