@@ -1,0 +1,178 @@
+{
+  "method": "Separate sequential post-trial probe, one unscored 16-token-capped actual chat per model. ps RSS sum of loopback daemon and descendants, KiB to bytes; shared pages may be double-counted, GPU/unified memory may be excluded; not true peak or isolated model allocation. No PIDs, names, paths or unrelated processes saved.",
+  "records": [
+    {
+      "model": "qwen3.8:27b-q4_K_M",
+      "before": {
+        "process_count": 1,
+        "summed_rss_bytes": 84967424
+      },
+      "after_load": {
+        "process_count": 2,
+        "summed_rss_bytes": 18588598272
+      },
+      "after_inference": {
+        "process_count": 2,
+        "summed_rss_bytes": 18750373888
+      },
+      "ollama_size_bytes": 17837955480,
+      "ollama_size_vram_bytes": 17837955480,
+      "actual_request": {
+        "model": "qwen3.8:27b-q4_K_M",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with the single word ready."
+          }
+        ],
+        "stream": false,
+        "options": {
+          "num_ctx": 8192,
+          "num_predict": 16,
+          "temperature": 0,
+          "seed": 0
+        },
+        "think": false
+      },
+      "actual_response": {
+        "model": "qwen3.8:27b-q4_K_M",
+        "created_at": "2026-10-13T15:25:41.434815Z",
+        "message": {
+          "role": "assistant",
+          "content": "ready"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 377603791,
+        "load_duration": 2234625,
+        "prompt_eval_count": 19,
+        "prompt_eval_cached_count": 0,
+        "prompt_eval_duration": 329832000,
+        "eval_count": 2,
+        "eval_duration": 43962000
+      },
+      "preload_response": {
+        "model": "qwen3.8:27b-q4_K_M",
+        "created_at": "2026-10-13T15:25:40.943225Z",
+        "response": "",
+        "done": true,
+        "done_reason": "load"
+      }
+    },
+    {
+      "model": "gemma4:31b-it-q4_K_M",
+      "before": {
+        "process_count": 1,
+        "summed_rss_bytes": 85065728
+      },
+      "after_load": {
+        "process_count": 2,
+        "summed_rss_bytes": 23106830336
+      },
+      "after_inference": {
+        "process_count": 2,
+        "summed_rss_bytes": 23153082368
+      },
+      "ollama_size_bytes": 2737653676,
+      "ollama_size_vram_bytes": 2737653676,
+      "actual_request": {
+        "model": "gemma4:31b-it-q4_K_M",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with the single word ready."
+          }
+        ],
+        "stream": false,
+        "options": {
+          "num_ctx": 8192,
+          "num_predict": 16,
+          "temperature": 0,
+          "seed": 0
+        },
+        "think": false
+      },
+      "actual_response": {
+        "model": "gemma4:31b-it-q4_K_M",
+        "created_at": "2026-10-13T15:25:47.692407Z",
+        "message": {
+          "role": "assistant",
+          "content": "ready"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 561578792,
+        "load_duration": 4490875,
+        "prompt_eval_count": 20,
+        "prompt_eval_cached_count": 0,
+        "prompt_eval_duration": 380091000,
+        "eval_count": 2,
+        "eval_duration": 174588000
+      },
+      "preload_response": {
+        "model": "gemma4:31b-it-q4_K_M",
+        "created_at": "2026-10-13T15:25:47.025626Z",
+        "response": "",
+        "done": true,
+        "done_reason": "load"
+      }
+    },
+    {
+      "model": "mistral-small3.2:24b",
+      "before": {
+        "process_count": 1,
+        "summed_rss_bytes": 85278720
+      },
+      "after_load": {
+        "process_count": 2,
+        "summed_rss_bytes": 16551936000
+      },
+      "after_inference": {
+        "process_count": 2,
+        "summed_rss_bytes": 16577036288
+      },
+      "ollama_size_bytes": 15897271992,
+      "ollama_size_vram_bytes": 15897271992,
+      "actual_request": {
+        "model": "mistral-small3.2:24b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with the single word ready."
+          }
+        ],
+        "stream": false,
+        "options": {
+          "num_ctx": 8192,
+          "num_predict": 16,
+          "temperature": 0,
+          "seed": 0
+        }
+      },
+      "actual_response": {
+        "model": "mistral-small3.2:24b",
+        "created_at": "2026-10-13T15:25:56.563232Z",
+        "message": {
+          "role": "assistant",
+          "content": "ready"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 1956926375,
+        "load_duration": 3944417,
+        "prompt_eval_count": 514,
+        "prompt_eval_cached_count": 0,
+        "prompt_eval_duration": 1912801000,
+        "eval_count": 2,
+        "eval_duration": 35183000
+      },
+      "preload_response": {
+        "model": "mistral-small3.2:24b",
+        "created_at": "2026-10-13T15:25:54.503001Z",
+        "response": "",
+        "done": true,
+        "done_reason": "load"
+      }
+    }
+  ]
+}

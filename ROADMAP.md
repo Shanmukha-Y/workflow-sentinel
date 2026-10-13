@@ -11,7 +11,8 @@
 | 7 | Release | Reproducible demo, threat model, measured results and limits; human review and manual release draft |
 
 One increment per day. Update progress with actual checks and blockers. No automatic schedule
-or social posting configured. Public visibility requires a separate release action.
+or social posting configured. The standing release instruction permits public visibility once
+the documented readiness checks pass.
 
 Current status: evidence investigation and a constrained Bash `printf` injection repair preview
 are implemented. Permission repairs remain deferred until explicit requirements can be supplied
@@ -25,5 +26,10 @@ local Qwen baseline (4/8) is preserved. General review/repair contract fixes pas
 eight as development regressions and six fresh frozen synthetic cases on first execution.
 The consolidated offline/local demo is verified. No cloud/paid calls were used.
 Remaining limits: one local model/host/configuration and self-authored known-category fixtures;
-no broad independent or adversarial security-quality claim. Keep private pending human release
-authorization and acceptance of the documented scope. Future fixture reuse is regression evidence.
+no broad independent or adversarial security-quality claim. The initial release is scoped to
+these documented limits after the final readiness audit. Future fixture reuse is regression evidence.
+
+Final comparison: three actual local backends, raw records, common frozen setup and repeated
+trials. Qwen/Gemma pass this narrow task set; Mistral remains experimental with retained protocol
+failures. Product replay/mock demos were removed; test-only mocks are not performance evidence.
+The standing release instruction permits initial publication after the final audit/CI checks.

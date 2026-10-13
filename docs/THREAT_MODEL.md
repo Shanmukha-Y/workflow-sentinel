@@ -47,12 +47,16 @@ reports, review decisions, scanner success and schema validity are not security 
 ## Release gates
 
 The original four failures are preserved; contract fixes passed 8/8 development and 6/6 fresh
-synthetic cases, and a consolidated demo is verified. Human release authorization remains open;
-acceptance must account for narrow synthetic scope, tightly guided tool selection and untested
-broader/adversarial behavior. See CONTRACT_INVESTIGATION.md. Any OpenAI/cloud pilot still needs
+synthetic cases, and a consolidated demo is verified. The standing instruction authorizes an
+initial release after the final audit, scoped to narrow synthetic evidence, tightly guided tool
+selection and untested broader/adversarial behavior. See CONTRACT_INVESTIGATION.md. Any OpenAI/cloud pilot still needs
 separate approval.
 Known synthetic regressions and SDK mocks remain separate from any future live results.
-The repository stays private until a separately authorized release; elapsed calendar time is
-not authorization. A later pilot must explicitly approve data disclosure, model, request scope
-and a substantiated monetary ceiling. No deployment, public release or social posting is part
-of the current implementation or evaluation.
+Public visibility follows the final readiness audit under the standing release authorization;
+elapsed calendar time alone is not readiness. A later pilot must explicitly approve data disclosure, model, request scope
+and a substantiated monetary ceiling. No deployment or social posting is performed by the implementation or evaluation.
+
+The actual three-model comparison is documented in comparison/REPORT.md. Residual Mistral
+protocol failures are safely refused, not coerced into success. Raw evidence is opt-in and used
+only with audited synthetic data in that comparison; it requires review before sharing. No
+canned model-output fallback remains in current product/demo paths. Unit mocks remain test-only.

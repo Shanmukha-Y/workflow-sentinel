@@ -1,51 +1,40 @@
-# Release readiness — private development
+# Initial release audit
 
-Workflow Sentinel remains private. Passing tests and reaching the end of the original week do
-not establish live capability or authorize a release.
+The standing instruction authorizes public visibility when the project is genuinely ready.
+No additional human-release gate is imposed. This release is a **bounded review prototype**,
+scoped to its documented constraints and actual local measurements, not broad security/model
+reliability. Optional Mistral remains experimental with measured strict-format failures.
 
-| Gate | Current evidence | Remaining requirement |
-|---|---|---|
-| Bounded investigation/repair/static validation | Unit suite and 38-case deterministic regression; isolated scanner comparisons | Preserve narrow scope and documented refusals |
-| Provider integration | Official SDK in-memory transport tests and offline scanner demos | OpenAI unverified; local baseline 4/8, development 8/8, fresh synthetic 6/6 |
-| Model evaluation tooling | Fixed eight-case known synthetic suite, scoring tests, request caps and preserved scorer failure | Original failures retained; general contract fix tested without relabeling |
-| Threat model | THREAT_MODEL.md documents assets, trust assumptions and known limits | Review alongside actual live behavior and disclosure/spend plan |
-| Private data/secrets | October 13 repository audit below | Re-audit the final release tree/artifacts; review any live results |
-| Reproducible release and public visibility | Consolidated offline/local demo verified; measured limits documented | Human release authorization and manual release decision/draft |
+| Gate | Evidence |
+|---|---|
+| Working source review/repair/validation | Unit suite, 38-case static regression, real native scanner runs |
+| Genuine local capability | Preserved Qwen baseline/fix and actual three-model comparison with raw evidence |
+| Failure preservation and fair comparison | Original failures, interrupted attempt, common corrected rerun, exposed/first/repeated roles |
+| Reproducible install/demo | Clean package install, source/wheel asset/license checks; featured demo actually calls Ollama and scanner |
+| Accurate natural README | Synthetic inputs labeled; no canned product/demo fallback; strict scope and backend limitations |
+| License/dependencies | MIT project source, SPDX/wheel license, separately installed dependency/runtime/weight terms |
+| Privacy/secrets/history | Full reachable-history and final-tree audit; generic resource details, no identifying local paths/user data |
+| Publication | Change visibility only after final remote commit and exact CI pass; verify unauthenticated access |
 
-A proposed OpenAI/cloud pilot would use exactly eight known synthetic cases, at most four provider
-attempts per case/32 overall, and at most 256 requested output tokens per call/8,192 overall.
-Unknown/failed attempts consume reservations; errors/skips stay in the eight-case denominator.
-Provider errors cannot be relabeled correct abstentions. The harness checks attack-text payload
-inclusion, not whether a model resisted the text. Details and user-run instructions are in
-[model_evaluation/README.md](../model_evaluation/README.md).
+Actual comparison results, category/error/latency/token/memory methods and limitations are in
+[comparison/REPORT.md](../comparison/REPORT.md). Qwen/Gemma completed their tested tasks;
+Mistral's ten final protocol failures were safely refused and remain failures. No observed
+unauthorized validation/source mutations occurred in the 90 final case executions. None of
+those facts proves security, statistical reliability or real-world effectiveness.
 
-Local model download/inference was separately authorized and the real Qwen run is preserved in
-LOCAL_MODEL.md. No paid cloud call or monetary commitment is authorized. A reliable dollar estimate/limit needs a
-selected supported model, current input/output pricing, disclosure approval, usage reconciliation
-and an explicitly approved enforcement method. Token, byte and request caps alone do not enforce
-cash spend. On-device inference incurred no API charges; hardware/electricity costs were not measured.
+All performance measurements are actual on-device inference. Unit mocks remain under `tests`
+for protocol/scoring/failure-path software verification, not capability evidence. Historical
+mock/oracle files moved to a test-only archive with original bytes/checksums/history retained.
+Synthetic fixtures are not real incidents. [Product audit](PRODUCT_AUDIT.md).
 
-## October 13 repository audit
+The featured demo requires a real local model and real scanner. The static CLI independently
+performs actual file investigation/scanner checks without an LLM. No model weights, scanner
+binaries or third-party libraries are vendored. No cloud calls, credential configuration,
+deployments or social posting occurred. Native processes and local daemon are trusted rather
+than OS-sandboxed. Future cloud/data/spend changes still need separate approval.
 
-Inspected 62 current tracked/new project files and 93 reachable historical Git blobs with
-credential patterns (GitHub tokens, AWS access-key IDs, private-key headers and OpenAI-style
-keys), sensitive filenames and private home-path detection. No matches requiring removal were
-found. Synthetic workflows/SARIF, example reports and new evaluation archives were reviewed for
-scope: data is synthetic; records omit raw provider bodies, prompts, credentials and source
-excerpts. Fixed mock authentication placeholders are intentionally non-credentials.
-
-Scope excludes ignored environments/caches and files outside this repository. Pattern/filename
-and content review is not proof that every secret or private datum is absent, nor dependency
-vulnerability or supply-chain verification. No personal credential stores were searched.
-A final audit must include any future live results before public sharing.
-
-## Actual local quality gate
-
-The first Qwen3.8 27B local run completed all eight cases in 58.98 seconds using 23 model requests.
-Both supported repairs and both abstention controls passed. Three manual-review cases abstained
-instead of completing review; the source-instruction case requested validation after a refused
-proposal and the deterministic guard blocked it. Score: 4/8. This genuine but narrow capability
-measurement is retained separately from mocks, with its failures. The repository stays private;
-Contract remediation subsequently passed 8/8 development and 6/6 fresh synthetic cases; the
-consolidated demo passed. Human release authorization and acceptance of narrow scope/model
-limitations remain. See CONTRACT_INVESTIGATION.md.
+Hardware records contain generic CPU/RAM/software versions, model digests and measurement data;
+no hostname, user-home path, device serial/UUID, process identity or private target content is
+published. Commit identity is the intentionally public GitHub handle and noreply address.
+Pattern/content/history review is not mathematical proof of absence; final checks cover only
+this repository and published assets, not external credential stores or ignored environments.

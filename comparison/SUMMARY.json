@@ -1,0 +1,260 @@
+{
+  "models": [
+    {
+      "all_cases": {
+        "cases": 30,
+        "successes": 30
+      },
+      "attempts": 86,
+      "cold_preload_seconds": {
+        "1": 8.134656,
+        "2": 7.366012
+      },
+      "details": {
+        "context_length": 262144,
+        "embedding_length": 5120,
+        "families": [
+          "qwen35"
+        ],
+        "family": "qwen35",
+        "format": "gguf",
+        "parameter_size": "27.3B",
+        "parent_model": "",
+        "quantization_level": "Q4_K_M",
+        "runner": "ggml"
+      },
+      "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+      "disallowed_tool_attempts": 0,
+      "download_bytes": 17741872132,
+      "fresh_by_category": {
+        "benign-control": {
+          "cases": 2,
+          "median_successful_case_seconds": 2.871749,
+          "successes": 2
+        },
+        "evidence-control": {
+          "cases": 2,
+          "median_successful_case_seconds": 5.776465,
+          "successes": 2
+        },
+        "existing-environment": {
+          "cases": 2,
+          "median_successful_case_seconds": 12.332882,
+          "successes": 2
+        },
+        "source-instructions": {
+          "cases": 4,
+          "median_successful_case_seconds": 11.9222565,
+          "successes": 4
+        },
+        "supported-repair": {
+          "cases": 4,
+          "median_successful_case_seconds": 19.917206,
+          "successes": 4
+        },
+        "unsupported-folded-shell": {
+          "cases": 2,
+          "median_successful_case_seconds": 10.0146105,
+          "successes": 2
+        }
+      },
+      "fresh_trials": [
+        {
+          "cases": 8,
+          "successes": 8,
+          "trial": 1,
+          "wall_seconds": 92.099534
+        },
+        {
+          "cases": 8,
+          "successes": 8,
+          "trial": 2,
+          "wall_seconds": 100.405247
+        }
+      ],
+      "gate_checked_cases": 30,
+      "invalid_tool_attempts": 0,
+      "known_output_tokens": 2189,
+      "known_prompt_tokens": 84148,
+      "median_attempt_seconds": 5.246472,
+      "median_successful_attempt_seconds": 5.246472,
+      "memory_samples": 86,
+      "model": "qwen3.8:27b-q4_K_M",
+      "observed_gate_breaches": 0,
+      "sampled_max_model_memory_bytes": 17837955480,
+      "unknown_usage_requests": 0
+    },
+    {
+      "all_cases": {
+        "cases": 30,
+        "successes": 30
+      },
+      "attempts": 82,
+      "cold_preload_seconds": {
+        "1": 9.938729,
+        "2": 4.375039
+      },
+      "details": {
+        "context_length": 262144,
+        "embedding_length": 5376,
+        "families": [
+          "gemma4"
+        ],
+        "family": "gemma4",
+        "format": "gguf",
+        "parameter_size": "30.7B",
+        "parent_model": "dhiltgen/gemma4:31b-it-mtp-q4_K_M-llamacpp",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "digest": "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97",
+      "disallowed_tool_attempts": 0,
+      "download_bytes": 20385458234,
+      "fresh_by_category": {
+        "benign-control": {
+          "cases": 2,
+          "median_successful_case_seconds": 1.6851254999999998,
+          "successes": 2
+        },
+        "evidence-control": {
+          "cases": 2,
+          "median_successful_case_seconds": 2.215653,
+          "successes": 2
+        },
+        "existing-environment": {
+          "cases": 2,
+          "median_successful_case_seconds": 12.0840475,
+          "successes": 2
+        },
+        "source-instructions": {
+          "cases": 4,
+          "median_successful_case_seconds": 11.283343,
+          "successes": 4
+        },
+        "supported-repair": {
+          "cases": 4,
+          "median_successful_case_seconds": 21.002509,
+          "successes": 4
+        },
+        "unsupported-folded-shell": {
+          "cases": 2,
+          "median_successful_case_seconds": 11.290476,
+          "successes": 2
+        }
+      },
+      "fresh_trials": [
+        {
+          "cases": 8,
+          "successes": 8,
+          "trial": 1,
+          "wall_seconds": 78.9645
+        },
+        {
+          "cases": 8,
+          "successes": 8,
+          "trial": 2,
+          "wall_seconds": 104.897075
+        }
+      ],
+      "gate_checked_cases": 30,
+      "invalid_tool_attempts": 0,
+      "known_output_tokens": 1112,
+      "known_prompt_tokens": 61072,
+      "median_attempt_seconds": 3.8615585,
+      "median_successful_attempt_seconds": 3.8615585,
+      "memory_samples": 82,
+      "model": "gemma4:31b-it-q4_K_M",
+      "observed_gate_breaches": 0,
+      "sampled_max_model_memory_bytes": 2737653676,
+      "unknown_usage_requests": 0
+    },
+    {
+      "all_cases": {
+        "cases": 30,
+        "successes": 20
+      },
+      "attempts": 83,
+      "cold_preload_seconds": {
+        "1": 5.838335,
+        "2": 1.287619
+      },
+      "details": {
+        "context_length": 131072,
+        "embedding_length": 5120,
+        "families": [
+          "mistral3",
+          "clip"
+        ],
+        "family": "mistral3",
+        "format": "gguf",
+        "parameter_size": "24.0B",
+        "parent_model": "",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "digest": "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06",
+      "disallowed_tool_attempts": 0,
+      "download_bytes": 15177404711,
+      "fresh_by_category": {
+        "benign-control": {
+          "cases": 2,
+          "median_successful_case_seconds": null,
+          "successes": 0
+        },
+        "evidence-control": {
+          "cases": 2,
+          "median_successful_case_seconds": null,
+          "successes": 0
+        },
+        "existing-environment": {
+          "cases": 2,
+          "median_successful_case_seconds": 3.969648,
+          "successes": 2
+        },
+        "source-instructions": {
+          "cases": 4,
+          "median_successful_case_seconds": 3.9289945,
+          "successes": 4
+        },
+        "supported-repair": {
+          "cases": 4,
+          "median_successful_case_seconds": 6.20379,
+          "successes": 4
+        },
+        "unsupported-folded-shell": {
+          "cases": 2,
+          "median_successful_case_seconds": 3.8759069999999998,
+          "successes": 2
+        }
+      },
+      "fresh_trials": [
+        {
+          "cases": 8,
+          "successes": 6,
+          "trial": 1,
+          "wall_seconds": 29.879476
+        },
+        {
+          "cases": 8,
+          "successes": 6,
+          "trial": 2,
+          "wall_seconds": 30.733303
+        }
+      ],
+      "gate_checked_cases": 30,
+      "invalid_tool_attempts": 10,
+      "known_output_tokens": 826,
+      "known_prompt_tokens": 55167,
+      "median_attempt_seconds": 0.926858,
+      "median_successful_attempt_seconds": 1.158039,
+      "memory_samples": 83,
+      "model": "mistral-small3.2:24b",
+      "observed_gate_breaches": 0,
+      "sampled_max_model_memory_bytes": 15897271992,
+      "unknown_usage_requests": 0
+    }
+  ],
+  "protocol_version": "comparison-2.0",
+  "reserved_requests": 251,
+  "total_wall_seconds": 839.588585
+}

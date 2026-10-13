@@ -1,84 +1,71 @@
-# Advisory adapter contract
+# Bounded model adapter contract
 
-`workflow_sentinel.agent.run(sarif, repo, responses, scanner=None)` implements the offline
-request interpreter. The bundled scripted transport and opt-in injected OpenAI adapter are supported. It creates
-the same bounded deterministic packets first, then interprets a sequence of structured
-requests. The default replay loads no provider SDK. The provider path accepts only a trusted injected
-client; it loads no source-defined tools, plugins or shell strings.
+The product `workflow_sentinel.agent.run(sarif, repo, scanner, adapter=...)` requires an actual
+configured adapter. It first resolves bounded deterministic packets, then interprets each model
+request. There is no scripted-product CLI or canned response fallback. The private execution
+seam is used only by controlled unit tests.
 
-| Request | Prerequisite | Observation / outcome |
+| Request | Prerequisite | Outcome |
 |---|---|---|
-| evidence | Valid packet index | Verified source evidence and deterministic triage |
-| propose | Evidence previously requested | Existing allowlisted repair preview or refusal |
-| validate | Proposed candidate, explicit scanner, unused packet, remaining budget | Existing static validator result |
-| finish | Prior evidence; any proposal successfully validated | Advisory review or deterministic abstention |
-| abstain | None | Terminal abstention |
+| evidence | Valid eligible packet index | Verified local source evidence and triage |
+| propose | Evidence already reviewed | Deterministic constrained preview or manual-only refusal |
+| validate | Proposed candidate, scanner opt-in, unused validation budget | Existing static validator |
+| finish | Verified manual review or successfully validated proposal | Advisory completion, no application |
+| abstain | Always | Terminal abstention |
 
-Terminal responses must be last. Exhaustion, invalid structure/order, deadline, missing scanner,
-failed validation and oversized observations abstain. Requested source evidence is data, never
-instructions. Response text is not stored in sanitized traces. Output source excerpts and diffs
-are not redacted: keep reports private and review before sharing. The interpreter does not
-accept a model's security verdict or supplied patch, even if its narrative appears plausible.
-A review outcome is not authorization to apply a patch and does not prove security.
+Host-derived policy fields distinguish review status from automatic-repair status. Unsupported
+repair with verified review evidence can complete manual review; it does not claim a fix.
+Insufficient evidence and unsuccessful validation abstain. Native tool advertising restricts
+actions and packet enums by those prerequisites; returned requests and the controller check
+again independently. Source excerpts/comments cannot change host state or available tools.
 
-The script can be reproduced with the README command. Unit tests cover malformed and malicious
-requests, boolean/negative/out-of-range indices, arbitrary commands/paths/patches, bad evidence,
-sequence ordering, repeated validation, response/observation/turn/deadline bounds, unavailable
-scanner opt-in, rejected/unsupported/unavailable results, trace sanitization, deterministic
-replay and unchanged source. Real scanner CI exercises one scripted successful proposal;
-that is a scanner integration demonstration, not a model evaluation.
+Sessions have eight-turn/response/observation/deadline caps and at most two validation pairs.
+The comparison harness tightens to four requests/case and an aggregate budget. Scope/hash/YAML
+and before/after scanner checks are deterministic; model-provided paths, commands, arbitrary
+patches and security verdicts are not accepted. No target workflow/script or model shell command
+is executed. Reports contain source excerpts; default provider traces avoid raw bodies.
 
-## OpenAI transport implementation and remaining gate
+## Native local Ollama
 
-`OpenAIAdapter(client, model=..., max_output_tokens=..., allow_source_disclosure=True)` is an
-opt-in interactive transport. It calls the supplied synchronous SDK client's
-`with_options(timeout=..., max_retries=0).responses.create(...)`. The request uses five strict
-function schemas, `tool_choice="required"`, `parallel_tool_calls=False`, `store=False`, and an
-explicit output-token cap. It accepts exactly one completed function call, validates the
-arguments again locally, rejects duplicate call IDs/JSON keys and returns the command to the
-same deterministic interpreter. Bounded reasoning items are preserved for continuation, and
-the next call receives the actual preceding observation using `function_call_output/call_id`.
-Raw provider response/errors are not included in report traces.
+`OllamaAdapter` uses the [native chat/tool protocol](https://docs.ollama.com/capabilities/tool-calling)
+on a fixed proxy-free, redirect-free `http://127.0.0.1:11434`. The daemon must already exist.
+Installed local GGUF/tool-capable Qwen, Gemma and Mistral Small tags are supported; cloud tags/
+remote metadata refuse. No server/credential configuration or automatic download occurs.
+Native outputs are not assumed strict: one complete call, correct field types/index/action and
+satisfied prerequisites are required. Prose, parallel calls, truncation and invalid requests
+refuse without running tools. Native timings and usage are recorded when supplied.
 
-Verified on October 12 against the [official function-calling guide](https://developers.openai.com/api/docs/guides/function-calling)
-and [official SDK guidance](https://developers.openai.com/api/docs/libraries). Tested SDK:
-OpenAI Python 3.29.0 with httpx2 2.13.1 in-memory MockTransport. No live requests or real
-credentials were used. The SDK tests verify the emitted request payload, multi-turn observation
-roundtrip, reasoning continuation, retries disabled on HTTP 429, strict configuration, malformed/
-refused/incomplete output, arbitrary commands/patches, duplicate call IDs/arguments, input and
-output caps, deadline restoration, and missing scanner refusal. A standalone mock transport
-demo can also use the real installed scanner on the synthetic repair fixture.
+Calls use an 8K context, 256-token cap, temperature/seed 0, and thinking disabled where supported
+(the nonthinking model has no think field). A 15-second POSIX main-thread wall deadline and
+socket timeout cap each call; active process alarms or non-main threads refuse. Trusted native
+code can delay signal delivery; this is not OS isolation. Source/observation and response byte
+limits still apply. Default traces are minimized; opt-in comparison capture retains bounded
+actual raw requests/responses only for the explicitly audited synthetic datasets. Those records
+must be audited before sharing and are not appropriate for unaudited private source content.
 
-The transport permits only `https://api.openai.com/v1`. A caller must separately approve data
-and spend, supply the client and supported model, and review excerpts for secrets. The adapter
-never discovers credentials or constructs clients. The test/demo uses a fixed mock placeholder
-and clears the SDK's environment during mock client construction; no real credential is read.
-There is no live CLI option. SDK dependencies are optional for runtime users.
+## Optional OpenAI transport
 
-Resource bounds: eight requests, 64 KB serialized conversation history, 16 KB decoded provider
-response, 4 KB function arguments, 64–512 output tokens/request. The existing 64 KB observation
-and two scanner-pair caps remain. Each call uses a POSIX main-thread signal wall deadline of at
-most 15 seconds, capped by the session's remaining 65-second budget, plus SDK timeout. Active
-process alarms and non-main threads are refused; use a dedicated single-thread application and
-a fresh unused client. Trusted SDK/native code could delay signal delivery; this is not process
-isolation. Output size is checked after SDK decoding, not a preallocation/streaming cap.
-Cancelling a local request does not establish remote cancellation or zero charges. Token/byte
-caps do not enforce a monetary budget, and `store=False` is not a provider retention guarantee.
+`OpenAIAdapter` accepts a caller-supplied fresh synchronous SDK client, explicit model/token cap
+and source-disclosure opt-in. It uses strict function tools, `tool_choice="required"`, no parallel
+calls, `store=False`, retries=0 and timeout. It validates output locally and returns each bounded
+observation through the Responses continuation protocol. No credential discovery/client
+construction is implemented. No real cloud-model evaluation has been performed; test transports
+establish protocol/error handling only. Local results do not establish this adapter's quality.
 
-OpenAI implementation is present but its real cloud capability is unvalidated. The separate
-local Ollama adapter has an actual 4/8 Qwen result; see LOCAL_MODEL.md. Release needs
-separately approved real-model evaluation with malicious source instructions, measured failure/
-refusal behavior, explicit cost/data limits and available model/account compatibility. SDK mocks
-establish protocol and guard behavior only. Existing frozen cases are regressions; do not relabel
-them as new held-out model cases. The documentation must not call replay or mocked transport
-autonomous LLM reasoning or claim static validation proves security.
+Verified implementation references: [official function calling](https://developers.openai.com/api/docs/guides/function-calling),
+[official SDK guidance](https://developers.openai.com/api/docs/libraries). Tests use SDK 3.29.0
+and httpx2 2.13.1 controlled transports under `tests`; they are not product-performance results.
 
-## Review/repair control metadata
+OpenAI history/decoded-response/argument/token bounds apply. Input/output limits are checked
+around SDK processing, not an allocation-proof streaming cap. Local cancellation does not
+establish remote cancellation or zero charges, and store=False is not a retention guarantee.
+Any cloud use still needs explicit data/spend approval. Request caps are not monetary caps.
 
-Verified manual review and unsupported automatic repair are different outcomes. Host-derived
-observation policy fields now make that distinction explicit; shared instructions/descriptions
-allow manual completion while preserving abstention for insufficient evidence/failed validation.
-The Ollama adapter also filters advertised tools and packet enums by satisfied prerequisites,
-and independently rejects returned calls outside that set. The original controller checks remain.
-See CONTRACT_INVESTIGATION.md for the 4/8 baseline, 8/8 development rerun and first-use 6/6 fresh
-synthetic result; these are not independent or broad security-effectiveness claims.
+## Evidence and limitations
+
+Actual local baselines, development reruns, exposed data and fresh/repeated comparison trials
+are separated in [the comparison report](../comparison/REPORT.md). The unchanged original
+failure and the general contract fix are documented in CONTRACT_INVESTIGATION.md. Historical
+mock/model-oracle records are test-only provenance under `tests/archives`, never model-quality
+evidence. Source cases are synthetic, not real incidents. Guided tools and a small self-authored
+set do not prove broad reliability, injection resistance, vulnerability detection or security.

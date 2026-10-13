@@ -1,224 +1,133 @@
 # Workflow Sentinel
 
-Workflow Sentinel turns [zizmor](https://docs.zizmor.sh/) findings into JSON reports for reviewing GitHub Actions workflows. It connects each finding to local source evidence and adds remediation guidance with links to the relevant documentation.
-
-It currently supports three zizmor rules:
-
-- `template-injection`: untrusted expressions used in script contexts.
-- `excessive-permissions`: overly broad workflow or job token permissions.
-- `dangerous-triggers`: privileged triggers that need closer review, including possible untrusted checkout.
-
-Reports include review decisions, source ranges, excerpts, file hashes, and guidance. Workflow context shows triggers, permission declarations, the affected job and step, expression references, and checkout references, with citations to their YAML locations. Each entry includes a short investigation trace. Findings with missing evidence or unsupported rules are marked `abstain` with a reason. An optional repair preview produces a constrained diff for supported Bash injection patterns.
+Workflow Sentinel investigates supplied [zizmor](https://docs.zizmor.sh/) findings in GitHub
+Actions workflows. It resolves local source evidence, produces cited review packets, previews
+a narrow class of Bash injection repairs, and validates eligible candidates on isolated copies.
+An optional local Ollama agent selects bounded tools; the deterministic checks govern every
+proposal and validation. Source workflows are never executed or automatically patched.
 
 ## Install
 
-Requires Python 3.11 or later. From the repository root:
+Requires Python 3.11+ on Linux or macOS. The offline CLI and local adapter require only PyYAML.
 
 ```sh
+git clone https://github.com/Shanmukha-Y/workflow-sentinel.git
+cd workflow-sentinel
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -e .
+python -m pip install zizmor==1.30.1
 ```
 
-## Quick start
+The scanner must be a trusted native zizmor 1.30.1 binary outside the repository being reviewed.
+For external targets, keep the installed scanner outside that target checkout. Ollama is
+installed separately; this project never starts a server, downloads weights automatically,
+reads model credentials, or falls back to cloud inference.
 
-Try the included example:
+## Review a workflow
+
+Try the included **synthetic input**, not a real incident:
 
 ```sh
-workflow-sentinel \
-  --sarif fixtures/vulnerable/findings.sarif \
+workflow-sentinel --sarif fixtures/vulnerable/findings.sarif \
   --repo fixtures/vulnerable > report.json
 ```
 
-This produces three entries: an expression embedded in a shell command, `write-all` token permissions, and a privileged trigger with a pull request checkout. This example uses hand-authored SARIF to demonstrate the report format. See [the example report](examples/offline-report.json) for the full output.
+The default is an actual deterministic source investigation, with no LLM. Reports contain file
+hashes, source excerpts/ranges, YAML context, reasons and citations. Supported rules are
+`template-injection`, `excessive-permissions`, and `dangerous-triggers`. Unknown rules or missing/
+ambiguous evidence abstain. A review is advisory: exploitability is not established.
 
-For your own repository, [install zizmor](https://docs.zizmor.sh/installation/) and generate SARIF first:
+For your own checkout, generate SARIF at its root, then review the same revision:
 
 ```sh
-cd /path/to/repo
 zizmor --offline --format=sarif . > findings.sarif
 workflow-sentinel --sarif findings.sarif --repo . > report.json
 ```
 
-Run zizmor from the repository root so source paths are relative to `--repo`. Sentinel accepts SARIF 2.1.0 with either the rule IDs listed above or their `zizmor/`-prefixed forms. Reports use the unprefixed IDs for supported rules. It writes JSON to stdout and errors to stderr. Exit code `0` means the report was generated, including any findings; `2` indicates invalid input.
+Reports include unredacted source excerpts. Review them for sensitive content before sharing
+or permitting a model to receive them. The accepted subset and report format are in [schemas](schemas).
 
-## Repair previews
-
-```sh
-workflow-sentinel \
-  --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
-  --repo fixtures/repairable \
-  --preview-repairs > preview.json
-```
-
-For a supported Bash step, the preview moves an untrusted expression into `env` and uses a quoted variable in the script:
-
-```yaml
-env:
-  SENTINEL_INPUT: ${{ github.event.pull_request.title }}
-run: |
-  printf '%s\n' "$SENTINEL_INPUT"
-```
-
-The JSON `repair` entry contains a unified diff, the original and proposed file hashes, and validation notes. Review the diff and verify the original hash before applying it. Sentinel leaves the source unchanged. See [the example preview](examples/repair-preview.json).
-
-Previews currently support one literal `printf '%s'` or `printf '%s\n'` command in a `run: |` block with explicit `shell: bash` and a matching SARIF snippet or source hash. The expression must be a supported PR/issue title or body reference, or `github.head_ref`. Existing environment declarations, container/default execution settings, extra commands, redirections, and ambiguous contexts produce a repair abstention. Permission reductions need explicit validated requirements and are not implemented; trigger and checkout changes remain report-only.
-
-## Static validation
-
-With a trusted native zizmor **1.30.1** binary installed outside the repository being reviewed:
+## Repair preview and static validation
 
 ```sh
-workflow-sentinel \
-  --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
-  --repo fixtures/repairable \
-  --validate-repairs \
-  --scanner /absolute/path/to/zizmor > validation.json
+workflow-sentinel --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
+  --repo fixtures/repairable --preview-repairs > preview.json
+workflow-sentinel --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
+  --repo fixtures/repairable --validate-repairs \
+  --scanner "$(command -v zizmor)" > validation.json
 ```
 
-`--validate-repairs` includes repair previews and checks each eligible candidate against current source. It reconstructs the allowed edit, verifies hashes and YAML, then scans the original and candidate in separate temporary directories. Only the selected workflow is copied. Source files remain unchanged.
+Supported repairs move one allowlisted untrusted expression from a literal Bash `printf` into
+an intermediate environment variable and a quoted shell expansion. An explicit `shell: bash`,
+matching snippet/hash and unambiguous context are required. Existing environments, defaults,
+containers, collisions, extra commands and unsupported syntax refuse. Permission requirements
+cannot be inferred; permission repair is not implemented. Checkout/trigger changes are report-only.
 
-The `static_validation` entry reports one of four outcomes:
+Validation reconstructs the allowed edit, checks hashes/YAML, and runs fixed offline scanner
+arguments on before/after copies of the single workflow. It confirms target removal and rejects
+new/strengthened findings. Results are `validated`, `rejected`, `unsupported`, or `unavailable`.
+Review the diff and source hash before applying anything yourself. A static pass is not proof
+of security or runtime semantic equivalence.
 
-- `validated`: a fresh scan confirmed the target finding; the candidate removes it without new or strengthened findings.
-- `rejected`: source or edit checks failed, the target remains, or the scanner comparison found a regression.
-- `unsupported`: the repair or comparison falls outside the supported scope.
-- `unavailable`: the scanner is missing, failed, timed out, returned malformed output, or reached a resource limit.
+## Real local agent and featured demo
 
-Comparison uses rule, severity, confidence, YAML location and finding multiplicity, so inserted lines do not create false regressions. Validation covers one workflow, not the entire repository. Missing local actions and dynamic/nonstandard action references are unsupported.
-
-Scanner arguments are fixed: offline SARIF, strict collection, regular persona, no configuration loading or ignore rules. The scanner receives a minimal environment. Each call has a 15-second timeout, a 1 MB stdout limit and a 64 KB stderr limit. At most two candidates are checked per report, with two calls each and no retries. Other scanner versions and script wrappers are currently unsupported. If `--scanner` is omitted, Sentinel looks for an installed `zizmor` binary on PATH.
-
-A validated result is a static check, not a security guarantee; review the diff before applying it. See [the example validation report](examples/static-validation.json).
-
-## Advisory adapter replay
-
-The optional adapter interpreter accepts structured requests to inspect a finding's verified
-local evidence, request a constrained proposal, run static validation, or abstain. The included
-scripted transport replays JSON responses offline; it is a reproducible interface demo, not a
-live model. Packet indices refer to the deterministic report's sorted `packets` array.
+Use an already installed tool-capable local model with Ollama listening on loopback. For example:
 
 ```sh
-workflow-sentinel \
-  --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif \
-  --repo fixtures/repairable \
-  --agent-script examples/agent-script.json \
-  --scanner /absolute/path/to/zizmor > agent-report.json
+OLLAMA_HOST=127.0.0.1:11434 ollama pull qwen3.8:27b-q4_K_M
+python examples/review_demo.py --local-model qwen3.8:27b-q4_K_M \
+  --scanner "$(command -v zizmor)" --output-directory /tmp/sentinel-real-demo
 ```
 
-The example requests evidence, a proposal, validation, then completion. With the supported
-scanner it produces an advisory `review` selection and a static validation result. Without
-`--scanner` it abstains at validation; this mode never discovers a scanner on PATH. Existing
-CLI behavior remains the default when `--agent-script` is absent.
+The featured demo **actually calls the local model and real scanner**. It writes review,
+preview, agent/validation and unchanged-source-hash artifacts. The output directory must be new.
+There is no canned model-output fallback. It uses one labeled synthetic workflow.
 
-The [request schema](schemas/agent-script.schema.json) permits only `evidence`, `propose`,
-`validate`, `finish` with an integer packet index, or `abstain` alone. Unknown fields, paths,
-commands, arbitrary patch text, and free-form rationale are rejected. Evidence selects only
-previously resolved packets; proposals require a prior evidence request and come from the
-existing deterministic repair policy. Proposed repairs cannot complete without successful
-static validation. Neither replay nor validation applies a patch to the original repository.
+The local endpoint is fixed to `127.0.0.1:11434`; proxies/redirects and cloud tags/remote metadata
+are refused. Locally installed GGUF/tool-capable Qwen, Gemma and Mistral Small families are
+accepted by the adapter; Mistral remains experimental because of measured strict-format
+failures. Model requests are checked against advertised prerequisites and eligible packet
+indices, then independently checked by the controller. Unsupported repair can finish a manual
+review; insufficient evidence or failed validation abstains. No commands, paths, arbitrary
+patches or model security verdicts are accepted. [Contract and threat model](docs/THREAT_MODEL.md).
 
-There are at most eight responses, 4 KB per response, 64 KB of cumulative tool observations,
-and two validation pairs without retries. A 65-second loop deadline is checked between turns;
-individual scanner subprocesses retain their 15-second deadline. Initial investigation retains
-its existing resource bounds. Scripts are read under the CLI's 1 MB input cap. Traces contain
-only fixed action/status values and turn numbers; evidence/report excerpts remain untrusted
-source content and may contain secrets. The result is an `agent-1.0` envelope around the
-unchanged deterministic report format.
+## Measured evaluations
 
-See [the adapter contract and live-provider gates](docs/ADAPTER.md). Scripted tests exercise
-policy enforcement, not model reasoning, prompt-injection resistance, or live-model quality.
+[The local comparison](comparison/REPORT.md) contains actual inference records, a frozen protocol,
+synthetic case definitions and repeated trials. The older eight cases are development data;
+the earlier six-case holdout is now exposed data. Fresh first-exposure results and repeated
+exposed trials are separated. These self-authored cases are not real incidents, independent
+blind data, vulnerability detection, or a broad security/model-reliability benchmark.
 
-## OpenAI provider adapter
+The original Qwen run scored 4/8 and remains preserved. General review/repair contract fixes
+then passed those eight as development regressions and six fresh variants. [Failure investigation](docs/CONTRACT_INVESTIGATION.md).
+Historical mock/model-oracle records are kept only as explicitly labeled test-harness provenance
+under `tests/archives`; they are never model-performance evidence. Unit tests use controlled
+transports for protocol/scoring/failure paths. Synthetic input fixtures are separate from actual
+model measurements. [Product/test audit](docs/PRODUCT_AUDIT.md).
 
-`OpenAIAdapter` uses the official OpenAI Python SDK's Responses API to request one strict
-function call at a time and return each bounded tool observation on the next turn. It runs
-through the same deterministic request interpreter as replay. The provider chooses which
-packet/tool to request; it cannot supply patches, commands, source paths or a security verdict.
-The [official function-calling guide](https://developers.openai.com/api/docs/guides/function-calling)
-describes the protocol. Offline CLI behavior remains the default.
+## Limits
 
-Install the optional SDK with `python -m pip install -e '.[provider]'`. Your trusted application
-must supply a fresh configured synchronous SDK client, an explicit model that supports strict
-function tools, an output-token cap and explicit permission to disclose source evidence.
-Sentinel never constructs a credential-bearing client or searches environment/files for keys.
+The agent selects among tightly guided evidence/propose/validate/finish/abstain tools; it does
+not independently discover vulnerabilities or evaluate workflow conditions/permission needs.
+Investigation is bounded to 32 files, 4 MB total, 1 MB/file and 1,000 findings, with YAML node/
+depth/context bounds. Unsafe paths, symlinks, ambiguous locations and unsupported YAML abstain.
+Matched source hashes/snippets establish local correspondence, not authenticated scan provenance.
 
-```python
-from workflow_sentinel.agent import run
-from workflow_sentinel.openai_adapter import OpenAIAdapter
+Agent sessions allow eight turns, bounded input/output and two validation pairs without retries.
+Native inference uses an 8K context, 256-token output cap and a 15-second call deadline. Each
+scanner call is capped at 15 seconds, 1 MB stdout and 64 KB stderr. Evaluation adds aggregate
+caps. Trusted dependencies, the local daemon and native scanner are not OS-sandboxed. Raw evidence
+capture is opt-in, intended for the audited synthetic evaluation; ordinary traces avoid raw
+provider bodies. See [adapter details](docs/ADAPTER.md) and [evaluation methods](model_evaluation/README.md).
 
-# client is supplied by your application's approved runtime configuration.
-adapter = OpenAIAdapter(client, model=model, max_output_tokens=256,
-                        allow_source_disclosure=True)
-report = run(sarif, repo, None, scanner, adapter=adapter)
-```
+The optional OpenAI SDK adapter has protocol tests but **no real cloud-model evaluation**. It
+requires an externally supplied approved client/model/disclosure configuration; no cloud use or
+credentials are automatically enabled. Install `.[provider]` only if using that API. Local results
+do not establish its effectiveness. Byte/token/request caps are not monetary or retention guarantees.
 
-Calling this with a real client can disclose workflow excerpts/diffs to OpenAI and incur charges.
-The provider adapter is a Python API; there is no live-provider CLI switch or automatic fallback.
-It permits only the official API endpoint, disables SDK retries and response storage, limits
-history to 64 KB and decoded responses to 16 KB, and caps output at 64–512 tokens per request
-with at most eight requests. These are resource limits, not a dollar budget or a retention
-promise. SDK response size is checked after decoding, not as a streaming allocation limit.
-
-Each synchronous call has a 15-second wall deadline and SDK timeout, capped by the session's
-remaining time. Calls require a POSIX main thread without an active process alarm; other
-contexts abstain. Use a dedicated single-thread application with a fresh client. Provider
-failures/refusals/incomplete output and malformed calls abstain without recording raw errors.
-
-Try the real SDK over an in-memory mocked transport, with no live API calls:
-
-```sh
-python examples/provider_mock_demo.py --scanner /absolute/path/to/zizmor > provider-demo.json
-```
-
-The demo labels its output `mock-openai-transport-advisory`. SDK protocol/error tests passed;
-the OpenAI transport has not been evaluated with a real cloud model. Source excerpts are
-unredacted: review disclosure before enabling a real client.
-
-## Local Ollama inference
-
-The optional local adapter uses native tool calls through a fixed, proxy-free
-`127.0.0.1:11434` connection. It requires an installed tool-capable Qwen GGUF model and rejects
-cloud tags/remote metadata. It uses the same deterministic proposal/validation policy and
-never starts a server, accesses credentials or falls back to cloud inference.
-
-```sh
-python model_evaluation/run_local.py --model qwen3.8:27b-q4_K_M \
-  --scanner /absolute/path/to/zizmor --output /tmp/sentinel-local-unique.json
-```
-
-A real on-device Qwen3.8 27B evaluation scored **4/8** on the eight known synthetic cases.
-Both supported repairs validated; three manual-review cases abstained, and one case requested
-validation after a refused proposal and was blocked. The original result remains preserved in [the local-model report](docs/LOCAL_MODEL.md).
-A general review/repair contract clarification and prerequisite-aware tool advertisement then
-passed 8/8 on those development cases and 6/6 on fresh, frozen synthetic variants. See
-[the failure investigation and consolidated demo](docs/CONTRACT_INVESTIGATION.md). These are
-narrow tool-loop results, not general autonomous security investigation or injection resistance.
-The repository remains private pending human release authorization and acceptance of the limits.
-
-## Limitations
-
-A `review` decision means the finding resolved to workflow context, not that exploitability was confirmed. Conditions and expressions are recorded as declarations; Sentinel does not evaluate them or determine the permissions a job needs. Shell context currently covers explicit step-level settings. Sentinel does not independently scan workflows, and an empty report does not establish security.
-
-Use the same checkout that was scanned. Supplied SHA-256 hashes and source snippets are checked against local content; mismatches produce abstentions. Reports label provenance as `hash-matched`, `snippet-matched`, or `unverified`. A matching snippet checks a fragment, and a supplied hash is not an authenticated scan revision. Reports include source excerpts, so check for sensitive content before sharing.
-
-Investigation reads are capped at 32 files and 4 MB total, with a 1 MB limit per file, 1,000 findings, and 10 locations per finding. YAML structure and context have size and depth limits. Ambiguous locations, duplicate keys, anchors, aliases, explicit tags, remote paths, symlinks, and SARIF URI base references produce abstentions. Source citations use one-based lines and Unicode code-point columns. Repository reads require POSIX directory-descriptor support (Linux or macOS). The [schemas](schemas) describe the accepted input subset and report format (`schema_version: 1.3`).
-
-## Evaluation
-
-A frozen synthetic suite checks triage, repair eligibility, citation/source consistency and static validation. The audited first-use subset matched 15/15 policy labels, with 5/5 exact candidate diffs and 4/4 real scanner comparisons. These are narrow policy checks, not vulnerability-detection or security guarantees. See [evaluation methodology, original results and corrections](evaluation/README.md).
-
-```sh
-python evaluation/run.py --scanner /absolute/path/to/zizmor --output /tmp/sentinel-evaluation-regression.json
-```
-
-The [model evaluation harness](model_evaluation/README.md) provides eight fixed synthetic cases
-with explicit outcome labels, aggregate request caps and failure-aware scoring. Its offline
-SDK oracle passed 8/8 after a documented scorer correction; this is harness verification, not
-live-model quality. The [threat model](docs/THREAT_MODEL.md) describes trust boundaries and
-remaining release gates.
-
-## Development
+## Development and license
 
 ```sh
 python -m pip install -e '.[dev]'
@@ -227,4 +136,5 @@ ruff check .
 mypy src
 ```
 
-See [ROADMAP.md](ROADMAP.md) for planned investigation, repair, and validation work.
+[MIT](LICENSE). Separately installed tools, dependencies and weights retain their own terms;
+none is vendored. [Dependency scope](docs/DEPENDENCIES.md), [release audit](docs/RELEASE_READINESS.md).

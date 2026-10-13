@@ -10,13 +10,15 @@ from workflow_sentinel.ollama_adapter import OllamaClient
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', required=True)
+    parser.add_argument('--capture-raw-evidence', action='store_true',
+                        help='save bounded local request/response evidence; review for private data')
     parser.add_argument('--manifest', type=Path, default=Path(__file__).with_name('manifest.json'))
     parser.add_argument('--scanner', required=True, type=Path)
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     report = evaluate_to_file(args.manifest, args.output,
                              OllamaClient, args.scanner, model=args.model, mode='local',
-                             approve_local_inference=True)
+                             approve_local_inference=True, capture_raw_evidence=args.capture_raw_evidence)
     print(json.dumps(report['metrics'], indent=2))
     metric = report['metrics']['policy_completion']
     return 0 if metric['numerator'] == metric['denominator'] else 1

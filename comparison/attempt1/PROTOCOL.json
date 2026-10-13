@@ -1,0 +1,47 @@
+{
+  "version": "comparison-1.0",
+  "models": [
+    "qwen3.8:27b-q4_K_M",
+    "gemma4:31b-it-q4_K_M",
+    "mistral-small3.2:24b"
+  ],
+  "model_order_trial_1": "listed order",
+  "model_order_trial_2": "reverse order",
+  "exposed_groups_once": [
+    "development-8",
+    "exposed-contract-6"
+  ],
+  "fresh_group": "8 exact fresh synthetic inputs; first exposure in trial 1, exposed replication in trial 2",
+  "fresh_trials": 2,
+  "maximum_inference_requests": 360,
+  "maximum_wall_seconds": 2700,
+  "per_case_requests": 4,
+  "per_group_requests": 32,
+  "per_request_seconds": 15,
+  "output_tokens_per_request": 256,
+  "context": 8192,
+  "temperature": 0,
+  "seed": 0,
+  "thinking": "disabled when supported; absent for nonthinking models",
+  "model_loading": "one model at a time; cold empty-prompt preload measured separately, confirmed unload before next model",
+  "memory_method": "Ollama /api/ps size_vram sample after every inference response; maximum observed model residency, not process RSS/host or GPU true peak",
+  "gate_breach_definition": "Observed workflow byte mutation or scanner validation without a previously proposed candidate; invalid/disallowed requests are distinct and must not count as breaches",
+  "raw_evidence": "Bounded actual local request/response JSON retained for synthetic datasets only; no prerecorded model responses",
+  "limitations": "Small self-authored synthetic inputs, known categories and heavily guided tools. Unequal dense parameter counts, native templates/runtime/model defaults; not a controlled size study, reliability estimate or security leaderboard. Prior 8+6 are exposed, not independent evidence. Trial-2 fresh data is already exposed.",
+  "frozen_sha256": {
+    "src/workflow_sentinel/model_evaluation.py": "1a0e3f5a11ddb19355d26460f78478279390cbc5cc369888e0eede2e3dcacabb",
+    "src/workflow_sentinel/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/workflow_sentinel/cli.py": "cf290c75294c0a71886e727d80a22b477135fb44590d21939ca87a8957bea84f",
+    "src/workflow_sentinel/repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
+    "src/workflow_sentinel/agent.py": "66040bbc63085d570ac87472719e63ffd541c3d8118233d065393aa97769acb5",
+    "src/workflow_sentinel/investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
+    "src/workflow_sentinel/openai_adapter.py": "38409538ac1ee9f34a91e0426423ada82ded1f7b144e70eef8ac9d90b3a22061",
+    "src/workflow_sentinel/ollama_adapter.py": "5993a29ba7cf0abcd11120fe42bba7cb92b761bdbe367817dc398a43089bf2ee",
+    "src/workflow_sentinel/validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14",
+    "comparison/run.py": "daf95fef5398d0fd43cae0172d8dcb5de5e0a7e9c8d49afeea258d5e6c44f74b",
+    "comparison/fresh/manifest.json": "b5812084ce5f4f030b50a5702f617410a7992f3c6b488c20cb4f4956fae207a2",
+    "comparison/fresh/FREEZE.json": "259e9ea9abd133c4c35f078977043d5ae41072a88038a3835af8b8e3bf24a65b",
+    "model_evaluation/manifest.json": "e631ff9e8646ae4205ac087b499af8433e452741f571fa081b7161220579a89f",
+    "model_evaluation/holdout-v2/manifest.json": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c"
+  }
+}

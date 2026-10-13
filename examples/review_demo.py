@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scanner', type=Path, required=True)
     parser.add_argument('--output-directory', type=Path, required=True)
-    parser.add_argument('--local-model', help='explicit opt-in to installed local Qwen inference')
+    parser.add_argument('--local-model', required=True, help='explicit opt-in to installed local Qwen inference')
     args = parser.parse_args()
     args.output_directory.mkdir()  # Fresh directory before any provider/scanner work.
     root = Path(__file__).resolve().parents[1]
@@ -25,14 +25,10 @@ def main():
                  'preview': investigate(sarif, repo, preview_repairs=True)}
     client = None
     try:
-        if args.local_model:
-            client = OllamaClient()
-            adapter = OllamaAdapter(client, model=args.local_model, max_output_tokens=256,
-                                    allow_local_inference=True)
-            report = run(sarif, repo, None, args.scanner, adapter=adapter)
-        else:
-            script = json.loads((root / 'examples/agent-script.json').read_text())
-            report = run(sarif, repo, script, args.scanner)
+        client = OllamaClient()
+        adapter = OllamaAdapter(client, model=args.local_model, max_output_tokens=256,
+                                allow_local_inference=True)
+        report = run(sarif, repo, args.scanner, adapter=adapter)
         artifacts['agent'] = report
     finally:
         if client:

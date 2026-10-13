@@ -1,0 +1,13 @@
+include LICENSE README.md ROADMAP.md PROGRESS.md pyproject.toml
+recursive-include docs *.md
+recursive-include examples *.py *.json
+recursive-include fixtures *.yml *.yaml *.json *.sarif
+recursive-include schemas *.json
+recursive-include evaluation *.py *.json *.md
+recursive-include model_evaluation *.py *.json *.md
+recursive-include comparison *.py *.json *.md
+recursive-include tests *.py *.json *.md
+recursive-include scripts *.py
+prune .venv
+prune .git
+global-exclude __pycache__ *.py[cod]

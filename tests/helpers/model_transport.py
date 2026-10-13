@@ -1,14 +1,11 @@
 """Run only the in-memory SDK policy oracle; no live transport or credential configuration."""
-import argparse
 import json
 import os
-from pathlib import Path
 from unittest.mock import patch
 
 import httpx2
 from openai import OpenAI
 
-from workflow_sentinel.model_evaluation import evaluate_to_file
 
 
 def mock_client(handler_override=None):
@@ -40,16 +37,3 @@ def mock_client(handler_override=None):
                       http_client=httpx2.Client(transport=httpx2.MockTransport(handler_override or handler)))
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--scanner', type=Path)
-    parser.add_argument('--output', type=Path, required=True)
-    args = parser.parse_args()
-    report = evaluate_to_file(Path(__file__).with_name('manifest.json'), args.output,
-                              mock_client, args.scanner, model='mock-model')
-    print(json.dumps(report['metrics'], indent=2))
-    return 0 if report['metrics']['policy_completion']['numerator'] == 8 else 1
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())

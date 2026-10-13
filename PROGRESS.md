@@ -350,3 +350,63 @@ model evaluation. All original archives/checksums preserved. Keep private pendin
 authorization and acceptance of the documented scope; do not force release. No model download,
 paid/cloud inference, credential configuration/discovery/transmission, deployment or social
 posting occurred. Exact remote commit/CI evidence is in the handoff.
+
+### October 13 — Real three-model comparison and initial release audit
+
+Publication was paused to incorporate the user's model-comparison and actual-results-only
+requirements. Selected official local Q4_K_M models after rechecking M4 Max/48 GiB RAM and
+505 GiB free disk: Qwen3.8 27.3B (17.74 GB already present), Gemma4 30.7B (20.39 GB), Mistral
+Small 3.2 24.0B (15.18 GB). No enormous variant, cloud model, paid inference or credentials.
+Downloaded two additional public registry weights; loaded only one model at a time.
+
+Frozen shared instructions/tools/budgets/scoring/code and fresh synthetic inputs (0c9cdcc).
+First actual attempt retained nine completed groups, Qwen/Gemma passes and Mistral failures,
+then stopped before repeats on an immediate unload-confirmation race. Raw Mistral records
+showed dropped native tool-call IDs and prose/malformed terminal replies. General ID propagation,
+explicit terminal tool-only/zero-argument abstention wording for every model and bounded unload
+waiting were fixed, checked against official Ollama 0.40 types. No per-model prompt/budget
+relaxation or label change. Retained first attempt/source snapshots and froze new exact
+revision-two synthetic inputs/common corrected protocol (735203a) before every model reran.
+
+Final actual comparison: 90 cases, 251 inference requests, 12 groups, 839.59s including load/
+host work. Prior eight are development and prior six exposed; fresh revision-two eight run
+once as first exact-source exposure and again as exposed replication, with reversed model
+order. Qwen/Gemma 30/30 each, fresh 8/8 twice; Mistral 20/30, fresh 6/8 twice. Its ten missing/
+unstructured terminal tool responses remain failures, not inferred successful abstentions.
+No disallowed requests or observed unauthorized validation/source mutation in 90 checked cases.
+All actual bounded request/response bodies, timing/token counts, fingerprints and failed runs
+retained; model digests stable. No mock transport enters comparison/performance tables.
+
+Measured matched successful repair medians: Qwen19.92s, Gemma21.00s, Mistral6.20s. Prompt/output
+counts all groups: 84,148/2,189;61,072/1,112;55,167/826; unknown usage zero. Cold unloaded-model
+preload separate from warm tasks, not OS/file-cache cold. API size_vram max samples17.84/2.74/
+15.90GB; Gemma's tiny counter is not whole-model memory. Separate sequential actual 16-token
+unscored probe plus ps daemon/descendant RSS sums gave18.75/23.15/16.58GB post-inference.
+Those are samples/shared-page-sensitive, not true GPU/host peaks. Memory telemetry caveat and
+unequal size/native runtime/tokenizer/cache/background conditions are prominent in REPORT.md.
+Small self-authored known-category inputs, guided tools and two fixed-setting repeats do not
+prove broad model reliability, intelligence, real-world security or injection resistance.
+
+Product audit found advertised scripted replay/mock SDK demos. Removed --agent-script and
+canned product fallback; agent.run now requires an adapter and featured demo requires actual
+local model plus native scanner. Test-only helpers and historical mock oracle artifacts moved
+under tests with original bytes/checksums/history preserved, never performance evidence.
+Synthetic input fixtures remain intentionally labeled, not real incidents. Unit controlled
+transports remain for protocol/scoring/error-path verification; no blanket no-mocks claim.
+Static example outputs regenerated from actual deterministic CLI/native scanner execution.
+
+Added MIT project license/SPDX packaging and dependency inventory; no weights/native binaries/
+third-party code vendored. Fixed source distribution missing demo/test assets, including hidden
+workflow files and relocated archives. Clean noneditable install/pip check, source/wheel license
+and payload checks, extracted-sdist tests,117 unit tests, Ruff, strict mypy9modules and38/38
+actual static regression pass. Final featured demo genuinely invoked Qwen and scanner, validated
+and preserved original hashes. No deployment or social posting; only a draft will be returned.
+
+Corrected the redundant human-release gate: standing user authorization permits public visibility
+when ready. Initial release is scoped to verified Qwen/Gemma paths and honest experimental
+Mistral failures. Final audit covers current tree plus every reachable historical blob for
+credentials/private paths/user identifiers; hardware records are generic, no hostnames/device IDs/
+private directories/customer content. Commit identity is intentional public GitHub handle/noreply.
+Final exact remote commit/CI and unauthenticated public-access verification follow in handoff;
+visibility changes only after those readiness checks. No additional confirmation is needed unless
+a tool itself blocks. Full history/result provenance is preserved, without rewriting away failures.

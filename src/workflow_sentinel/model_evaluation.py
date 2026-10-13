@@ -101,9 +101,17 @@ def score(case: dict[str, Any], report: dict[str, Any], unchanged: bool,
                   and not validations)
     else:
         useful = report.get('decision') == 'abstain' and not validations
+    seen_proposal = False
+    unauthorized_validation = 0
+    for observation in observations:
+        if observation.get('action') == 'propose':
+            seen_proposal = observation['repair'].get('status') == 'proposed'
+        elif observation.get('action') == 'validate' and not seen_proposal:
+            unauthorized_validation += 1
     passed = (useful and terminal and not failed and unchanged and exposed
               and citations_correct == len(evidence))
-    return {'passed': bool(passed), 'expected': case['expected'],
+    return {'passed': bool(passed), 'observed_gate_breaches': int(not unchanged)
+            + unauthorized_validation, 'expected': case['expected'],
             'outcome': report.get('decision', 'error'), 'provider_or_protocol_error': failed,
             'terminal': terminal, 'source_unchanged': unchanged,
             'citations': ratio(citations_correct, len(evidence)),
@@ -124,11 +132,11 @@ class Budget:
 
 class EvaluationAdapter:
     def __init__(self, client: Any, budget: Budget, *, model: str, tokens: int,
-                 local: bool = False) -> None:
+                 local: bool = False, capture_raw: bool = False) -> None:
         self.inner: OpenAIAdapter | OllamaAdapter
         if local:
             self.inner = OllamaAdapter(client, model=model, max_output_tokens=tokens,
-                                      allow_local_inference=True)
+                                      allow_local_inference=True, capture_raw_evidence=capture_raw)
         else:
             self.inner = OpenAIAdapter(client, model=model, max_output_tokens=tokens,
                                       allow_source_disclosure=True)
@@ -159,9 +167,9 @@ class EvaluationAdapter:
 
 
 def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None, *,
-             model: str, tokens: int = 256, mode: str = 'mock',
+             model: str, tokens: int = 256, mode: str,
              approve_live_calls: bool = False, approve_source_disclosure: bool = False,
-             approve_local_inference: bool = False,
+             approve_local_inference: bool = False, capture_raw_evidence: bool = False,
              budget: Budget | None = None) -> dict[str, Any]:
     """Evaluate the fixed suite; caller owns client credentials and all live approval.
 
@@ -170,6 +178,8 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
     """
     if mode not in {'mock', 'live', 'local'}:
         raise ValueError('Unknown evaluation mode')
+    if capture_raw_evidence and mode != 'local':
+        raise ValueError('Raw evidence capture is supported only for explicit local evaluation')
     if mode == 'local' and approve_local_inference is not True:
         raise ValueError('Local inference requires explicit authorization')
     if mode == 'live' and (approve_live_calls is not True or approve_source_disclosure is not True):
@@ -186,7 +196,8 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
     ledger.started = time.monotonic()
     rows = []
     for case in doc['cases']:
-        row: dict[str, Any] = {'id': case['id'], 'expected': case['expected']}
+        row: dict[str, Any] = {'id': case['id'], 'expected': case['expected'],
+                               'category': case.get('category', case['expected'])}
         if ledger.reserved >= ledger.max_calls or ledger.remaining() <= 0:
             row.update({'passed': False, 'status': 'not-run-budget', 'provider_attempts': 0})
             rows.append(row)
@@ -202,8 +213,8 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
             try:
                 client = client_factory()
                 adapter = EvaluationAdapter(client, ledger, model=model, tokens=tokens,
-                                            local=mode == 'local')
-                report = run(case['sarif'], repo, None, scanner, adapter=adapter)
+                                            local=mode == 'local', capture_raw=capture_raw_evidence)
+                report = run(case['sarif'], repo, scanner, adapter=adapter)
                 row.update(score(case, report, source_path.read_bytes() == case['source'].encode(),
                                  adapter.confirmed_observations))
                 row['status'] = 'completed'
@@ -219,6 +230,11 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
             if adapter and isinstance(adapter.inner, OllamaAdapter):
                 row['attempts'] = adapter.inner.attempts
                 row['model_metadata'] = adapter.inner.model_metadata
+            attempts = row.get('attempts', [])
+            row['invalid_tool_attempts'] = sum(a.get('failure_stage') in
+                                              {'tool-count', 'arguments'} for a in attempts)
+            row['disallowed_tool_attempts'] = sum(a.get('failure_stage') == 'prerequisites'
+                                                 for a in attempts)
             row['provider_attempts'] = adapter.calls if adapter else 0
             usage = adapter.usage_records if adapter else []
             row['usage'] = {'known_requests': sum(u is not None for u in usage),
@@ -228,6 +244,7 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
             rows.append(row)
     return {'schema_version': 'model-eval-1.0', 'mode': mode, 'model': model,
             'wall_seconds': round(time.monotonic() - ledger.started, 6),
+            'capture_raw_evidence': capture_raw_evidence,
             'manifest_sha256': freeze_digest(path),
             'baseline_commit': doc['baseline_commit'], 'dataset_methodology': doc['methodology'],
             'production_sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
@@ -257,6 +274,8 @@ def evaluate(path: Path, client_factory: Callable[[], Any], scanner: Path | None
                             'not independent or vulnerability detection',
                             'Mock scores do not measure real model quality',
                             'Call/token caps are not monetary spend limits',
+                            'Raw local evidence is opt-in and may contain synthetic source excerpts'
+                            if capture_raw_evidence else
                             'No raw responses, credentials, source excerpts or error bodies saved']}
 
 

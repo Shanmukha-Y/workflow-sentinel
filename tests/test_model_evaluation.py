@@ -10,15 +10,25 @@ from unittest.mock import patch
 
 import httpx2
 
-from workflow_sentinel.agent import run
+from workflow_sentinel.agent import _execute as run
 from workflow_sentinel.model_evaluation import (
-    Budget, evaluate, evaluate_to_file, manifest, ratio, save, score,
+    Budget, evaluate as execute_evaluation, evaluate_to_file as execute_to_file,
+    manifest, ratio, save, score,
 )
 from workflow_sentinel.openai_adapter import OpenAIAdapter
 
+
+def evaluate(*args, **kwargs):
+    return execute_evaluation(*args, **{'mode': 'mock', **kwargs})
+
+
+def evaluate_to_file(*args, **kwargs):
+    return execute_to_file(*args, **{'mode': 'mock', **kwargs})
+
+
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / 'model_evaluation/manifest.json'
-SPEC = importlib.util.spec_from_file_location('model_mock', ROOT / 'model_evaluation/run_mock.py')
+SPEC = importlib.util.spec_from_file_location('model_mock', ROOT / 'tests/helpers/model_transport.py')
 MOCK = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MOCK)
 
@@ -226,11 +236,11 @@ class ModelEvaluationTests(unittest.TestCase):
     def test_preserved_original_and_corrected_records(self):
         history = json.loads((ROOT / 'model_evaluation/HISTORY.json').read_text())
         for name, expected in history['records_sha256'].items():
-            self.assertEqual(hashlib.sha256((ROOT / 'model_evaluation/results' / name)
-                                           .read_bytes()).hexdigest(), expected)
-        original = json.loads((ROOT / 'model_evaluation/results/mock-first-scoring-error.json')
+            self.assertEqual(hashlib.sha256((ROOT / name if name.startswith('tests/') else
+                                            ROOT / 'model_evaluation/results' / name).read_bytes()).hexdigest(), expected)
+        original = json.loads((ROOT / 'tests/archives/model-harness-validation/mock-first-scoring-error.json')
                               .read_text())
-        corrected = json.loads((ROOT / 'model_evaluation/results/mock-regression.json').read_text())
+        corrected = json.loads((ROOT / 'tests/archives/model-harness-validation/mock-regression.json').read_text())
         self.assertEqual(original['metrics']['policy_completion'], ratio(7, 8))
         self.assertEqual(corrected['metrics']['policy_completion'], ratio(8, 8))
         self.assertEqual(corrected['mode'], 'mock')

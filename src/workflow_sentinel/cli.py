@@ -118,23 +118,15 @@ def main() -> int:
                         help='validate previews using bounded offline zizmor scans of temporary copies')
     parser.add_argument('--scanner', type=Path,
                         help='absolute path to an installed native zizmor binary')
-    parser.add_argument('--agent-script', type=Path,
-                        help='replay bounded advisory JSON requests offline')
     args = parser.parse_args()
-    if args.scanner and not (args.validate_repairs or args.agent_script):
-        parser.error('--scanner requires --validate-repairs or --agent-script')
+    if args.scanner and not args.validate_repairs:
+        parser.error('--scanner requires --validate-repairs')
     try:
         if not args.repo.is_dir():
             raise ValueError("repository directory does not exist")
         sarif = json.loads(read_bounded(args.sarif))
-        if args.agent_script:
-            if args.preview_repairs or args.validate_repairs:
-                parser.error('--agent-script manages proposal/validation requests itself')
-            from workflow_sentinel.agent import decode, run
-            report = run(sarif, args.repo, decode(read_bounded(args.agent_script)), args.scanner)
-        else:
-            report = investigate(sarif, args.repo, args.preview_repairs,
-                                 args.validate_repairs, args.scanner)
+        report = investigate(sarif, args.repo, args.preview_repairs,
+                             args.validate_repairs, args.scanner)
         print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
     except (ValueError, OSError, KeyError, TypeError, AttributeError, RecursionError) as exc:
         print("workflow-sentinel: invalid input (" + type(exc).__name__ + ")", file=sys.stderr)

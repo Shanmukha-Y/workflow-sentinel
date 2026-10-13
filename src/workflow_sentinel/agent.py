@@ -79,7 +79,7 @@ def available_tools(packets: list[dict[str, Any]],
     return result
 
 
-def run(sarif: dict[str, Any], root: Path, responses: Any,
+def _execute(sarif: dict[str, Any], root: Path, responses: Any,
         scanner: Path | None = None, *, adapter: Adapter | None = None) -> dict[str, Any]:
     """Interpret scripted responses or an explicitly injected trusted provider adapter.
 
@@ -189,3 +189,9 @@ def run(sarif: dict[str, Any], root: Path, responses: Any,
             return result
         result['observations'].append(observation)
     return result
+
+
+def run(sarif: dict[str, Any], root: Path, scanner: Path | None = None,
+        *, adapter: Adapter) -> dict[str, Any]:
+    """Product entry point: a real configured adapter is mandatory; no canned replay fallback."""
+    return _execute(sarif, root, None, scanner, adapter=adapter)

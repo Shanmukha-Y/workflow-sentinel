@@ -1,0 +1,464 @@
+{
+  "protocol": {
+    "version": "comparison-2.0",
+    "models": [
+      "qwen3.8:27b-q4_K_M",
+      "gemma4:31b-it-q4_K_M",
+      "mistral-small3.2:24b"
+    ],
+    "model_order_trial_1": "listed order",
+    "model_order_trial_2": "reverse order",
+    "exposed_groups_once": [
+      "development-8",
+      "exposed-contract-6"
+    ],
+    "fresh_group": "8 new exact revision-two synthetic inputs; old fresh-v1 is exposed after first attempt; trial 1 first exact source exposure, trial 2 exposed replication. Known categories/control signals are not novel or blind.",
+    "fresh_trials": 2,
+    "maximum_inference_requests": 360,
+    "maximum_wall_seconds": 2700,
+    "per_case_requests": 4,
+    "per_group_requests": 32,
+    "per_request_seconds": 15,
+    "output_tokens_per_request": 256,
+    "context": 8192,
+    "temperature": 0,
+    "seed": 0,
+    "thinking": "disabled when supported; absent for nonthinking models",
+    "model_loading": "one model at a time; cold empty-prompt preload measured separately, confirmed unload before next model",
+    "memory_method": "Ollama /api/ps size_vram sample after every inference response; maximum observed model residency, not process RSS/host or GPU true peak",
+    "gate_breach_definition": "Observed workflow byte mutation or scanner validation without a previously proposed candidate; invalid/disallowed requests are distinct and must not count as breaches",
+    "raw_evidence": "Bounded actual local request/response JSON retained for synthetic datasets only; no prerecorded model responses",
+    "limitations": "Small self-authored synthetic inputs, known categories and heavily guided tools. Unequal dense parameter counts, native templates/runtime/model defaults; not a controlled size study, reliability estimate or security leaderboard. Prior 8+6 are exposed, not independent evidence. Trial-2 fresh data is already exposed.",
+    "frozen_sha256": {
+      "src/workflow_sentinel/model_evaluation.py": "1a0e3f5a11ddb19355d26460f78478279390cbc5cc369888e0eede2e3dcacabb",
+      "src/workflow_sentinel/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/workflow_sentinel/cli.py": "cf290c75294c0a71886e727d80a22b477135fb44590d21939ca87a8957bea84f",
+      "src/workflow_sentinel/repairs.py": "ee4bfac93cd069d33e34639694db1661ef7736b1fe99f3b4b65a37b80baf4a31",
+      "src/workflow_sentinel/agent.py": "66040bbc63085d570ac87472719e63ffd541c3d8118233d065393aa97769acb5",
+      "src/workflow_sentinel/investigation.py": "73fccac166ad8683197ee9d4051464e091607f5c7c9e267f7061957bbf33a831",
+      "src/workflow_sentinel/openai_adapter.py": "837305f806a75265c2954e682e7d54f6fdaa6e2d811c35fb1600651edbbbc73d",
+      "src/workflow_sentinel/ollama_adapter.py": "637736360cfa6a1cfb378e0d5bedda32c4c2ebba15721dc9a35626004a5e36af",
+      "src/workflow_sentinel/validation.py": "aa456cb1379ca0ee0776627a6e553fece8e5a77bae9381ef87269cb13bcb7b14",
+      "comparison/run.py": "ac7965687f7bf725181432215db3a422b9549d1a1edbf02c29f5808aedbf75b9",
+      "model_evaluation/manifest.json": "e631ff9e8646ae4205ac087b499af8433e452741f571fa081b7161220579a89f",
+      "model_evaluation/holdout-v2/manifest.json": "bd23678ae99d92152345435d9a8e64b17a178058bc208080bc398d3968e5182c",
+      "comparison/fresh-v2/manifest.json": "0f12702e65f5f10ae90689c83f597acd894d0521a81c9420a0be9f6cae466c71",
+      "comparison/fresh-v2/FREEZE.json": "a93aae7d69882fe4be27a7f532bd6f9700b049fb2f693fa57a16d664ea19983c"
+    },
+    "integration_correction": "Preserve native tool-call IDs and matching tool-result IDs; require terminal tool format explicitly for all models; bounded asynchronous unload confirmation. All models rerun under identical final setup. Original interrupted runs retained."
+  },
+  "models": {
+    "qwen3.8:27b-q4_K_M": {
+      "tag": "qwen3.8:27b-q4_K_M",
+      "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+      "download_bytes": 17741872132,
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen35",
+        "families": [
+          "qwen35"
+        ],
+        "parameter_size": "27.3B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 262144,
+        "embedding_length": 5120,
+        "runner": "ggml"
+      },
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ]
+    },
+    "gemma4:31b-it-q4_K_M": {
+      "tag": "gemma4:31b-it-q4_K_M",
+      "digest": "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97",
+      "download_bytes": 20385458234,
+      "details": {
+        "parent_model": "dhiltgen/gemma4:31b-it-mtp-q4_K_M-llamacpp",
+        "format": "gguf",
+        "family": "gemma4",
+        "families": [
+          "gemma4"
+        ],
+        "parameter_size": "30.7B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 262144,
+        "embedding_length": 5376,
+        "runner": "llamacpp"
+      },
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ]
+    },
+    "mistral-small3.2:24b": {
+      "tag": "mistral-small3.2:24b",
+      "digest": "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06",
+      "download_bytes": 15177404711,
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "mistral3",
+        "families": [
+          "mistral3",
+          "clip"
+        ],
+        "parameter_size": "24.0B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 131072,
+        "embedding_length": 5120,
+        "runner": "llamacpp"
+      },
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "file": "qwen3_8-27b-q4_K_M-development-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "trial": 1,
+      "group": "development",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 109.655206
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-exposed-contract-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "trial": 1,
+      "group": "exposed-contract",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 17,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 73.803256
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-fresh-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "trial": 1,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 92.099534
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-development-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "trial": 1,
+      "group": "development",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 22,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 80.832135
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-exposed-contract-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "trial": 1,
+      "group": "exposed-contract",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 16,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 52.152972
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-fresh-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "trial": 1,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 22,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 78.9645
+    },
+    {
+      "file": "mistral-small3_2-24b-development-t1.json",
+      "model": "mistral-small3.2:24b",
+      "trial": 1,
+      "group": "development",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 4,
+          "denominator": 8,
+          "value": 0.5
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 21,
+        "provider_or_protocol_errors": 4,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 28.179842
+    },
+    {
+      "file": "mistral-small3_2-24b-exposed-contract-t1.json",
+      "model": "mistral-small3.2:24b",
+      "trial": 1,
+      "group": "exposed-contract",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 4,
+          "denominator": 6,
+          "value": 0.6666666666666666
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 16,
+        "provider_or_protocol_errors": 2,
+        "citation_records": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 20.132492
+    },
+    {
+      "file": "mistral-small3_2-24b-fresh-t1.json",
+      "model": "mistral-small3.2:24b",
+      "trial": 1,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 6,
+          "denominator": 8,
+          "value": 0.75
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 2,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 29.879476
+    },
+    {
+      "file": "mistral-small3_2-24b-fresh-t2.json",
+      "model": "mistral-small3.2:24b",
+      "trial": 2,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 6,
+          "denominator": 8,
+          "value": 0.75
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 2,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 30.733303
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-fresh-t2.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "trial": 2,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 22,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 104.897075
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-fresh-t2.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "trial": 2,
+      "group": "fresh",
+      "metrics": {
+        "policy_completion": {
+          "numerator": 8,
+          "denominator": 8,
+          "value": 1.0
+        },
+        "cases_not_run": 0,
+        "harness_errors": 0,
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 0,
+        "citation_records": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "required_instruction_exposure": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0
+        }
+      },
+      "wall_seconds": 100.405247
+    }
+  ],
+  "wall_seconds": 839.588585,
+  "reserved_requests": 251
+}

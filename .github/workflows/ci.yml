@@ -21,9 +21,6 @@ jobs:
       - run: workflow-sentinel --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif --repo fixtures/repairable --validate-repairs > /tmp/validation.json
       - run: python -c "import json; r=json.load(open('/tmp/validation.json')); v=r['packets'][0]['static_validation']; assert v['status']=='validated' and v['target_removed'] and v['new_findings']==0"
       - run: python evaluation/run.py --scanner "$(command -v zizmor)" --output /tmp/evaluation-regression.json
-      - run: workflow-sentinel --sarif fixtures/repairable/findings.zizmor-1.30.1.sarif --repo fixtures/repairable --agent-script examples/agent-script.json --scanner "$(command -v zizmor)" > /tmp/agent.json
-      - run: python -c "import json; r=json.load(open('/tmp/agent.json')); assert r['decision']=='review' and r['report']['packets'][0]['static_validation']['status']=='validated'"
-      - run: python examples/provider_mock_demo.py --scanner "$(command -v zizmor)" > /tmp/provider-mock.json
-      - run: python -c "import json; r=json.load(open('/tmp/provider-mock.json')); assert r['mode']=='mock-openai-transport-advisory' and r['decision']=='review'"
-      - run: python model_evaluation/run_mock.py --scanner "$(command -v zizmor)" --output /tmp/model-evaluation-mock.json
-      - run: python examples/review_demo.py --scanner "$(command -v zizmor)" --output-directory /tmp/consolidated-review-demo
+      - run: python -m pip install build==1.6.1
+      - run: python -m build --outdir /tmp/release-distributions
+      - run: python scripts/check_distribution.py /tmp/release-distributions

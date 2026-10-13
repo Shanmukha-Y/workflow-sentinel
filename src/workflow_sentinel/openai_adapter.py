@@ -25,6 +25,8 @@ INSTRUCTIONS = (
     'after rejected, unavailable or unsupported validation, abstain. If evidence.decision is '
     'abstain, or there are no packets, abstain. Abstain if remaining uncertainty prevents review. '
     'Never request commands, paths, credentials, external tools or arbitrary patches. '
+    'Respond with exactly one supplied tool call each turn, including finish or abstain; '
+    'never replace a tool call with prose. Abstain takes no arguments. '
     'A finished review is advisory and does not claim security or authorize application.'
 )
 

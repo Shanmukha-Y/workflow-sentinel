@@ -11,7 +11,7 @@ from unittest.mock import patch
 import httpx2
 from openai import OpenAI
 
-from workflow_sentinel.agent import run
+from workflow_sentinel.agent import _execute as run
 from workflow_sentinel.openai_adapter import OpenAIAdapter, ProviderError, deadline
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -19,9 +19,12 @@ class Client:
                 {'function': {'name': 'evidence', 'arguments': {'packet': 0}}}]}}
 
     def model_info(self, model):
-        return {'tag': model, 'digest': 'a' * 64, 'download_bytes': 18000000000}
+        return {'tag': model, 'digest': 'a' * 64, 'download_bytes': 18000000000,
+                'capabilities': ['tools', 'thinking']}
 
     def call(self, route, body=None, **kwargs):
+        if route == '/api/ps':
+            return {'models': []}
         self.requests.append((route, copy.deepcopy(body), kwargs))
         return copy.deepcopy(self.response)
 
@@ -136,7 +139,7 @@ class OllamaTests(unittest.TestCase):
 
     def test_preserved_real_run_failures_and_guard(self):
         import tempfile
-        from workflow_sentinel.agent import run
+        from workflow_sentinel.agent import _execute as run
         from workflow_sentinel.model_evaluation import manifest
         root = Path(__file__).resolve().parents[1]
         actual = json.loads((root / 'model_evaluation/results/local-qwen38-first.json').read_text())
@@ -191,7 +194,7 @@ class OllamaTests(unittest.TestCase):
 
     def test_manual_refusal_can_finish_without_scanner(self):
         import tempfile
-        from workflow_sentinel.agent import run
+        from workflow_sentinel.agent import _execute as run
         from workflow_sentinel.model_evaluation import manifest
         root = Path(__file__).resolve().parents[1]
         case = manifest(root / 'model_evaluation/manifest.json')['cases'][2]
@@ -244,3 +247,32 @@ class OllamaTests(unittest.TestCase):
         self.assertEqual(record['metrics']['citation_records']['numerator'], 5)
         self.assertTrue(all(c['source_unchanged'] for c in record['cases']))
         self.assertTrue(all(not c['validation_statuses'] for c in record['cases']))
+
+    def test_raw_evidence_is_explicit_and_bounded(self):
+        client = Client()
+        adapter = OllamaAdapter(client, model=MODEL, max_output_tokens=256,
+                                allow_local_inference=True, capture_raw_evidence=True)
+        adapter.next([{'rule_id': 'x', 'decision': 'review'}], [], 60)
+        attempt = adapter.attempts[0]
+        self.assertEqual(attempt['raw_response'], client.response)
+        self.assertEqual(attempt['raw_request']['model'], MODEL)
+        self.assertNotIn('Authorization', json.dumps(attempt['raw_request']))
+
+    def test_selected_comparable_local_families(self):
+        for model in ['gemma4:31b-it-q4_K_M', 'mistral-small3.2:24b']:
+            adapter = OllamaAdapter(Client(), model=model, max_output_tokens=256,
+                                    allow_local_inference=True)
+            self.assertEqual(adapter.model, model)
+
+    def test_tool_call_id_roundtrip_is_preserved(self):
+        client = Client()
+        client.response['message']['tool_calls'][0]['id'] = 'call_native123'
+        adapter = self.make(client)
+        packets = [{'rule_id': 'x', 'decision': 'review'}]
+        adapter.next(packets, [], 60)
+        client.response['message']['tool_calls'][0]['function']['name'] = 'propose'
+        client.response['message']['tool_calls'][0]['id'] = 'call_second'
+        adapter.next(packets, [{'packet': 0, 'action': 'evidence', 'evidence': []}], 60)
+        messages = client.requests[-1][1]['messages']
+        self.assertEqual(messages[-1]['tool_call_id'], 'call_native123')
+        self.assertEqual(messages[-2]['tool_calls'][0]['id'], 'call_native123')

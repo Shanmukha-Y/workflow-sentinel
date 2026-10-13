@@ -1,0 +1,250 @@
+{
+  "status": "aborted-before-repeat",
+  "stop_reason": "Model unload had not yet disappeared from immediate /api/ps; later probe confirmed empty. Original records preserved.",
+  "records": [
+    {
+      "file": "gemma4-31b-it-q4_K_M-development-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "group": "development",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 8,
+          "value": 1.0
+        },
+        "provider_attempts": 22,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 1,
+          "numerator": 1,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-exposed-contract-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "group": "exposed-contract",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 5,
+          "numerator": 5,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "provider_attempts": 16,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "gemma4-31b-it-q4_K_M-fresh-t1.json",
+      "model": "gemma4:31b-it-q4_K_M",
+      "group": "fresh",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 8,
+          "value": 1.0
+        },
+        "provider_attempts": 22,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "mistral-small3_2-24b-development-t1.json",
+      "model": "mistral-small3.2:24b",
+      "group": "development",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 0,
+          "value": 0.0
+        },
+        "provider_attempts": 19,
+        "provider_or_protocol_errors": 8,
+        "required_instruction_exposure": {
+          "denominator": 1,
+          "numerator": 0,
+          "value": 0.0
+        }
+      }
+    },
+    {
+      "file": "mistral-small3_2-24b-exposed-contract-t1.json",
+      "model": "mistral-small3.2:24b",
+      "group": "exposed-contract",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 5,
+          "numerator": 5,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 6,
+          "numerator": 0,
+          "value": 0.0
+        },
+        "provider_attempts": 16,
+        "provider_or_protocol_errors": 6,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "mistral-small3_2-24b-fresh-t1.json",
+      "model": "mistral-small3.2:24b",
+      "group": "fresh",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 0,
+          "value": 0.0
+        },
+        "provider_attempts": 21,
+        "provider_or_protocol_errors": 8,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-development-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "group": "development",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 8,
+          "value": 1.0
+        },
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 1,
+          "numerator": 1,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-exposed-contract-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "group": "exposed-contract",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 5,
+          "numerator": 5,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "provider_attempts": 17,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    },
+    {
+      "file": "qwen3_8-27b-q4_K_M-fresh-t1.json",
+      "model": "qwen3.8:27b-q4_K_M",
+      "group": "fresh",
+      "trial": 1,
+      "metrics": {
+        "cases_not_run": 0,
+        "citation_records": {
+          "denominator": 6,
+          "numerator": 6,
+          "value": 1.0
+        },
+        "harness_errors": 0,
+        "policy_completion": {
+          "denominator": 8,
+          "numerator": 8,
+          "value": 1.0
+        },
+        "provider_attempts": 23,
+        "provider_or_protocol_errors": 0,
+        "required_instruction_exposure": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        }
+      }
+    }
+  ],
+  "trial_two_groups_completed": 0
+}

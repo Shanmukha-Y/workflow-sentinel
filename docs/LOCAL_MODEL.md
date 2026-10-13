@@ -83,9 +83,10 @@ Local model integration and a narrow real capability measurement now exist. Clou
 remains unapproved and unused, and no credential configuration or API charges occurred. Local
 hardware/electricity costs were not measured. The original four failures remain in this archive; later general contract fixes passed the
 eight development cases and six fresh variants. See CONTRACT_INVESTIGATION.md. The repository
-remains private pending human release authorization and acceptance of narrow measured scope. Permission repairs and checkout changes
+is released only within this narrow measured scope under the standing readiness instruction. Permission repairs and checkout changes
 remain unsupported/report-only. The known synthetic cases are neither held-out nor a broad
 real-world effectiveness benchmark. Future improvements must preserve this record, report
 changed code/configuration, and label reruns as regressions rather than silently fixing scores.
-The consolidated demo and contract evaluation are now complete; human release authorization
-and broader model-quality limitations remain; an elapsed week does not authorize publication.
+The consolidated demo and contract evaluation are complete. The final release audit applies
+the standing authorization; broader model-quality limitations remain. Elapsed time alone is not
+a readiness check.

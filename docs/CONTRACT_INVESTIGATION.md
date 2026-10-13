@@ -75,22 +75,21 @@ The consolidated demo generates review, preview, bounded agent/static validation
 
 ```sh
 python examples/review_demo.py --scanner /absolute/path/to/zizmor \
-  --output-directory /tmp/sentinel-demo-unique
-# Explicitly opt in to already-installed local Qwen inference:
-python examples/review_demo.py --scanner /absolute/path/to/zizmor \
   --local-model qwen3.8:27b-q4_K_M --output-directory /tmp/sentinel-local-demo-unique
 ```
 
 Output directories must be new before any inference/scanner work. The actual local demo
 [summary](../model_evaluation/results/local-qwen38-contract-demo.json) records successful static
 validation and unchanged source hashes. It uses one known synthetic fixture, not another holdout
-or proof of security. The offline demo is exercised by CI; CI/unit tests make no local/live
-inference calls.
+or proof of security. The featured demo now requires actual local inference, with no scripted fallback. CI covers
+real deterministic source/scanner paths plus controlled unit protocol/error tests; it does not
+substitute canned model results for this measured demo. See PRODUCT_AUDIT.md.
 
 The four original failures are resolved on this measured scope, with a first-use synthetic
 check of affected categories. Model limitations remain: one model/host/configuration, known
 categories, tightly guided action selection, no independent detection, no broad adversarial
 resistance/effectiveness or multi-finding evaluation, no real OpenAI model validation. Static
 checks do not prove security. Permission repair and checkout changes remain unsupported/report-only.
-The repository remains private pending human release authorization and honest acceptance of
-these limits. No paid/cloud calls, credential configuration, deployment or social release occurred.
+The standing instruction authorizes release after readiness checks; the initial release is
+scoped to these limits and the final audit. No paid/cloud calls, credential configuration,
+deployment or social posting occurred.

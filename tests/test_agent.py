@@ -3,13 +3,11 @@ import copy
 import json
 from pathlib import Path
 import unittest
-import subprocess
-import sys
 
 from jsonschema import validate
 from unittest.mock import patch
 
-from workflow_sentinel.agent import decode, request, run
+from workflow_sentinel.agent import decode, request, _execute as run
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT / 'fixtures/repairable'
@@ -94,14 +92,9 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(result['report']['packets'][0]['repair']['status'], 'abstain')
 
     def test_schema_and_offline_cli(self):
-        script = json.loads((ROOT / 'examples/agent-script.json').read_text())
-        validate(script, json.loads((ROOT / 'schemas/agent-script.schema.json').read_text()))
-        completed = subprocess.run([sys.executable, '-m', 'workflow_sentinel.cli',
-                                   '--sarif', str(REPO / 'findings.zizmor-1.30.1.sarif'),
-                                   '--repo', str(REPO), '--agent-script',
-                                   str(ROOT / 'examples/agent-script.json')],
-                                   check=True, capture_output=True, text=True, timeout=5)
-        result = json.loads(completed.stdout)
+        script = json.loads((ROOT / 'tests/helpers/agent-script.json').read_text())
+        validate(script, json.loads((ROOT / 'tests/helpers/agent-script.schema.json').read_text()))
+        result = run(SARIF, REPO, script)
         self.assertEqual(result['decision'], 'abstain')
         self.assertIn('explicit scanner', result['reason'])
 
