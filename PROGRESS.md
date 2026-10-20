@@ -410,3 +410,19 @@ private directories/customer content. Commit identity is intentional public GitH
 Final exact remote commit/CI and unauthenticated public-access verification follow in handoff;
 visibility changes only after those readiness checks. No additional confirmation is needed unless
 a tool itself blocks. Full history/result provenance is preserved, without rewriting away failures.
+
+
+## 2026-10-20 — Risk-based test cap
+
+Reduced 117 collected methods (plus bundled variants) to 50 named cases, with no
+subtests, filtering or relocation. Removed redundant permutations/bookkeeping and
+narrowed bundled scenarios rather than compressing them. Added an unfiltered
+collection guard to CI; docs/TEST_COVERAGE.md records module counts, retained
+boundaries and deliberate gaps. Production and frozen actual-model evidence are
+unchanged. Historical 117-test release checks above remain historical facts.
+Validation: 50/50 retained tests; guard also rejects a temporary 51st case; test/guard
+formatting, whole-repository Ruff and strict mypy pass. Existing 38/38 offline static
+regression passes with zizmor 1.30.1 (12 actual scanner calls). Source/wheel payload
+and license checks pass; extracted source distribution also collects/runs 50 tests.
+Changed-file credential-pattern scan has no matches; no source/evidence changes.
+Exact remote commit and CI are recorded in the cleanup handoff.

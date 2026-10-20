@@ -131,6 +131,7 @@ do not establish its effectiveness. Byte/token/request caps are not monetary or 
 
 ```sh
 python -m pip install -e '.[dev]'
+python scripts/check_test_budget.py
 python -m unittest discover -s tests -v
 ruff check .
 mypy src
@@ -138,3 +139,6 @@ mypy src
 
 [MIT](LICENSE). Separately installed tools, dependencies and weights retain their own terms;
 none is vendored. [Dependency scope](docs/DEPENDENCIES.md), [release audit](docs/RELEASE_READINESS.md).
+
+The maintained unit suite is capped at 50 collected cases. See
+[the coverage inventory](docs/TEST_COVERAGE.md) for retained boundaries and deliberate gaps.
